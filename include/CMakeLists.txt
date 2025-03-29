@@ -1,0 +1,1 @@
+configure_file(rrobot/environment/version.hpp.in rrobot/environment/version.hpp @ONLY)

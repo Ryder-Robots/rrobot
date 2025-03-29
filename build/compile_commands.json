@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/aaron/Projects/rrobot/build",
+  "command": "/usr/bin/aarch64-linux-gnu-g++ -DBOOST_ALL_NO_LIB -DBOOST_PROGRAM_OPTIONS_DYN_LINK -Drrobot_EXPORTS -I/home/aaron/Projects/rrobot/build -I/home/aaron/Projects/rrobot -I/home/aaron/Projects/rrobot/build/_deps/json-src/include -I/home/aaron/Projects/rrobot/src -I/home/aaron/Projects/rrobot/build/include -g -fPIC -o CMakeFiles/rrobot.dir/src/rrobot/main.cpp.o -c /home/aaron/Projects/rrobot/src/rrobot/main.cpp",
+  "file": "/home/aaron/Projects/rrobot/src/rrobot/main.cpp"
+}
+]

@@ -1,0 +1,19 @@
+#ifndef VERSION_H
+#define VERSION_H
+
+#include <string>
+
+using namespace std;
+
+namespace rrobot {
+    class RrVersion {
+        public:
+            string getVersion() {return "@VERSION@";}
+            int getVersonMajor() {return @CPACK_PACKAGE_VERSION_MAJOR@;}
+            int getVersonMinor() {return @CPACK_PACKAGE_VERSION_MINOR@;}
+            int getVersionPath() {return @CPACK_PACKAGE_VERSION_PATCH@;}
+            string getAppName() {return "@CPACK_PACKAGE_NAME@";}
+    };
+}
+
+#endif
