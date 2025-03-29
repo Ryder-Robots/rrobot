@@ -5,6 +5,14 @@
 		{
 			"compiler" : 
 			{
+				"implicit" : {},
+				"path" : "/usr/bin/aarch64-linux-gnu-gcc"
+			},
+			"language" : "C"
+		},
+		{
+			"compiler" : 
+			{
 				"id" : "GNU",
 				"implicit" : 
 				{

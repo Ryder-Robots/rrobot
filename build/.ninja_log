@@ -1,3 +1,21 @@
 # ninja log v5
+3	207	1743245091396430301	/home/aaron/Projects/rrobot/build/test/test_environmentprocessor[1]_tests.cmake	bb55f4ff4777fbdc
 0	15	1743244453847924564	CMakeFiles/rrobot.dir/src/rrobot/main.cpp.o	7a993e2f767b920e
+2	4664	1743244825414998445	_deps/googletest-build/googlemock/CMakeFiles/gmock.dir/src/gmock-all.cc.o	3d966785db7d0a97
 15	37	1743244453867924236	lib/librrobot.so	8a9baaaa7f49357d
+7839	8316	1743244828962960172	lib/libgtestd.a	4fd012b0fadecb35
+3	1318	1743245027632997159	test/CMakeFiles/test_environmentprocessor.dir/test_environmentprocessor.cpp.o	75eda7e2deb637f9
+10	2086	1743244822839026312	_deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/src/gtest_main.cc.o	1757b46d3600aeea
+3	207	1743245091396430301	test/test_environmentprocessor	bb55f4ff4777fbdc
+3	3135	1743244823887014966	_deps/googletest-build/googlemock/CMakeFiles/gmock_main.dir/src/gmock_main.cc.o	90ab4873a95cc857
+3	207	1743245091396430301	test/test_environmentprocessor[1]_tests.cmake	bb55f4ff4777fbdc
+8316	8374	1743244829126958407	lib/libgtest_maind.a	86306fa23efae41f
+8316	8487	1743244829210957502	lib/libgmockd.a	7b28c7c414a73c09
+3	7839	1743244828586964223	_deps/googletest-build/googletest/CMakeFiles/gtest.dir/src/gtest-all.cc.o	684cdbda41a48acb
+8487	8574	1743244829326956254	lib/libgmock_maind.a	292d9b3265f37a3e
+4	26	1743245476873437265	CMakeFiles/rrobot.dir/src/rrobot/main.cpp.o	cf560a561c038bf2
+26	57	1743245476901437068	lib/librrobot.so	8a9baaaa7f49357d
+4	1359	1743245478205427883	CMakeFiles/test_environmentprocessor.dir/test/test_environmentprocessor.cpp.o	877c0865391a9f4b
+1360	1560	1743245478405426475	test/test_environmentprocessor	af212134cb602c9a
+1360	1560	1743245478405426475	test_environmentprocessor[1]_tests.cmake	af212134cb602c9a
+1360	1560	1743245478405426475	/home/aaron/Projects/rrobot/build/test_environmentprocessor[1]_tests.cmake	af212134cb602c9a

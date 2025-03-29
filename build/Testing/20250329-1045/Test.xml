@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="Linux-aarch64-linux-gnu-g++"
+	BuildStamp="20250329-1045-Experimental"
+	Name="raspberrypi"
+	Generator="ctest-3.25.1"
+	CompilerName="/usr/bin/aarch64-linux-gnu-g++"
+	CompilerVersion="12.2.0"
+	OSName="Linux"
+	Hostname="raspberrypi"
+	OSRelease="6.6.51+rpt-rpi-2712"
+	OSVersion="#1 SMP PREEMPT Debian 1:6.6.51-1+rpt3 (2024-10-08)"
+	OSPlatform="aarch64"
+	Is64Bits="1"
+	VendorString=""
+	VendorID="Unknown Manufacturer"
+	FamilyID="8"
+	ModelID="0"
+	ProcessorCacheSize="0"
+	NumberOfLogicalCPU="4"
+	NumberOfPhysicalCPU="1"
+	TotalVirtualMemory="199"
+	TotalPhysicalMemory="8048"
+	LogicalProcessorsPerPhysical="4"
+	ProcessorClockFrequency="0"
+	>
+	<Testing>
+		<StartDateTime>Mar 29 21:51 AEDT</StartDateTime>
+		<StartTestTime>1743245484</StartTestTime>
+		<TestList>
+			<Test>./test/resources/TestEnvironmentProcessor.TestEnvironment</Test>
+		</TestList>
+		<Test Status="passed">
+			<Name>TestEnvironmentProcessor.TestEnvironment</Name>
+			<Path>./test/resources</Path>
+			<FullName>./test/resources/TestEnvironmentProcessor.TestEnvironment</FullName>
+			<FullCommandLine>/home/aaron/Projects/rrobot/build/test/test_environmentprocessor "--gtest_filter=TestEnvironmentProcessor.TestEnvironment" "--gtest_also_run_disabled_tests"</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.00238057</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/home/aaron/Projects/rrobot/build/test/test_environmentprocessor "--gtest_filter=TestEnvironmentProcessor.TestEnvironment" "--gtest_also_run_disabled_tests"</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Environment">
+					<Value>#CTEST_RESOURCE_GROUP_COUNT=</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value encoding="base64" compression="gzip">eJyVUMEKgkAQve9XzDEPLnUNPASJh8BE6yQetppEWHdid6zfr5QsBSHfaYY3783Mi4lxDRFRqREO6BiulWa0ELRdaO6VJVOj4cTSGZ0jK0eEyIMeBaSNMZUpYQXculmqP7VrKkYpcr9HAZGmk9Idj19PcMh+cxsN/3pOXSdySI8xtChm/NApYL+boYLFEmrnzT+yEwITK+2J/xJhVNa/0MMM857KGawycrjn9WOyybJw+06mm5XiCfOwqT8=</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<EndDateTime>Mar 29 21:51 AEDT</EndDateTime>
+		<EndTestTime>1743245484</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>
