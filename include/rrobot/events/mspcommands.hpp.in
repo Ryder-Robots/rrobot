@@ -1,0 +1,22 @@
+#ifndef MSPCOMMANDS_HPP
+#define MSPCOMMANDS_HPP
+
+#include <stdint.h>
+
+namespace rrobot {
+
+/**
+ * @brief list of currently supported commands. Note that the list is taken from
+ * http://www.multiwii.com/wiki/index.php?title=Multiwii_Serial_Protocol
+ */
+
+enum MSPCOMMANDS : uint8_t {
+@LOOP_CONTENT@
+};
+
+#define VALID_MSPCOMMANDS unordered_map<string, MSPCOMMANDS> VALID_MSPCOMMANDS_KEYS = { \
+@VALID_MSPCOMMANDS@}
+
+}  // namespace rrobot
+
+#endif  // MSPCOMMANDS_HPP
