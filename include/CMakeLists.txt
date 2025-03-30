@@ -51,7 +51,6 @@ endforeach()
 set(VALID_STOPBIT ${LOOP_CONTENT})
 #end serialtype configuration
 
-
 set(rrobot_INCLUDE 
     rrobot/environment/version.hpp
     rrobot/environment/mspsensors.hpp
@@ -59,6 +58,8 @@ set(rrobot_INCLUDE
     rrobot/environment/mspversion.hpp
     rrobot/environment/chwmodel.hpp
     rrobot/environment/crrserial.hpp
+    rrobot/environment/cqueues.hpp
+    rrobot/environment/crr_server.hpp
 )
 
 foreach(item ${rrobot_INCLUDE})

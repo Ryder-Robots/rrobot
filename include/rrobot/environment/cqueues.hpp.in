@@ -1,0 +1,26 @@
+#ifndef CQUEUES_HPP
+#define CQUEUES_HPP
+
+namespace rrobot {
+class CQueues {
+   public:
+    CQueues(int limit, int thread_wait_time, int thread_process_time, int thread_time_out)
+        : _limit(limit),
+          _thread_wait_time(thread_wait_time),
+          _thread_process_time(thread_process_time),
+          _thread_time_out(thread_time_out) {}
+
+    int getLimit() { return _limit; }
+    int getThreadWaitTime() { return _thread_process_time; }
+    int getThreadProcessTime() { return _thread_process_time; }
+    int getThreadTimeOut() { return _thread_time_out; }
+
+   private:
+    int _limit;
+    int _thread_wait_time;
+    int _thread_process_time;
+    int _thread_time_out;
+};
+}  // namespace rrobot
+
+#endif // CQUEUES_HPP
