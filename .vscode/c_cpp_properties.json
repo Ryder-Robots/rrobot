@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${default}",
+                "${workspaceFolder}/src/**",
+                "${workspaceFolder}/include/**",
+                "${workspaceFolder}/build/_deps/json-src/include/**",
+                "${workspaceFolder}/build/_deps/googletest-src/googletest/include/**",
+                "${workspaceFolder}/build/_deps/googletest-src/googlemock/include/**",
+                "${workspaceFolder}/build/_deps/lazycsv-src/include/**",
+                "${workspaceFolder}/build/include"
+            ],
+            "defines": [],
+            "cStandard": "c17",
+            "cppStandard": "c++14",
+            "intelliSenseMode": "linux-clang-arm64"
+        }
+    ],
+    "version": 4
+}

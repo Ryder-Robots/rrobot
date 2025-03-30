@@ -1,0 +1,47 @@
+#ifndef CRRSERIAL_HPP
+#define CRRSERIAL_HPP
+
+#include <libserial/SerialPort.h>
+
+#include <string>
+#include <unordered_map>
+
+using namespace std;
+
+namespace rrobot {
+class CRrSerial {
+   public:
+    CRrSerial(const string port, const LibSerial::BaudRate baud, const LibSerial::CharacterSize charsize,
+              const LibSerial::FlowControl flow_control, const LibSerial::StopBits stop_bits,
+              const LibSerial::Parity parity)
+        : _port(port),
+          _baud(baud),
+          _charsize(charsize),
+          _flow_control(flow_control),
+          _stop_bits(stop_bits),
+          _parity(parity) {}
+
+    string getPort() { return _port; }
+    LibSerial::BaudRate getBaud() { return _baud; }
+    LibSerial::CharacterSize getCharsize() { return _charsize; }
+    LibSerial::FlowControl getFlowControl() { return _flow_control; }
+    LibSerial::StopBits getStopBits() { return _stop_bits; }
+    LibSerial::Parity getParity() { return _parity; }
+
+   private:
+    const string _port;
+    const LibSerial::BaudRate _baud;
+    const LibSerial::CharacterSize _charsize;
+    const LibSerial::FlowControl _flow_control;
+    const LibSerial::StopBits _stop_bits;
+    const LibSerial::Parity _parity;
+};
+
+#define VALID_BAUDRATES_INIT const unordered_map<string, LibSerial::BaudRate> VALID_BAUDRATES = {@VALID_BAUDRATES@}
+#define VALID_CHAR_SZ_INIT const unordered_map<string, LibSerial::CharacterSize> VALID_CHAR_SZ = {@VALID_CHAR_SZ@}
+#define VALID_FLOW_CNT_INIT const unordered_map<string, LibSerial::FlowControl> VALID_FLOW_CNT = {@VALID_FLOW_CNT@}
+#define VALID_PARITY_INIT const unordered_map<string, LibSerial::Parity> VALID_PARITY = {@VALID_PARITY@}
+#define VALID_STOPBIT_INIT const unordered_map<string, LibSerial::StopBits> VALID_STOPBIT = {@VALID_STOPBIT@}
+}  // namespace rrobot
+
+#endif  // CRRSERIAL_HPP
