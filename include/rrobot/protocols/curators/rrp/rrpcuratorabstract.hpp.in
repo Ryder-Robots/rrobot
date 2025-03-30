@@ -1,0 +1,45 @@
+#ifndef RRPCURATORABSTRACT_HPP
+#define RRPCURATORABSTRACT_HPP
+
+#include <nlohmann/json.hpp>
+#include <rrobot/events/event.hpp>
+
+using json = nlohmann::json;
+
+namespace rrobot {
+
+    /**
+     * @class RrpCuratorAbstract
+     * @brief
+     * interface for RRP Curators
+     */
+    class RrpCuratorAbstract {
+        public:
+
+        /**
+         * @fn deserialize
+         * @brief
+         * desialize event with payload.
+         * @param in json object representing payload
+         * @param direction optional parameter, that if argued will set directon in event.
+         */
+        virtual Event* deserialize(json in) = 0;
+        virtual Event* deserialize(json in, MSPDIRECTION direction) = 0;
+
+        /**
+         * @fn serialize
+         * @brief
+         * serialize outbound event.
+         */
+        virtual json serialize(Event *in) = 0;
+
+        /**
+         * @fn deserialize
+         * @brief
+         * desialize event without a payload.
+         */
+        virtual Event* deserialize(MSPDIRECTION direction) = 0;
+    };
+}
+
+#endif // RRPCURATORABSTRACT_HPP

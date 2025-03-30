@@ -1,0 +1,98 @@
+#ifndef @CURATOR_HEADING@
+#define @CURATOR_HEADING@
+
+#include <string>
+#include <nlohmann/json.hpp>
+#include <rrobot/events/event.hpp>
+#include <rrobot/protocols/curators/rrp/mspevent.hpp>
+#include <rrobot/events/mspdirection.hpp>
+#include <rrobot/exceptions/exceptions.hpp>
+#include <rrobot/events/cmodes.hpp>
+
+#include <rrobot/protocols/curators/rrp/rrpcuratorabstract.hpp>
+
+using json = nlohmann::json;
+using namespace std;
+
+#define @MCURATATOR_DESERIALIZER@ @CURATATOR_DESERIALIZER@
+#define @MCURATATOR_SERIALIZER@ @CURATATOR_SERIALIZER@
+
+namespace rrobot {
+/**
+ * @class @CURATOR_CLASS_NAME@
+ * @brief
+ * Generated source code for @CURATOR_CLASS_NAME@ curator.
+ */
+class @CURATOR_CLASS_NAME@ : public RrpCuratorAbstract {
+    public:
+        @CURATOR_CLASS_NAME@(MSPDIRECTION direction = MSPDIRECTION::@DIRECTION@):_direction(direction) {}
+
+        Event* deserialize(MSPDIRECTION direction) {
+            Event* event = new Event(@MSP_COMMAND@, direction);
+            return event;
+        }
+
+        #if @MCURATATOR_DESERIALIZER@ == 1
+        Event* deserialize(json in) override {
+            Event* event;
+                @CLASS_NAME@* payload = new @CLASS_NAME@(); 
+                event = new Event(@MSP_COMMAND@, _direction, payload);
+@CURATOR_SETTERS@
+            return event;
+        }
+
+        /*
+         * Overrides defaulted dirction, and uses the one specified to allow for two way commands. 
+         */
+        Event* deserialize(json in, MSPDIRECTION direction) override {
+            Event* event;
+                @CLASS_NAME@* payload = new @CLASS_NAME@(); 
+                event = new Event(@MSP_COMMAND@, direction, payload);
+@CURATOR_SETTERS@
+            return event;
+        }
+
+        #else
+        Event* deserialize(json in) override;
+        Event* deserialize(json in, MSPDIRECTION direction) override;
+        #endif
+
+        #if @MCURATATOR_SERIALIZER@ == 1
+        json serialize(Event *in) override {
+            string command = getCommandString();
+            @CLASS_NAME@ payload = in->getPayload<@CLASS_NAME@>();
+            json j = {
+                {"command", command},
+                {"payload", {
+@CURATOR_SERIALIZER_SETTERS@
+                }}
+            };
+            return j;
+        }
+        #else
+        json serialize(Event *in) override;
+        #endif
+
+    private:
+        MSPDIRECTION _direction;
+        void validate(string member, json in) {
+            if(!in.contains(member)) {
+                throw MissingRequiredAttributeException(member + " is a required attribute for @CLASS_NAME@");
+            }
+        }
+
+        string getCommandString() {
+            VALID_MSPCOMMANDS;
+            string command = "MSP_NONE";
+            for (const auto& pair : VALID_MSPCOMMANDS_KEYS) {
+                if (pair.second == @MSP_COMMAND@) {
+                    command = pair.first;
+                    break;
+                }
+            }
+            return command;
+        }
+};
+}
+
+#endif // @CURATOR_HEADING@

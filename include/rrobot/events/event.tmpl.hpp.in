@@ -1,0 +1,21 @@
+#ifndef @EVENT_HEADING@
+#define @EVENT_HEADING@
+
+#include <stdint.h>
+#include <string>
+#include <rrobot/environment/multitype.hpp>
+#include <rrobot/environment/mspversion.hpp>
+#include <rrobot/events/cmodes.hpp>
+
+using namespace std;
+
+namespace rrobot {
+class @CLASS_NAME@{
+    public:
+@GETTERS@
+    private:
+@MEMBERS@
+};
+}
+
+#endif  // @EVENT_HEADING@

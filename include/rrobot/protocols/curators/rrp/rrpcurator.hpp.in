@@ -1,0 +1,15 @@
+#ifndef RRPCURATORS_HPP
+#define RRPCURATOR_HPP
+
+#include <fatcnt/protocols/common/curators/rrp/rrpcuratorabstract.hpp>
+
+/**
+ * header file for curators.
+ */
+
+@INCLUDE_CURATOR_CONTENT@
+
+
+#define CURATOR_MAP_INIT unordered_map<MSPCOMMANDS, RrpCuratorAbstract*> CURATOR_MAP_KEYS = {@CURATOR_PAIR@}
+
+#endif // RRPCURATOR_HPP

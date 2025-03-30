@@ -1,0 +1,6 @@
+#ifndef MSPEVENT_HPP
+#define MSPEVENT_HPP
+
+@INCLUDE_CONTENT@
+
+#endif // MSPEVENT_HPP
