@@ -1,0 +1,11 @@
+#ifndef RRQUEUE_MANAGER_HPP
+#define RRQUEUE_MANAGER_HPP
+
+//TODO: Finish as per written design.
+namespace rrobot {
+    class RrQueueManager {
+
+    };
+}
+
+#endif

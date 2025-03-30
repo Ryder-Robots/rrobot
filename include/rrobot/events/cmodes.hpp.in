@@ -1,0 +1,27 @@
+#ifndef CMODES_HPP
+#define CMODES_HPP
+
+#include <stdint.h>
+
+namespace rrobot {
+/**
+ * @enum RR_CMMODES
+ * @brief
+ * RR_CMODES are used by catagorizer to define which mode to use.
+ *
+ * Value range is between (256 to 32768)
+ * valid values are:
+ * 256, 512, 1024, 2048, 4096, 8192, 16348, 32768
+ */
+enum RR_CMODES : uint32_t {
+    CMODE_NOT_SET = 1 << 8,        // Mode not set
+    CMODE_MANUAL_FLIGHT = 1 << 9,  // Manual flight mode
+};
+}  // namespace rrobot
+
+#define MODE_BITMASK(F) ((F & CMODE_MANUAL_FLIGHT) + (F & CMODE_NOT_SET))
+#define VALID_CMODES_INIT                                                                   \
+    unordered_map<string, RR_CMODES> VALID_CMODES_KEYS = {{"CMODE_NOT_SET", CMODE_NOT_SET}, \
+                                                          {"CMODE_MANUAL_FLIGHT", CMODE_MANUAL_FLIGHT}}
+
+#endif  // CMODES_HPP

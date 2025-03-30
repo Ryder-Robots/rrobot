@@ -1,0 +1,78 @@
+#ifndef EVENT_HPP
+#define EVENT_HPP
+
+#include <stdlib.h>
+#include <rrobot/events/cmodes.hpp>
+#include <rrobot/events/mspdirection.hpp>
+#include <rrobot/events/mspcommands.hpp>
+
+@INCLUDE_CONTENT@
+
+namespace rrobot {
+/**
+ *  @brief events are added to queues.
+ */
+class Event {
+   public:
+    // constructor for outbound, or requests with a payload.
+    Event(MSPCOMMANDS command, MSPDIRECTION direction, void* payload)
+        : _command(command), 
+          _direction(direction),
+          _payload(payload) {
+        
+        _hasPayload = true;
+    }
+
+    // constructor for inbound request, payload is not set.
+    Event(MSPCOMMANDS command, MSPDIRECTION direction)        
+        : _command(command), 
+          _direction(direction) {}
+
+    ~Event() {
+        if (hasPayload()) {
+            switch(_command) {
+@DECONSTRUCT_EVENT@              
+                default:
+                    delete(reinterpret_cast<msp_none*>(_payload));
+            }
+
+            // avoid null pointer error, in case delete is called twice.
+            _hasPayload = false;
+        }
+    }
+
+    /**
+     * @fn hasPayload
+     * @brief
+     * returns true if payload has been set (this usually indicates outbound), false if not this will usually indicate
+     * inbound.
+     */
+    bool hasPayload() {return _hasPayload;}
+
+    /**
+     * @fn getPayload
+     * @brief 
+     * Returns the payload
+     * @return payload
+     */
+    template <typename T> T getPayload() {
+        return *(reinterpret_cast<T*>(_payload));
+    }
+
+    MSPCOMMANDS getCommand() {
+        return _command;
+    }
+
+    MSPDIRECTION getDirection() {
+        return _direction;
+    }
+
+   private:
+    const MSPCOMMANDS  _command;   // command
+    const MSPDIRECTION _direction; // direction of command
+    void*              _payload = nullptr;   // payload
+    bool               _hasPayload = false;    
+};
+}  // namespace rrobot
+
+#endif  // EVENT_HPP

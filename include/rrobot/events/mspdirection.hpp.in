@@ -1,0 +1,20 @@
+#ifndef MSPDIRECTION_HPP
+#define MSPDIRECTION_HPP
+
+namespace rrobot {
+
+/**
+ * @brief
+ * describes intended destination queue.  This can be overridden by EventProcessor,  for example a message MUST not
+ * be sent to AI_ENGINE, or FLIGHT_CONTROLLER unless connection has been authenticated.
+ */
+enum class MSPDIRECTION {
+    ERROR,         // An internal error has occurred
+    EXTERNAL_IN,   // Comming from an external entity inbound
+    EXTERNAL_OUT,  // goint to an external entity outbound
+    INVALID,       // direction was not set in the correct conext
+    NOT_SET,       // direction has not been set, depending on context use default, or override.
+};
+}  // namespace rrobot
+
+#endif  // MSPDIRECTION_HPP

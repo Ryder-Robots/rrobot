@@ -1,0 +1,30 @@
+#ifndef RRPQUEUES_NAMES_HPP
+#define RRPQUEUES_NAMES_HPP
+
+namespace rrobot {
+    /**
+     * @enum RRP_QUEUES
+     * list of available queues. These are queues that can be mapped to requests
+     */
+
+    enum RRP_QUEUES {
+        NONE,
+        USER_INTERFACE,
+        AI_ENGINE,
+        MICROCONTROLLER,
+        FLIGHT_CONTROLLER,
+        CATEGORIZER,
+        STATUS,
+    };
+}
+
+#define VALID_RRP_QUEUES_INIT unordered_map<string, RRP_QUEUES> VALID_RRP_QUEUES_KEYS = {{"NONE", NONE}, \
+    {"USER_INTERFACE", USER_INTERFACE},\
+    {"AI_ENGINE", AI_ENGINE},\
+    {"MICROCONTROLLER", MICROCONTROLLER},\
+    {"FLIGHT_CONTROLLER", FLIGHT_CONTROLLER},\
+    {"CATEGORIZER", CATEGORIZER},\
+    {"STATUS", STATUS}}
+
+
+#endif // RRPQUEUES_NAMES_HPP
