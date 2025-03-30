@@ -19,6 +19,7 @@ set(rrobot_INCLUDE
     rrobot/environment/version.hpp
     rrobot/environment/mspsensors.hpp
     rrobot/environment/multitype.hpp
+    rrobot/environment/mspversion.hpp
 )
 
 foreach(item ${rrobot_INCLUDE})

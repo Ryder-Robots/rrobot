@@ -1,0 +1,19 @@
+#ifndef MSP_VERISON_T_HPP
+#define MSP_VERISON_T_HPP
+
+#include <string>
+#include <unordered_map>
+
+using namespace std;
+
+namespace rrobot {
+    enum MSP_VERSION {
+        VIRTUAL,
+        SKULD001,
+        SKULD002,
+    };
+
+    #define VALID_MSP_VERSION_KEYS_INIT unordered_map<string, MSP_VERSION> VALID_MSP_VERSION_KEYS = {{"VIRTUAL", VIRTUAL}, {"SKULD001", SKULD001}, {"SKULD002", SKULD002}}
+}
+
+#endif // MSP_VERISON_T_HPP

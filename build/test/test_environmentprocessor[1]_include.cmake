@@ -1,5 +1,0 @@
-if(EXISTS "/home/aaron/Projects/rrobot/build/test/test_environmentprocessor[1]_tests.cmake")
-  include("/home/aaron/Projects/rrobot/build/test/test_environmentprocessor[1]_tests.cmake")
-else()
-  add_test(test_environmentprocessor_NOT_BUILT test_environmentprocessor_NOT_BUILT)
-endif()
