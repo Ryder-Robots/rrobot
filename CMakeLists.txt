@@ -47,6 +47,7 @@ find_package(Boost 1.74.0 COMPONENTS program_options REQUIRED )
 set(rrobot_SOURCES
         src/rrobot/main.cpp
         src/rrobot/environment/environmentProcessor.cpp
+        src/rrobot/state/rrqueue_manager.cpp
 )
 
 add_library(rrobot SHARED  ${rrobot_SOURCES})

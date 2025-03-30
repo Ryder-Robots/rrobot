@@ -1,11 +1,123 @@
 #ifndef RRQUEUE_MANAGER_HPP
 #define RRQUEUE_MANAGER_HPP
 
-//TODO: Finish as per written design.
-namespace rrobot {
-    class RrQueueManager {
+#include <chrono>
+#include <mutex>
+#include <queue>
+#include <unordered_map>
+#include <thread>
+#include <rrobot/exceptions/exceptions.hpp>
+#include <rrobot/events/event.hpp>
+#include <rrobot/state/rrpqueue_names.hpp>
 
-    };
-}
+using namespace std;
+
+namespace rrobot {
+/**
+ * @class RrQueueManager
+ * @brief
+ * manages queue ingress and egress.
+ */
+class RrQueueManager {
+   public:
+   /**
+    * @fn RrQueueManager
+    * @brief
+    * class constructor, 
+    * 
+    * @param queue_limit sets hard limit, once limit is reached no more events can be added to queue.
+    * @param queue_wait_time minimum time to wait before accepting next request. This will delay handler. This is executed after handler.execute() has been
+    * completed.
+    * @param queueProcessTime Total time it takes to process a single request. 
+    * 
+    */
+    RrQueueManager(int queue_limit, chrono::milliseconds queue_wait_time, chrono::milliseconds queue_process_time)
+        : _queueLimit(queue_limit), _queueWaitTime(queue_wait_time), _queueProcessTime(queue_process_time) {}
+
+    ~RrQueueManager();
+
+    /**
+     * @fn addQueue
+     * @brief
+     * Adds new queue to list of queues
+     * @param q name of queue to add
+     */
+    void addQueue(RRP_QUEUES q);
+
+    /**
+     * @fn mapQueue
+     * @brief
+     * if q1 exists then use the same queue for q2.
+     * @param q1 existing queue to map
+     * @param q2 queue to map to
+     */
+    void mapQueue(RRP_QUEUES q1, RRP_QUEUES q2);
+
+    /**
+     * @fn queueWaitTime
+     * @brief
+     * hint function for eventHandler, delta that indicates the total execution of an event before encqueuing.
+     */
+    chrono::milliseconds queueProcessTime(RRP_QUEUES q);
+
+    /**
+     * @fn enqueue
+     * @brief
+     * adds event to queue 'q'
+     * @param q queue to add event to
+     * @param e event reference to add.
+     */
+    void enqueue(RRP_QUEUES q, Event* e);
+
+    /**
+     * @fn dequeue
+     * @brief
+     * returns last event on queue, this is strictly FIFO.
+     * @param q queue name
+     */
+    Event* dequeue(RRP_QUEUES q);
+
+    /**
+     * @fn peek
+     * @brief
+     * returns oldest event in queue, unlike dequeue will not remove event from queue.
+     * @param q queue name
+     */
+    Event* peek(RRP_QUEUES q);
+
+    /**
+     * @fn isEmpty
+     * @brief
+     * returns true if queue is empty, otherwise returns true.AI_ENGINE
+     * @param q queue name
+     */
+    bool isEmpty(RRP_QUEUES q);
+
+    /**
+     * @fn isFull
+     * @brief
+     * if queue size reaches _queueLimit then this value returns true, otherwise false.
+     * @param q queue name
+     */
+    bool isFull(RRP_QUEUES q);
+
+    /**
+     * @fn size
+     * @brief
+     * returns number of elements in queue.
+     * @param size
+     */
+    size_t size(RRP_QUEUES q);
+
+   private:
+    unordered_map<RRP_QUEUES, std::queue<Event*>> _queues;  // events to be sent to user interface
+    unordered_map<RRP_QUEUES, std::mutex> _locks;
+    mutex _mtx; // sequerisation lock for local calls.
+
+    const int _queueLimit;
+    chrono::milliseconds _queueWaitTime;     // time handler must wait after processing queue
+    chrono::milliseconds _queueProcessTime;  // how long a queue can be processed for
+};
+}  // namespace rrobot
 
 #endif

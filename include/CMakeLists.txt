@@ -64,6 +64,7 @@ set(rrobot_INCLUDE
     rrobot/environment/environment.hpp
     rrobot/environment/environmentProcessor.hpp
     rrobot/state/rrpqueue_names.hpp
+    rrobot/state/rrqueue_manager.hpp
     rrobot/events/cmodes.hpp
     rrobot/events/mspdirection.hpp
     rrobot/protocols/curators/rrp/rrpcuratorabstract.hpp
@@ -75,6 +76,7 @@ endforeach()
 
 #Exceptions
 set(EXCEPTIONS 
+  AttemptToDequeueToEmptyQueue
   InvalidManifestException 
   MissingRequiredAttributeException 
   QueueDoesNotExit 
@@ -93,7 +95,7 @@ foreach(item ${EXCEPTIONS})
   set(OUTPUT_NAME "rrobot/exceptions/${EXCEPTION_NAME}.hpp")
   string(TOUPPER "${EXCEPTION_NAME}_HPP" EXCEPTION_HEADING)
   configure_file(rrobot/exceptions/exception.hpp.in ${OUTPUT_NAME} @ONLY)
-  string(APPEND INCLUDE_CONTENT "\#include <fatcnt/exceptions/${EXCEPTION_NAME}.hpp>\n")
+  string(APPEND INCLUDE_CONTENT "\#include <rrobot/exceptions/${EXCEPTION_NAME}.hpp>\n")
 endforeach()
 set(GENERATED_INCLUDES ${INCLUDE_CONTENT})
 configure_file(rrobot/exceptions/exceptions.hpp.in rrobot/exceptions/exceptions.hpp @ONLY)
