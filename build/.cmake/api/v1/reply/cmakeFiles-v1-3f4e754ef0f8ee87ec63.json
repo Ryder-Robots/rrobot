@@ -269,6 +269,12 @@
 			"path" : "include/rrobot/environment/version.hpp.in"
 		},
 		{
+			"path" : "include/rrobot/environment/mspsensors.hpp.in"
+		},
+		{
+			"path" : "include/rrobot/environment/multitype.hpp.in"
+		},
+		{
 			"isGenerated" : true,
 			"path" : "build/_deps/json-src/CMakeLists.txt"
 		},

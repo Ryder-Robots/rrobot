@@ -1,0 +1,17 @@
+#ifndef MULTITYPE_T_HPP
+#define MULTITYPE_T_HPP
+
+#include <unordered_map>
+#include <string>
+
+using namespace std;
+
+namespace rrobot {
+    enum MULTITYPE_T { 
+@GENERATED_TYPE@
+    };
+
+    #define VALID_MULTITYPE_KEYS_INIT  unordered_map<string, MULTITYPE_T> VALID_MULTITYPE_KEYS = {@VALID_MT@}
+}  // namespace rrobot
+
+#endif  // MULTITYPE_T_HPP
