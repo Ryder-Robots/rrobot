@@ -1,0 +1,48 @@
+#ifndef ENVIRONMENT_HPP
+#define ENVIRONMENT_HPP
+
+#include <rrobot/environment/chwmodel.hpp>
+#include <rrobot/environment/crrserial.hpp>
+#include <rrobot/environment/version.hpp>
+#include <rrobot/environment/cqueues.hpp>
+#include <rrobot/environment/crr_server.hpp>
+#include <rrobot/environment/clogging.hpp>
+
+namespace rrobot {
+
+    /**
+     * @class Environment
+     * @brief
+     * Returns constants that are set either through environment variables, program manifest, or via command line options.
+     * These values should not change during the duration of the program.
+     */
+    class Environment {
+        public:
+            Environment(const CHwModel hwmodel, const CRrSerial mc, const RrVersion rrVersion, const CQueues queues, 
+                const CServer server, const CLogging logging) :
+                _hwModel(hwmodel),
+                _mc(mc),
+                _version(rrVersion),
+                _queues(queues),
+                _server(server),
+                _logging(logging) {}
+
+            CHwModel   getHwModel() {return _hwModel;}
+            CRrSerial  getMc() {return _mc;}
+            RrVersion getVersion() { return _version;}
+            CQueues    getQueues() {return _queues;}
+            CServer    getServer() {return _server;}
+            CLogging   getLogging() {return _logging;}
+
+            
+        private:
+            const CHwModel   _hwModel;
+            const CRrSerial  _mc;
+            const RrVersion _version;
+            const CQueues    _queues;
+            const CServer    _server;
+            const CLogging   _logging;
+    };
+}
+
+#endif // ENVIRONMENT_HPP

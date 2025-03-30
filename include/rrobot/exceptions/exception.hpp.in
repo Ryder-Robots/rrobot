@@ -1,0 +1,23 @@
+#ifndef @EXCEPTION_HEADING@
+#define @EXCEPTION_HEADING@
+
+#include <exception>
+#include <string>
+
+using namespace std;
+
+namespace rrobot {
+class @EXCEPTION_NAME@ : public std::exception {
+   private:
+    string msg;
+
+   public:
+    @EXCEPTION_NAME@(const string& msg) : msg(msg) {}
+
+    const char* what() const noexcept override {
+        return msg.c_str();
+    }
+};
+} 
+
+#endif // @EXCEPTION_HEADING@

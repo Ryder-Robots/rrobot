@@ -1,0 +1,24 @@
+#ifndef CLOGGING_HPP
+#define CLOGGING_HPP
+
+#include <dlib/logger.h>
+
+namespace rrobot {
+class CLogging {
+   public:
+    CLogging(dlib::log_level logLevel) : _logLevel(logLevel) {}
+
+    dlib::log_level getLogLevel() { return _logLevel; }
+
+   private:
+    dlib::log_level _logLevel;
+};
+}  // namespace rrobot
+
+#define VALID_LOGLEVELS                                                                                     \
+    unordered_map<string, dlib::log_level> VALID_LOGLEVELS_KEYS = {                                         \
+        {"LALL", dlib::LALL},   {"LNONE", dlib::LNONE}, {"LTRACE", dlib::LTRACE}, {"LDEBUG", dlib::LDEBUG}, \
+        {"LINFO", dlib::LINFO}, {"LWARN", dlib::LWARN}, {"LERROR", dlib::LERROR}, {"LFATAL", dlib::LFATAL}, \
+    }
+
+#endif  // CLOGGING_HPP

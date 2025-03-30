@@ -60,8 +60,34 @@ set(rrobot_INCLUDE
     rrobot/environment/crrserial.hpp
     rrobot/environment/cqueues.hpp
     rrobot/environment/crr_server.hpp
+    rrobot/environment/clogging.hpp
 )
 
 foreach(item ${rrobot_INCLUDE})
   configure_file("${item}.in" ${item} @ONLY)
 endforeach()
+
+#Exceptions
+set(EXCEPTIONS 
+  InvalidManifestException 
+  MissingRequiredAttributeException 
+  QueueDoesNotExit 
+  ExceedMaxMessage 
+  InvalidMessageSent 
+  InvalidFormat 
+  InvalidCommand 
+  UnsupportedAttribute 
+  BadConnectionException 
+  FailedToInitilizeHandler 
+  NetworkIOException
+  RrIOException)
+set(INCLUDE_CONTENT "")
+foreach(item ${EXCEPTIONS})
+  set(EXCEPTION_NAME ${item})
+  set(OUTPUT_NAME "rrobot/exceptions/${EXCEPTION_NAME}.hpp")
+  string(TOUPPER "${EXCEPTION_NAME}_HPP" EXCEPTION_HEADING)
+  configure_file(rrobot/exceptions/exception.hpp.in ${OUTPUT_NAME} @ONLY)
+  string(APPEND INCLUDE_CONTENT "\#include <fatcnt/exceptions/${EXCEPTION_NAME}.hpp>\n")
+endforeach()
+set(GENERATED_INCLUDES ${INCLUDE_CONTENT})
+configure_file(rrobot/exceptions/exceptions.hpp.in rrobot/exceptions/exceptions.hpp @ONLY)
