@@ -45,15 +45,6 @@ class RrQueueManager {
     void addQueue(RRP_QUEUES q);
 
     /**
-     * @fn mapQueue
-     * @brief
-     * if q1 exists then use the same queue for q2.
-     * @param q1 existing queue to map
-     * @param q2 queue to map to
-     */
-    void mapQueue(RRP_QUEUES q1, RRP_QUEUES q2);
-
-    /**
      * @fn queueWaitTime
      * @brief
      * hint function for eventHandler, delta that indicates the total execution of an event before encqueuing.

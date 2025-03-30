@@ -28,18 +28,6 @@ void RrQueueManager::addQueue(RRP_QUEUES q) {
     auto& mtx = _locks[q];
 }
 
-/**
- * CAVEAT: without using mutex references, there are two different locks on the queue, this could lead to some undefined behanviour,
- * best to avoid mapQueue() unless absolutely necessary.
- */
-void RrQueueManager::mapQueue(RRP_QUEUES q1, RRP_QUEUES q2) {
-    const std::lock_guard<std::mutex> lock(_mtx);
-    if (_queues.find(q1) == _queues.end()) {
-        throw QueueDoesNotExit("could not find queue for direction");
-    }
-    _queues.emplace(q2, _queues.at(q1));
-    auto& mtx = _locks.at(q2);
-}
 
 chrono::milliseconds RrQueueManager::queueProcessTime(RRP_QUEUES q) {
     return _queueProcessTime;
