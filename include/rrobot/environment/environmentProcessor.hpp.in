@@ -1,0 +1,44 @@
+#ifndef ENVIRONMENTPROCESSOR_HPP
+#define ENVIRONMENTPROCESSOR_HPP
+
+#include <dlib/logger.h>
+
+#include <boost/program_options.hpp>
+#include <nlohmann/json.hpp>
+#include <vector>
+#include <rrobot/environment/environment.hpp>
+#include <rrobot/exceptions/exceptions.hpp>
+
+using namespace std;
+using json = nlohmann::json;
+
+namespace rrobot {
+/**
+ * @class EnvironmentProcessor
+ * @brief
+ * Generates environment form manifest. If extensions to the manifest is required, a custom class will need to
+ * implemented and can use the JSON object to retrieve manifest extensions.
+ */
+class EnviromentProcessor {
+   public:
+    /**
+     * @fn createEnvironment
+     * @brief
+     * Creates environment,
+     *     - environment variables override manifest settings
+     *     - command line options override environment variables
+     */
+    static Environment createEnvironment(json manifest);
+
+   private:
+    static CHwModel createHwModel(json manifest);
+    static CRrSerial createMc(json manifest);
+    static CQueues createQueues(json manifest);
+    static CServer createServer(json manifest);
+    static CLogging createLogging(json manifest);
+
+    static bool verify(json manifest, vector<string> keys, string container);
+};
+}  // namespace rrobot
+
+#endif  // ENVIRONMENTPROCESSOR_HPP

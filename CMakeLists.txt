@@ -46,6 +46,7 @@ find_package(Boost 1.74.0 COMPONENTS program_options REQUIRED )
 # Sources common to all drones
 set(rrobot_SOURCES
         src/rrobot/main.cpp
+        src/rrobot/environment/environmentProcessor.cpp
 )
 
 add_library(rrobot SHARED  ${rrobot_SOURCES})

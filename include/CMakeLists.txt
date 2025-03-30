@@ -61,6 +61,8 @@ set(rrobot_INCLUDE
     rrobot/environment/cqueues.hpp
     rrobot/environment/crr_server.hpp
     rrobot/environment/clogging.hpp
+    rrobot/environment/environment.hpp
+    rrobot/environment/environmentProcessor.hpp
 )
 
 foreach(item ${rrobot_INCLUDE})
