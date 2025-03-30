@@ -1,0 +1,89 @@
+#ifndef STATE_HPP
+#define STATE_HPP
+
+#include <rrobot/events/cmodes.hpp>
+
+namespace rrobot {
+/**
+ * @class State
+ * @brief
+ * indicates health state (not AI state variables)
+ */
+class State {
+   public:
+    /**
+     * @fn isRunning()
+     * @brief
+     * returns true unless system shutdown is in progress.
+     */
+    bool isRunning() { return _is_running; }
+
+    /**
+     * @fn getErrorCount()
+     * @brief
+     * returns count of any errors that the system has experienced
+     */
+    uint16_t getErrorCount() { return _error_count; }
+
+    /**
+     * @fn getSensors()
+     * @brief
+     * flag that indicates which sensors the robot supports
+     */
+    uint16_t getSensors() { return _sensors; }
+
+    /**
+     * @fn getFlags
+     * @brief
+     * returns various flags indicating system health including current set mode.
+     */
+    int32_t getFlags() { return _flags; }
+
+    /**
+     * @fn setIsRunning
+     * @brief
+     * When set to false, system will start shutting down.
+     * @param isRunning
+     */
+    void setIsRunning(bool isrunning) { _is_running = isrunning; }
+
+    /**
+     * @fn setErrorCount
+     * @brief
+     * sets error count.
+     * @param errorCount new errorCount
+     */
+    void setErrorCount(uint16_t errorCount) { _error_count = errorCount; }
+
+    /**
+     * @fn setSensors
+     * @brief
+     * sets sensor flag
+     * @param sensors sensor flag
+     */
+    void setSensors(uint16_t sensors) { _sensors = sensors; }
+
+    /**
+     * @fn setCycleTime
+     * @brief
+     * last recorded cycle time, for a complete process.
+     */
+    void setCycleTime(uint16_t cycleTime) { _cycleTime = cycleTime; }
+
+    /**
+     * @fn setFlags
+     * @brief
+     * sets flags.
+     */
+    void setFlags(uint32_t flags) { _flags = flags; }
+
+   private:
+    bool _is_running = true;
+    uint16_t _error_count = 0;
+    uint16_t _sensors = 0;
+    uint16_t _cycleTime = 0;
+    uint32_t _flags = CMODE_NOT_SET;
+};
+}  // namespace rrobot
+
+#endif

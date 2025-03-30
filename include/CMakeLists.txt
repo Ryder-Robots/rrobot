@@ -65,6 +65,9 @@ set(rrobot_INCLUDE
     rrobot/environment/environmentProcessor.hpp
     rrobot/state/rrpqueue_names.hpp
     rrobot/state/rrqueue_manager.hpp
+    rrobot/state/state.hpp
+    rrobot/state/state_manager.hpp
+    rrobot/state/rrpstatus.hpp
     rrobot/events/cmodes.hpp
     rrobot/events/mspdirection.hpp
     rrobot/protocols/curators/rrp/rrpcuratorabstract.hpp
