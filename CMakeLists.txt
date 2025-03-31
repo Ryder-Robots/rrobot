@@ -89,3 +89,8 @@ add_executable(test_rrqueue_manager test/test_rrqueue_manager.cpp)
 set_target_properties(test_rrqueue_manager PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
 target_link_libraries(test_rrqueue_manager GTest::gtest_main rrobot dlib gmock)
 gtest_discover_tests(test_rrqueue_manager  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")
+
+add_executable(test_state_manager test/test_state_manager.cpp)
+set_target_properties(test_state_manager PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
+target_link_libraries(test_state_manager GTest::gtest_main rrobot dlib gmock)
+gtest_discover_tests(test_state_manager  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")

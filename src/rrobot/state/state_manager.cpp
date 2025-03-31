@@ -16,19 +16,22 @@ RR_CMODES StateManager::getMode() {
 
 RRP_STATUS StateManager::getStatus() {
     const std::lock_guard<std::mutex> lock(_lock);
-    int32_t statuses = 0;
     int32_t flags_modes = MODE_BITMASK(_state.getFlags());
     RRP_STATUS status = RRP_STATUS::INITILIZING;
     std::vector<RRP_STATUS> statusArray = STATUS_ARRAY_INIT;
 
     // This is the a precise order on what global status will be.
     for (auto s : statusArray) {
-        if ((statuses & s) == s) {
+        if ((_state.getFlags() & s) == s) {
             status = s;
             break;
         }
     }
     return status;
+}
+
+void StateManager::resetStatus() {
+    _state.setFlags(getMode());
 }
 
 void StateManager::setMode(RR_CMODES mode) {
@@ -41,4 +44,14 @@ void StateManager::setMode(RR_CMODES mode) {
 void StateManager::setStatus(int32_t status) {
     const std::lock_guard<std::mutex> lock(_lock);
     _state.setFlags(0 | _state.getFlags() | status);
+}
+
+bool StateManager::isRunning() {
+    const std::lock_guard<std::mutex> lock(_lock);
+    return _state.isRunning();
+}
+
+void StateManager::setIsRunning(bool r) {
+    const std::lock_guard<std::mutex> lock(_lock);
+    return _state.setIsRunning(r);
 }

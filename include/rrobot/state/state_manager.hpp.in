@@ -14,11 +14,46 @@ namespace rrobot {
  */
 class StateManager {
    public:
+
+   StateManager(){}
+
+   ~StateManager(){}
+
+   /**
+    * @fn getFlags
+    * @brief
+    * returns raw copy of flags
+    */
     int32_t getFlags();
 
+    /**
+     * @fn getMode()
+     * @brief
+     * returns system mode.
+     */
     RR_CMODES getMode();
 
+    /**
+     * @fn getStatus
+     * @brief
+     * returns current system status
+     */
     RRP_STATUS getStatus();
+
+    /**
+     * @fn isRunning
+     * @brief
+     * Returns true if system is running.
+     */
+    bool isRunning();
+
+    /**
+     * @fn setIsRunning
+     * @brief
+     * will change system status to running, or non running state.ACTIVE
+     * @param r true for system running, false to trigger shutdown
+     */
+    void setIsRunning(bool r);
 
     /**
      * @fn setStatus
@@ -27,7 +62,20 @@ class StateManager {
      */
     void setStatus(int32_t status);
 
+    /**
+     * @fn resetStatus
+     * @brief
+     * Should be set before checking all handlers.
+     */
+    void resetStatus();
+
+    /**
+     * @fn setMode
+     * @brief
+     * change system mode.
+     */
     void setMode(RR_CMODES mode);
+
 
    private:
     State _state;
