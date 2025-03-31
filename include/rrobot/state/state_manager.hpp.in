@@ -2,8 +2,9 @@
 #define STATE_MANAGER_HPP
 
 #include <mutex>
-#include <rrobot/state/state.hpp>
+#include <vector>
 #include <rrobot/state/rrpstatus.hpp>
+#include <rrobot/state/state.hpp>
 
 namespace rrobot {
 /**
@@ -13,26 +14,25 @@ namespace rrobot {
  */
 class StateManager {
    public:
+    int32_t getFlags();
 
-    int32_t StateManager::getFlags();
+    RR_CMODES getMode();
 
-    RR_CMODES StateManager::getMode();
-
-    RRP_STATUS StateManager::getStatus();
+    RRP_STATUS getStatus();
 
     /**
      * @fn setStatus
      * @brief
      * resets the statuses, note that this should only be done from the mapper.
      */
-    void setStatus(int32_t statuses);
+    void setStatus(int32_t status);
 
-    void StateManager::setMode(RR_CMODES mode);
+    void setMode(RR_CMODES mode);
 
    private:
-   State _state;
-   std::mutex _lock;
-   const int32_t DRONE_ARMED = 0 | INITILIZING | ERROR | RELOADING | SHUTTING_DOWN | TERMINATED;
+    State _state;
+    std::mutex _lock;
+    const int32_t DRONE_ARMED = 0 | INITILIZING | ERROR | RELOADING | SHUTTING_DOWN | TERMINATED;
 };
 }  // namespace rrobot
 

@@ -48,6 +48,9 @@ set(rrobot_SOURCES
         src/rrobot/main.cpp
         src/rrobot/environment/environmentProcessor.cpp
         src/rrobot/state/rrqueue_manager.cpp
+        src/rrobot/state/state_manager.cpp
+        src/rrobot/protocols/curators/rrp/msp_ident_curator.cpp
+        src/rrobot/protocols/curators/rrp/msp_mode_curator.cpp
 )
 
 add_library(rrobot SHARED  ${rrobot_SOURCES})
