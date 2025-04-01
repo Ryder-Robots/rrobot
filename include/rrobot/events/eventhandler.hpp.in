@@ -1,0 +1,113 @@
+#ifndef EVENTHANDLER_HPP
+#define EVENTHANDLER_HPP
+
+#include <dlib/logger.h>
+
+#include <rrobot/events/event.hpp>
+#include <rrobot/environment/environment.hpp>
+#include <rrobot/state/state_manager.hpp>
+
+namespace rrobot {
+
+/**
+ * @interface EventHandler
+ * @brief
+ * Handlers consume, and act on events that are given by the mapper.
+ */
+class EventHandler {
+   public:
+    EventHandler() {}
+
+    ~EventHandler() {}
+
+    /**
+     * @fn init
+     * @brief
+     * Called prior to main loop exactly once to set up any environmental needs.
+     * @param smg state manager
+     * @param env environment
+     */
+    virtual void init(StateManager& smg, Environment& env) {}
+
+    /**
+     * @fn shutDown
+     * @brief
+     * Called when system is shutting down, should perform any neceessary clean up.
+     */
+    virtual void shutDown() {}
+
+    /**
+     * @fn consume
+     * @brief
+     * this method must be implemented when another handler directs an event to this handler.
+     * @param event event that is to be consumed
+     * @param state reference to current state file.
+     * @return true to delete the event on exit, this should be the default, otherwise return false.
+     */
+    virtual bool consume(StateManager& smg, Event* event) = 0;
+
+    /**
+     * @fn name
+     * @brief
+     * The name of the handler used for debugging purposes.
+     */
+    virtual string name() = 0;
+
+    /**
+     * @fn produce
+     * @brief
+     * when available method returns true, then call this method that will produce events for
+     * other handlers.
+     */
+    virtual Event* produce(StateManager& sm) = 0;
+
+    /**
+     * @fn available
+     * @brief
+     * when events can be consumed this method must return true.
+     */
+    virtual bool available() = 0;
+
+    /**
+     * @fn getStatus
+     * @brief
+     * Returns current status of handler.
+     */
+    virtual RRP_STATUS getStatus() = 0;
+
+    /**
+     * @fn setUp
+     * @brief
+     * if defined by the handler performs any start up before each run
+     */
+    virtual void setUp() {}
+
+    /**
+     * @fn shutDown
+     * @brief
+     * called after each run.
+     */
+    virtual void tearDown() {}
+
+    /**
+     * @fn reload
+     * @brief
+     * called to reload system after an error has occured.  If this method is implemented then the handler MUST
+     * reset the status is the error has been handled.
+     */
+    virtual void reload() {}
+
+    /**
+     * @fn onError
+     * @brief
+     * when in implmented called when an error has occured within handler.
+     *
+     * It is up to the handler to set the status to active if the exception has been handled.
+     *
+     * @param exception that has occured.
+     */
+    virtual void onError(const std::exception& e) {}
+};
+}  // namespace rrobot
+
+#endif  // EVENTHANDLER_HPP

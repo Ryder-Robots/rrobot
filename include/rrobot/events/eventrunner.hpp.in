@@ -1,0 +1,48 @@
+#ifndef EVENTRUNNER_HPP
+#define EVENTRUNNER_HPP
+
+#include <dlib/logger.h>
+#include <rrobot/events/eventhandler.hpp>
+#include <rrobot/state/rrqueue_manager.hpp>
+#include <rrobot/state/state_manager.hpp>
+
+namespace rrobot {
+/**
+ * @class EventRunnner
+ * @brief
+ * EventRunner coordinates actions needed to handle a consumer/producer of events (eventHandler)
+ */
+class EventRunner {
+   public:
+    EventRunner(EventHandler* handler, RrQueueManager& qmg, StateManager& smg, RRP_QUEUES inbound, RRP_QUEUES outbound)
+        : _handler(handler), _qmg(qmg), _smg(smg), _inbound(inbound), _outbound(outbound) {}
+
+    ~EventRunner() {
+        if (_handler != nullptr) {
+            delete(_handler);
+        }
+    }
+
+    /**
+     * @fn run
+     * @brief
+     * Called within the thread to allow execution of the handler.
+     *
+     * @param handler (this object)
+     * @param state  reference to state object
+     */
+    static void run(EventRunner& runner);
+
+   private:
+    void handleProduceEvents(EventHandler* handler);
+    void handleConsumeEvents(EventHandler* handler);
+
+    EventHandler* _handler = nullptr;
+    RrQueueManager& _qmg;
+    StateManager& _smg;
+    RRP_QUEUES _inbound;
+    RRP_QUEUES _outbound;
+};
+}  // namespace rrobot
+
+#endif  // EVENTRUNNER_HPP

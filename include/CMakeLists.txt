@@ -70,6 +70,8 @@ set(rrobot_INCLUDE
     rrobot/state/rrpstatus.hpp
     rrobot/events/cmodes.hpp
     rrobot/events/mspdirection.hpp
+    rrobot/events/eventhandler.hpp
+    rrobot/events/eventrunner.hpp
     rrobot/protocols/curators/rrp/rrpcuratorabstract.hpp
 )
 
