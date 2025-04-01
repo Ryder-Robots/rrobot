@@ -40,8 +40,13 @@ class MockConcreteHandler : public EventHandler {
         _status = RRP_STATUS::TERMINATED;
     }
     RRP_STATUS getStatus() override {return _status;}
-
     RRP_STATUS _status = RRP_STATUS::ACTIVE;
+    bool _reload_called = false;
+
+    void reload() { 
+        _reload_called = true;
+        _status = RRP_STATUS::ACTIVE;
+    }
 };
 
 TEST_F(TestEventRunner, TestShouldExecute) {
@@ -62,6 +67,25 @@ TEST_F(TestEventRunner, TestShouldExecute) {
     t.join();
     EXPECT_EQ(true, true);
     delete(runner);
+}
+
+TEST_F(TestEventRunner, TestInvalidQueue) {
+    MockConcreteHandler handler = MockConcreteHandler();
+    Environment env = createEnv();
+    RrQueueManager qmg = RrQueueManager(
+        env.getQueues().getLimit(), 
+        std::chrono::milliseconds(env.getQueues().getThreadWaitTime()), 
+        std::chrono::milliseconds(env.getQueues().getThreadProcessTime()));
+    StateManager smg;
+    handler._reload_called = false;
+    EventRunner* runner = new EventRunner(&handler, qmg, smg, RRP_QUEUES::AI_ENGINE, RRP_QUEUES::USER_INTERFACE);
+    std::thread t = std::thread(EventRunner::run, runner);
+    
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    smg.setIsRunning(false);
+    t.join();
+    
+    EXPECT_EQ(true, handler._reload_called);
 }
 
 int main(int argc, char** argv) {

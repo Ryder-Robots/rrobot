@@ -53,21 +53,24 @@ void EventRunner::run(EventRunner* runner) {
     // isRunning can be considered a kill switch if it is hit, then stop
     while (runner->_smg.isRunning()) {
         auto start = std::chrono::high_resolution_clock::now();
+        auto status = handler->getStatus();
         try {
             if (handler->getStatus() == RRP_STATUS::ACTIVE) {
                 runner->handleProduceEvents(handler);
                 runner->handleConsumeEvents(handler);
+                status = handler->getStatus();
             }
         } catch (const std::exception& e) {
             dlog_hnd << dlib::LERROR << "handler: " << handler->name()
                      << "reported :" << "error occured while handling event: " << e.what();
             runner->_smg.setStatus(RRP_STATUS::ERROR);
             handler->onError(e);
+            status = RRP_STATUS::ERROR;
         }
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
         std::chrono::microseconds waitTime = std::chrono::duration_cast<std::chrono::microseconds>(
-            elapsed - runner->_qmg.queueProcessTime(runner->_inbound));
+           runner->_qmg.queueProcessTime(runner->_inbound) -  elapsed);
 
         if (waitTime.count() > 0) {
             dlog_hnd << dlib::LDEBUG << handler->name() << " finished early now waiting for " << waitTime.count()
@@ -75,7 +78,7 @@ void EventRunner::run(EventRunner* runner) {
             this_thread::sleep_for(waitTime);
         }
 
-        if (handler->getStatus() != RRP_STATUS::ACTIVE) {
+        if (status != RRP_STATUS::ACTIVE) {
             dlog_hnd << dlib::LWARN << "handler" << handler->name()
                      << ": handler status was not active attempting to reload";
             handler->reload();
