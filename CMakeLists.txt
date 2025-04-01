@@ -51,6 +51,7 @@ set(rrobot_SOURCES
         src/rrobot/state/state_manager.cpp
         src/rrobot/protocols/curators/rrp/msp_ident_curator.cpp
         src/rrobot/protocols/curators/rrp/msp_mode_curator.cpp
+        src/rrobot/events/eventrunner.cpp
 )
 
 add_library(rrobot SHARED  ${rrobot_SOURCES})

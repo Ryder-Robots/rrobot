@@ -36,6 +36,7 @@ class EventRunner {
    private:
     void handleProduceEvents(EventHandler* handler);
     void handleConsumeEvents(EventHandler* handler);
+    void timeout(EventHandler* handler);
 
     EventHandler* _handler = nullptr;
     RrQueueManager& _qmg;

@@ -93,6 +93,7 @@ set(EXCEPTIONS
   BadConnectionException 
   FailedToInitilizeHandler 
   NetworkIOException
+  TimeOutException
   RrIOException)
 set(INCLUDE_CONTENT "")
 foreach(item ${EXCEPTIONS})
