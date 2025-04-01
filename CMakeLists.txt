@@ -95,3 +95,8 @@ add_executable(test_state_manager test/test_state_manager.cpp)
 set_target_properties(test_state_manager PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
 target_link_libraries(test_state_manager GTest::gtest_main rrobot dlib gmock)
 gtest_discover_tests(test_state_manager  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")
+
+add_executable(test_eventrunner test/test_eventrunner.cpp)
+set_target_properties(test_eventrunner PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
+target_link_libraries(test_eventrunner GTest::gtest_main rrobot dlib gmock)
+gtest_discover_tests(test_eventrunner  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")

@@ -30,13 +30,6 @@ class EventHandler {
     virtual void init(StateManager& smg, Environment& env) {}
 
     /**
-     * @fn shutDown
-     * @brief
-     * Called when system is shutting down, should perform any neceessary clean up.
-     */
-    virtual void shutDown() {}
-
-    /**
      * @fn consume
      * @brief
      * this method must be implemented when another handler directs an event to this handler.

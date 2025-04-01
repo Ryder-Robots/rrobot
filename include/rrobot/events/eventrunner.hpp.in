@@ -17,11 +17,7 @@ class EventRunner {
     EventRunner(EventHandler* handler, RrQueueManager& qmg, StateManager& smg, RRP_QUEUES inbound, RRP_QUEUES outbound)
         : _handler(handler), _qmg(qmg), _smg(smg), _inbound(inbound), _outbound(outbound) {}
 
-    ~EventRunner() {
-        if (_handler != nullptr) {
-            delete(_handler);
-        }
-    }
+    ~EventRunner() {}
 
     /**
      * @fn run
@@ -31,12 +27,12 @@ class EventRunner {
      * @param handler (this object)
      * @param state  reference to state object
      */
-    static void run(EventRunner& runner);
+    static void run(EventRunner* runner);
 
    private:
     void handleProduceEvents(EventHandler* handler);
     void handleConsumeEvents(EventHandler* handler);
-    void timeout(EventHandler* handler);
+    void timeout(EventHandler* handler, RRP_STATUS wanted);
 
     EventHandler* _handler = nullptr;
     RrQueueManager& _qmg;
