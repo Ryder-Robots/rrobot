@@ -146,8 +146,6 @@ TEST_F(TestEventRunner, TestProduceEvent) {
 
     qmg.addQueue(RRP_QUEUES::AI_ENGINE);
     qmg.addQueue(RRP_QUEUES::USER_INTERFACE);
-    
-    // EXPECT_CALL(handler, available).WillOnce(Return(true));
 
     smg.setIsRunning(true);
     EventRunner* runner = new EventRunner(&handler, qmg, smg, RRP_QUEUES::AI_ENGINE, RRP_QUEUES::USER_INTERFACE);
