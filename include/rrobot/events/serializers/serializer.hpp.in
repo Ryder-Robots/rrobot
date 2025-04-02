@@ -1,0 +1,34 @@
+#ifndef SERIALIZER_HPP
+#define SERIALIZER_HPP
+
+#include <rrobot/events/event.hpp>
+
+namespace rrobot {
+    template <typename T, typename E> class Serializer {
+        public:
+
+        /**
+         * @fn serialize 
+         * @brief
+         * serialize event.
+         */
+        virtual T serialize(E event) = 0;
+
+        /**
+         * @fn deserialize
+         * @brief
+         * deserialize inbound event based upon the direction given in event.
+         */
+        virtual E deserialize(T event) = 0;
+
+        /**
+         * @fn deserialize
+         * @brief
+         * when direction is defined then override the direction on the inbound variable.
+         * 
+         */
+        virtual E deserialize(T event, MSPDIRECTION direction) {return deserialize(event);}
+    };
+}
+
+#endif // SERIALIZER_HPP

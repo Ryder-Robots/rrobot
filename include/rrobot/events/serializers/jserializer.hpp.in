@@ -1,0 +1,32 @@
+#ifndef JSERIALIZER_HPP
+#define JSERIALIZER_HPP
+
+#include <nlohmann/json.hpp>
+#include <rrobot/events/event.hpp>
+#include <rrobot/events/serializers/serializer.hpp>
+#include <rrobot/exceptions/exceptions.hpp>
+#include <rrobot/protocols/curators/rrp/rrpcurator.hpp>
+#include <unordered_map>
+
+using json = nlohmann::json;
+
+namespace rrobot {
+class Jserializer : public Serializer<json, Event*> {
+   public:
+    json serialize(Event* event) override;
+    Event* deserialize(json j) override;
+    Event* deserialize(json event, MSPDIRECTION direction) override;
+
+    /*
+     * Use constructor to maintain state.
+     */
+    Jserializer();
+    ~Jserializer();
+
+   private:
+    unordered_map<string, MSPCOMMANDS> _validMspCommands;
+    unordered_map<MSPCOMMANDS, RrpCuratorAbstract*> _curatorMap;
+};
+}  // namespace rrobot
+
+#endif  // JSERIALIZER_HPP

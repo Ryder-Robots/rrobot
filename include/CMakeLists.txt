@@ -72,6 +72,8 @@ set(rrobot_INCLUDE
     rrobot/events/mspdirection.hpp
     rrobot/events/eventhandler.hpp
     rrobot/events/eventrunner.hpp
+    rrobot/events/serializers/serializer.hpp
+    rrobot/events/serializers/jserializer.hpp
     rrobot/protocols/curators/rrp/rrpcuratorabstract.hpp
 )
 
