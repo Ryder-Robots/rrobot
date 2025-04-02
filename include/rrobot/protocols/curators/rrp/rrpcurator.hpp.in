@@ -1,7 +1,7 @@
 #ifndef RRPCURATORS_HPP
 #define RRPCURATOR_HPP
 
-#include <fatcnt/protocols/common/curators/rrp/rrpcuratorabstract.hpp>
+#include <rrobot/protocols/curators/rrp/rrpcuratorabstract.hpp>
 
 /**
  * header file for curators.
