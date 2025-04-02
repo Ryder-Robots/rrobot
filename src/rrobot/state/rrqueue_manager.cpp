@@ -11,12 +11,14 @@ using namespace rrobot;
  */
 RrQueueManager::~RrQueueManager() {
     const std::lock_guard<std::mutex> lock(_mtx);
+    
+    // allow some time for queues to clear
+    std::this_thread::sleep_for(_queueWaitTime * _queues.size());
+
     for (const auto& [key, value] : _queues) {
-        if (!value.empty()) {
-            while(!value.empty()) {
-                Event* e = value.front();
-                delete(e);
-            }
+        if (!isEmpty(key)) {
+            Event* e = dequeue(key);
+            delete(e);
         }
     }
 }
@@ -38,13 +40,12 @@ void  RrQueueManager::enqueue(RRP_QUEUES q, Event* e) {
         throw QueueDoesNotExit("could not find queue for direction");
     }
     const std::lock_guard<std::mutex> lock(_locks.at(q));
-    std::this_thread::sleep_for(_queueWaitTime);
-
     if (isFull(q)) {
         throw new ExceedMaxMessage("queue has too many messages");
     }
 
     _queues.at(q).emplace(e);
+    std::this_thread::sleep_for(_queueWaitTime);
 }
 
 Event* RrQueueManager::dequeue(RRP_QUEUES q) {

@@ -30,9 +30,8 @@ class MockConcreteHandler : public EventHandler {
    public:
     MockConcreteHandler() {}
     ~MockConcreteHandler() {}
-    MOCK_METHOD(bool, available, (), (override));
+    // MOCK_METHOD(bool, available, (), (override));
     MOCK_METHOD(bool, consume, (StateManager&, Event*), (override));
-    MOCK_METHOD(Event*, produce, (StateManager&), (override));
 
     string name() override { return "mockhandler"; }
     void init(StateManager& smg, Environment& env) {}
@@ -42,10 +41,26 @@ class MockConcreteHandler : public EventHandler {
     RRP_STATUS getStatus() override {return _status;}
     RRP_STATUS _status = RRP_STATUS::ACTIVE;
     bool _reload_called = false;
+    bool _available = true;
 
-    void reload() { 
+    void reload() override { 
         _reload_called = true;
         _status = RRP_STATUS::ACTIVE;
+    }
+
+    Event* produce(StateManager& s) {
+        msp_authkey* payload = new msp_authkey();
+        payload->set_key("test");
+        Event* event = new Event(MSP_AUTHKEY, MSPDIRECTION::EXTERNAL_IN, payload);
+        return event;
+    }
+
+    bool available() override {
+        if (_available == true) {
+            _available = false;
+            return true;
+        }
+        return false;
     }
 };
 
@@ -118,6 +133,33 @@ TEST_F(TestEventRunner, TestConsumeEvent) {
 
     delete(runner);
 }
+
+TEST_F(TestEventRunner, TestProduceEvent) {
+    Environment env = createEnv();
+    RrQueueManager qmg(
+        env.getQueues().getLimit(), 
+        std::chrono::milliseconds(env.getQueues().getThreadWaitTime()), 
+        std::chrono::milliseconds(env.getQueues().getThreadProcessTime()));
+
+    StateManager smg;
+    MockConcreteHandler handler;
+
+    qmg.addQueue(RRP_QUEUES::AI_ENGINE);
+    qmg.addQueue(RRP_QUEUES::USER_INTERFACE);
+    
+    // EXPECT_CALL(handler, available).WillOnce(Return(true));
+
+    smg.setIsRunning(true);
+    EventRunner* runner = new EventRunner(&handler, qmg, smg, RRP_QUEUES::AI_ENGINE, RRP_QUEUES::USER_INTERFACE);
+    std::thread t = std::thread(EventRunner::run, runner);
+    // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    while(qmg.isEmpty(RRP_QUEUES::USER_INTERFACE)) {}
+    EXPECT_EQ(1, qmg.size(RRP_QUEUES::USER_INTERFACE));
+    smg.setIsRunning(false);
+    t.join();
+    delete(runner);
+}
+
 
 
 int main(int argc, char** argv) {

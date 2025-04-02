@@ -56,8 +56,9 @@ void EventRunner::run(EventRunner* runner) {
         auto status = handler->getStatus();
         try {
             if (handler->getStatus() == RRP_STATUS::ACTIVE) {
+                // consume event then produce result
+                runner->handleConsumeEvents(handler);                
                 runner->handleProduceEvents(handler);
-                runner->handleConsumeEvents(handler);
                 status = handler->getStatus();
             }
         } catch (const std::exception& e) {
