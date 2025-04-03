@@ -30,7 +30,6 @@ class MockConcreteHandler : public EventHandler {
    public:
     MockConcreteHandler() {}
     ~MockConcreteHandler() {}
-    // MOCK_METHOD(bool, available, (), (override));
     MOCK_METHOD(bool, consume, (StateManager&, Event*), (override));
 
     string name() override { return "mockhandler"; }
@@ -150,7 +149,6 @@ TEST_F(TestEventRunner, TestProduceEvent) {
     smg.setIsRunning(true);
     EventRunner* runner = new EventRunner(&handler, qmg, smg, RRP_QUEUES::AI_ENGINE, RRP_QUEUES::USER_INTERFACE);
     std::thread t = std::thread(EventRunner::run, runner);
-    // std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     while(qmg.isEmpty(RRP_QUEUES::USER_INTERFACE)) {}
     EXPECT_EQ(1, qmg.size(RRP_QUEUES::USER_INTERFACE));
     smg.setIsRunning(false);

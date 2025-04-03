@@ -1,0 +1,108 @@
+#ifndef UIHANDLER_HPP
+#define UIHANDLER_HPP
+
+#include <nlohmann/json.hpp>
+#include <rrobot/com/external.hpp>
+#include <rrobot/events/eventhandler.hpp>
+#include <rrobot/events/serializers/serializer.hpp>
+#include <rrobot/exceptions/exceptions.hpp>
+
+using json = nlohmann::json;
+
+namespace rrobot {
+/**
+ * @class UiHandler
+ *
+ * @brief
+ * Handles network requests, this is inteneded for WIFI, WAN,  but could possibly could be used for
+ * radio controller events.
+ */
+class UiHandler : public EventHandler {
+   public:
+    /*
+     * Environment is only available at construction time, after that a copy should be made to retain it. You can not
+     * change environment.
+     */
+    UiHandler(External& external, Serializer<json, Event*>& serializer, StateManager& smg, const Environment env)
+        : _external(external), _serializer(serializer), _smg(smg) {}
+
+    ~UiHandler() {
+        shutdown();
+    }
+
+    /**
+     * @fn consume
+     * @brief
+     * serialize events sent from other processors and send them to connection.
+     */
+    bool consume(StateManager& smg, Event* event) override;
+
+    /**
+     * @fn produce
+     * @brief
+     * recieve events from connection, deserialize and return the deserialized event.
+     */
+    Event* produce(StateManager& smg) override;
+
+    /**
+     * @fn available
+     * @brief
+     * returns true if available to produce events.
+     */
+    bool available() override;
+
+    /**
+     * @fn setUp
+     * @brief
+     * perform setup operations.
+     */
+    void setUp() override;
+
+    /**
+     * @fn reload
+     * @brief
+     * called after an error has occrred to reinitilize handler.
+     */
+    void reload() override;
+
+    /**
+     * @fn tearDown
+     * @brief
+     * bring system down
+     */
+    void tearDown() override;
+
+    /**
+     * @fn name
+     * @brief
+     * always return uihandler
+     */
+    string name() override { return "uihandler"; }
+
+    /**
+     * @fn onError
+     * @brief
+     * checks to see if the error is fatal or not,  fatal is lost connection.
+     * Connection will be reset. Otherwise status is set back to active.
+     */
+    void onError(const std::exception& e) override;
+
+    RRP_STATUS getStatus() override { return _status; }
+
+   private:
+    // methods
+    void init(const Environment env);
+    void shutdown();
+
+    // members
+    RRP_STATUS _status = RRP_STATUS::INITILIZING;
+    External& _external;
+    Serializer<json, Event*>& _serializer;
+    StateManager& _smg;
+    bool _available = false;
+    const char _delimiter = 0x1E;
+    char _buffer[BUFSIZ];
+};
+}  // namespace rrobot
+
+#endif  // UIHANDLER_HPP

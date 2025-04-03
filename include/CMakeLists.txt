@@ -75,6 +75,8 @@ set(rrobot_INCLUDE
     rrobot/events/serializers/serializer.hpp
     rrobot/events/serializers/jserializer.hpp
     rrobot/protocols/curators/rrp/rrpcuratorabstract.hpp
+    rrobot/com/external.hpp
+    rrobot/handlers/uihandler.hpp
 )
 
 foreach(item ${rrobot_INCLUDE})

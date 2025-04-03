@@ -53,6 +53,7 @@ set(rrobot_SOURCES
         src/rrobot/protocols/curators/rrp/msp_mode_curator.cpp
         src/rrobot/events/eventrunner.cpp
         src/rrobot/events/serializers/jserializer.cpp
+        src/rrobot/handlers/uihandler.cpp
 )
 
 add_library(rrobot SHARED  ${rrobot_SOURCES})
@@ -111,3 +112,8 @@ add_executable(test_jserializer test/test_jserializer.cpp)
 set_target_properties(test_jserializer PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
 target_link_libraries(test_jserializer GTest::gtest_main rrobot dlib gmock)
 gtest_discover_tests(test_jserializer  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/resources")
+
+add_executable(test_uihandler test/test_uihandler.cpp)
+set_target_properties(test_uihandler PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
+target_link_libraries(test_uihandler GTest::gtest_main rrobot dlib gmock)
+gtest_discover_tests(test_uihandler  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/resources")
