@@ -166,6 +166,28 @@ TEST_F(TestUiHandler, TestInBoundEvents3) {
     EXPECT_THROW({ui.produce(smg);}, NetworkIOException);
 }
 
+TEST_F(TestUiHandler, TestOutBoundEvents) {
+    msp_set_motor_hbridge* payload = new  msp_set_motor_hbridge();
+    payload->set_motor1(500);
+    payload->set_motor2(600);
+    payload->set_motor3(700);
+    payload->set_motor4(800);
+    payload->set_in(0b10101010);
+    Event* event = new Event(MSPCOMMANDS::MSP_SET_MOTOR_HBRIDGE, MSPDIRECTION::EXTERNAL_IN , payload);
+    MockExternal external;
+
+    UiHandler ui(external, serializer, smg, env);
+    ui.consume(smg, event);
+    json j = json::parse(external._outbound.substr(0, external._outbound.length() - 1));
+    EXPECT_EQ(500, j["payload"]["motor1"]);
+    EXPECT_EQ(600, j["payload"]["motor2"]);
+    EXPECT_EQ(700, j["payload"]["motor3"]);
+    EXPECT_EQ(800, j["payload"]["motor4"]);
+    EXPECT_EQ(0b10101010, j["payload"]["in"]);
+    EXPECT_EQ("MSP_SET_MOTOR_HBRIDGE", j["command"]);
+    delete(event);
+}
+
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
