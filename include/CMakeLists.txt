@@ -76,6 +76,7 @@ set(rrobot_INCLUDE
     rrobot/events/serializers/jserializer.hpp
     rrobot/protocols/curators/rrp/rrpcuratorabstract.hpp
     rrobot/com/external.hpp
+    rrobot/com/server.hpp
     rrobot/handlers/uihandler.hpp
 )
 

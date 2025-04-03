@@ -1,0 +1,56 @@
+#ifndef SERVER_HPP
+#define SERVER_HPP
+
+#include <netinet/in.h>
+#include <unistd.h>
+#include <sys/ioctl.h>
+#include <rrobot/com/external.hpp>
+#include <rrobot/exceptions/exceptions.hpp>
+
+namespace rrobot {
+    /**
+     * @class RrServer
+     * @brief
+     * Connects to TCP port.
+     */
+    class RrServer : public External {
+        public:
+            /** 
+             * @fn RrServer
+             * @brief
+             * Uses environment to create connected to TCP socket. Will call init.
+             */
+            RrServer(Environment env, StateManager& smg);
+
+            /**
+             * @fn init
+             * @brief
+             * perform initialisation procedure.
+             */
+            void init(StateManager& smg) override;
+
+            /**
+             * @fn recev_rr
+             * @brief
+             * direct interface to recv
+             */
+            ssize_t recv_rr(void* buffer, size_t bufsz) override;
+
+            int accept_rr() override;
+
+            void close_rr() override;
+
+            ssize_t send_rr(const void *buf, size_t bufsz)  override;
+
+            ssize_t available() override;
+
+            int shutdown_rr() override;
+
+        private:
+            int                 _socket = 0;
+            int                 _sockfd = 0;
+            struct sockaddr_in *_servaddr = nullptr;
+    };
+}
+
+#endif // SERVER_HPP

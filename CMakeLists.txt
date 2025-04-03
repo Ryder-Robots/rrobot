@@ -54,6 +54,7 @@ set(rrobot_SOURCES
         src/rrobot/events/eventrunner.cpp
         src/rrobot/events/serializers/jserializer.cpp
         src/rrobot/handlers/uihandler.cpp
+        src/rrobot/com/server.cpp
 )
 
 add_library(rrobot SHARED  ${rrobot_SOURCES})
