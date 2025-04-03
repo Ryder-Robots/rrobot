@@ -24,7 +24,9 @@ class UiHandler : public EventHandler {
      * change environment.
      */
     UiHandler(External& external, Serializer<json, Event*>& serializer, StateManager& smg, const Environment env)
-        : _external(external), _serializer(serializer), _smg(smg) {}
+        : _external(external), _serializer(serializer), _smg(smg) {
+            init(env);
+    }
 
     ~UiHandler() {
         shutdown();

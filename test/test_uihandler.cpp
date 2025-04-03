@@ -116,6 +116,8 @@ TEST(TestUniHandler, TestInit) {
     StateManager smg;
     Environment env = createEnv();
     UiHandler ui(external, serializer, smg, env);
+
+    EXPECT_EQ(RRP_STATUS::ACTIVE, ui.getStatus());
 }
 
 int main(int argc, char **argv) {
