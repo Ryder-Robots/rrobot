@@ -14,17 +14,6 @@ using ::testing::Return;
 using ::testing::_;
 using ::testing::AnyNumber;
 
-class TestUiHandler : public ::testing::Test {
-   protected:
-    void SetUp() override {
-        // Setup code
-    }
-
-    void TearDown() override {
-        // Teardown code
-    }
-};
-
 Environment createEnv() {
     const fs::path filepath = "manifests/virtual.json";
     std::ifstream ifs(filepath);
@@ -34,6 +23,21 @@ Environment createEnv() {
     return EnviromentProcessor::createEnvironment(manifest);
 }
 
+
+class TestUiHandler : public ::testing::Test {
+   protected:
+    void SetUp() override {
+        // Setup code
+    }
+
+    void TearDown() override {
+        // Teardown code
+    }
+
+    Jserializer serializer = Jserializer();
+    StateManager smg;
+    Environment env = createEnv();
+};
 
 class MockExternal : public External {
     public:
@@ -110,15 +114,58 @@ class MockExternal2 : public External {
     MOCK_METHOD(int, shutdown_rr, (), (override));
 };
 
-TEST(TestUniHandler, TestInit) {
+TEST_F(TestUiHandler, TestInit) {
     MockExternal external;
-    Jserializer serializer = Jserializer();
-    StateManager smg;
-    Environment env = createEnv();
     UiHandler ui(external, serializer, smg, env);
-
     EXPECT_EQ(RRP_STATUS::ACTIVE, ui.getStatus());
 }
+
+TEST_F(TestUiHandler, TestInBoundEvents1) {
+    MockExternal external;
+    UiHandler ui(external, serializer, smg, env);
+
+    EXPECT_EQ(true, ui.available());
+    Event* e = ui.produce(smg);
+    EXPECT_TRUE(e->hasPayload());
+    msp_set_motor_hbridge payload1 = e->getPayload<msp_set_motor_hbridge>();
+    EXPECT_EQ(500, payload1.get_motor1());
+    EXPECT_EQ(600, payload1.get_motor2());
+    EXPECT_EQ(500, payload1.get_motor3());
+    EXPECT_EQ(600, payload1.get_motor4());
+    EXPECT_EQ(0b01010101, payload1.get_in());
+
+    EXPECT_EQ(RRP_STATUS::ACTIVE, ui.getStatus());
+    delete(e);
+}
+
+TEST_F(TestUiHandler, TestInBoundEvents2) {
+    MockExternal external;
+    UiHandler ui(external, serializer, smg, env);
+
+    EXPECT_EQ(true, ui.available());
+    Event* e = ui.produce(smg);
+    EXPECT_TRUE(e->hasPayload());
+    msp_set_motor_hbridge payload = e->getPayload<msp_set_motor_hbridge>();
+    EXPECT_EQ(500, payload.get_motor1());
+    EXPECT_EQ(600, payload.get_motor2());
+    EXPECT_EQ(500, payload.get_motor3());
+    EXPECT_EQ(600, payload.get_motor4());
+    EXPECT_EQ(true, e->hasPayload());
+    EXPECT_EQ(0b01010101, payload.get_in());
+
+    EXPECT_EQ(RRP_STATUS::ACTIVE, ui.getStatus());
+    delete(e);
+}
+
+TEST_F(TestUiHandler, TestInBoundEvents3) {
+    MockExternal2 external;
+    UiHandler ui(external, serializer, smg, env);
+
+    EXPECT_CALL(external, recv_rr(_, _)).WillOnce(Return(-1));
+    EXPECT_EQ(false, ui.available());
+    EXPECT_THROW({ui.produce(smg);}, NetworkIOException);
+}
+
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
