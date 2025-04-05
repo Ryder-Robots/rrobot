@@ -1,0 +1,58 @@
+#ifndef RRMAPPER_HPP
+#define RRMAPPER_HPP
+
+#include <rrobot/environment/environment.hpp>
+#include <rrobot/events/eventhandler.hpp>
+#include <rrobot/state/rrpqueue_names.hpp>
+#include <rrobot/state/state_manager.hpp>
+
+namespace rrobot {
+
+/**
+ * @class RrMapper
+ * @brief
+ * interface to prgram that triggers thread manganger.
+ */
+class RrMapper {
+    public:
+    /**
+     * @fn init
+     * @brief
+     * Provides interface to environment to allow creation of handlers.
+     * @param env current environment from manifest
+     * @param smg status manager
+     */
+    virtual void init(const Environment env, StateManager& smg) = 0;
+
+    /**
+     * @fn init
+     * @brief
+     * init can be expanded to include epath, which is the resource location of the manifest. If extra arguments are
+     * required, main program can determine the relative path from epath.
+     */
+    virtual void init(const Environment env, StateManager& smg, const string epath) { init(env, smg); }
+
+    /**
+     * @fn queueNames
+     * @brief
+     * Returns a vector of queue names, this is used to create queues for drone.
+     */
+    virtual std::vector<RRP_QUEUES> queueNames() = 0;
+
+    /**
+     * @fn mapDirection
+     * @brief
+     * Applies any any overridden mapping that is a result of changing the drones mode.
+     */
+    virtual RRP_QUEUES mapQueue(Event* event) = 0;
+
+    /**
+     * @fn createEventHandlers
+     * @brief
+     * creates the event handler mapping.
+     */
+    virtual std::vector<EventHandler*> createEventHandlers() = 0;
+};
+}  // namespace rrobot
+
+#endif  // RRMAPPER_HPP

@@ -1,0 +1,44 @@
+#ifndef THREADMANAGER_HPP
+#define THREADMANAGER_HPP
+
+#include <dlib/logger.h>
+#include <stdlib.h>
+
+#include <boost/algorithm/string.hpp>
+#include <rrobot/environment/environmentProcessor.hpp>
+#include <rrobot/handlers/rrmapper.hpp>
+#include <rrobot/state/rrqueue_manager.hpp>
+#include <rrobot/events/eventrunner.hpp>
+#include <rrobot/exceptions/exceptions.hpp>
+
+namespace rrobot {
+
+/**
+ * @class ThreadManager
+ * @brief
+ * Once mapper is created,
+ */
+class ThreadManager {
+   public:
+    /**
+     * @
+     */
+    ThreadManager(RrMapper& mapper, const string epath) : _mapper(mapper) { setup(epath); }
+    ~ThreadManager() { teardown(); }
+    void run();
+
+   private:
+    void setup(const string epath);
+    void teardown();
+    bool checkStatus(RRP_STATUS wanted);
+
+    std::vector<std::thread*> _threads;
+    std::vector<EventRunner> _eventRunners;
+    RrMapper& _mapper;
+    StateManager _smg;
+    RrQueueManager* _qmg = nullptr;
+    int _thread_wait_time = 0;
+};
+}  // namespace rrobot
+
+#endif  // THREADMANAGER_HPP

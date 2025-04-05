@@ -29,6 +29,7 @@ class EventRunner {
      */
     static void run(EventRunner* runner);
     RRP_STATUS status() {return _status;}
+    EventHandler* handler() {return _handler;}
 
    private:
     void handleProduceEvents(EventHandler* handler);

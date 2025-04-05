@@ -55,6 +55,7 @@ set(rrobot_SOURCES
         src/rrobot/events/serializers/jserializer.cpp
         src/rrobot/handlers/uihandler.cpp
         src/rrobot/com/server.cpp
+        src/rrobot/handlers/threadmanager.cpp
 )
 
 add_library(rrobot SHARED  ${rrobot_SOURCES})

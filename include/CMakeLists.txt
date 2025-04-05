@@ -78,6 +78,8 @@ set(rrobot_INCLUDE
     rrobot/com/external.hpp
     rrobot/com/server.hpp
     rrobot/handlers/uihandler.hpp
+    rrobot/handlers/rrmapper.hpp
+    rrobot/handlers/threadmanager.hpp
 )
 
 foreach(item ${rrobot_INCLUDE})
@@ -99,6 +101,7 @@ set(EXCEPTIONS
   FailedToInitilizeHandler 
   NetworkIOException
   TimeOutException
+  InvalidStatus
   RrIOException)
 set(INCLUDE_CONTENT "")
 foreach(item ${EXCEPTIONS})
