@@ -6,10 +6,10 @@
 
 #include <boost/algorithm/string.hpp>
 #include <rrobot/environment/environmentProcessor.hpp>
-#include <rrobot/handlers/rrmapper.hpp>
-#include <rrobot/state/rrqueue_manager.hpp>
 #include <rrobot/events/eventrunner.hpp>
 #include <rrobot/exceptions/exceptions.hpp>
+#include <rrobot/handlers/rrmapper.hpp>
+#include <rrobot/state/rrqueue_manager.hpp>
 
 namespace rrobot {
 
@@ -23,7 +23,9 @@ class ThreadManager {
     /**
      * @
      */
-    ThreadManager(RrMapper& mapper, const string epath) : _mapper(mapper) { setup(epath); }
+    ThreadManager(RrMapper& mapper, StateManager& smg, const string epath) : _mapper(mapper), _smg(smg) {
+        setup(epath);
+    }
     ~ThreadManager() { teardown(); }
     void run();
 
@@ -35,7 +37,7 @@ class ThreadManager {
     std::vector<std::thread*> _threads;
     std::vector<EventRunner> _eventRunners;
     RrMapper& _mapper;
-    StateManager _smg;
+    StateManager& _smg;
     RrQueueManager* _qmg = nullptr;
     int _thread_wait_time = 0;
 };

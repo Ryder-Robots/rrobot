@@ -109,12 +109,11 @@ void ThreadManager::run() {
                         << " and attempting to reset handlers";
                 throw new ExceedMaxMessage("found full queue, ignoring event");
             }
-
+            _qmg->enqueue(q, e);
             if (!isActive) {
                 dlog_tm << dlib::LERROR << "an error has occurred, if this persists, perrform emergancy landing";
                 throw new InvalidStatus("incorrect state reseting handlers.");
             }
-
         } catch (const std::exception& e) {
             dlog_tm << dlib::LERROR << e.what();
             _smg.setStatus(RRP_STATUS::ERROR);
