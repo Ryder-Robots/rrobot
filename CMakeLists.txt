@@ -118,3 +118,8 @@ add_executable(test_uihandler test/test_uihandler.cpp)
 set_target_properties(test_uihandler PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
 target_link_libraries(test_uihandler GTest::gtest_main rrobot dlib gmock)
 gtest_discover_tests(test_uihandler  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")
+
+add_executable(test_catagorizer test/test_catagorizer.cpp)
+set_target_properties(test_catagorizer PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
+target_link_libraries(test_catagorizer GTest::gtest_main rrobot dlib gmock)
+gtest_discover_tests(test_catagorizer  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")

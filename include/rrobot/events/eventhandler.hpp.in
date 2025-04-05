@@ -62,13 +62,6 @@ class EventHandler {
     virtual bool available() = 0;
 
     /**
-     * @fn getStatus
-     * @brief
-     * Returns current status of handler.
-     */
-    virtual RRP_STATUS getStatus() = 0;
-
-    /**
      * @fn setUp
      * @brief
      * if defined by the handler performs any start up before each run

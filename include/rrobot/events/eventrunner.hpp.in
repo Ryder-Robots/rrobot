@@ -28,6 +28,7 @@ class EventRunner {
      * @param state  reference to state object
      */
     static void run(EventRunner* runner);
+    RRP_STATUS status() {return _status;}
 
    private:
     void handleProduceEvents(EventHandler* handler);
@@ -39,6 +40,7 @@ class EventRunner {
     StateManager& _smg;
     RRP_QUEUES _inbound;
     RRP_QUEUES _outbound;
+    RRP_STATUS _status;
 };
 }  // namespace rrobot
 

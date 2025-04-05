@@ -89,15 +89,12 @@ class UiHandler : public EventHandler {
      */
     void onError(const std::exception& e) override;
 
-    RRP_STATUS getStatus() override { return _status; }
-
    private:
     // methods
     void init(const Environment env);
     void shutdown();
 
     // members
-    RRP_STATUS _status = RRP_STATUS::INITILIZING;
     External& _external;
     Serializer<json, Event*>& _serializer;
     StateManager& _smg;

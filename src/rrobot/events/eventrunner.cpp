@@ -29,7 +29,7 @@ void EventRunner::timeout(EventHandler* handler, RRP_STATUS wanted) {
 
     // arbitary pick of 3 second here, may be ut should be adjustable.
     while (std::chrono::high_resolution_clock::now() - start < 3s) {
-        if (handler->getStatus() == wanted) {
+        if (_status == wanted) {
             return;
         }
     }
@@ -39,34 +39,33 @@ void EventRunner::timeout(EventHandler* handler, RRP_STATUS wanted) {
 }
 
 void EventRunner::run(EventRunner* runner) {
+    runner->_status = RRP_STATUS::INITILIZING;
     EventHandler* handler = runner->_handler;
     dlog_hnd << dlib::LDEBUG << "initializing:  " << handler->name();
-    runner->_smg.setStatus(RRP_STATUS::INITILIZING);
+    runner->_smg.setStatus(runner->status());
 
     handler->setUp();
     // set a timeout to become active
-    runner->timeout(handler, RRP_STATUS::ACTIVE);
+    runner->_status = RRP_STATUS::ACTIVE;
 
     dlog_hnd << dlib::LDEBUG << handler->name() << " is now active";
-    runner->_smg.setStatus(RRP_STATUS::ACTIVE);
+    runner->_smg.setStatus(runner->status());
 
     // isRunning can be considered a kill switch if it is hit, then stop
     while (runner->_smg.isRunning()) {
         auto start = std::chrono::high_resolution_clock::now();
-        auto status = handler->getStatus();
         try {
-            if (handler->getStatus() == RRP_STATUS::ACTIVE) {
+            if (runner->status() == RRP_STATUS::ACTIVE) {
                 // consume event then produce result
                 runner->handleConsumeEvents(handler);                
                 runner->handleProduceEvents(handler);
-                status = handler->getStatus();
             }
         } catch (const std::exception& e) {
             dlog_hnd << dlib::LERROR << "handler: " << handler->name()
                      << "reported :" << "error occured while handling event: " << e.what();
-            runner->_smg.setStatus(RRP_STATUS::ERROR);
+            runner->_status = RRP_STATUS::ERROR;
+            runner->_smg.setStatus(runner->status());
             handler->onError(e);
-            status = RRP_STATUS::ERROR;
         }
         auto end = std::chrono::high_resolution_clock::now();
         std::chrono::microseconds elapsed = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
@@ -79,7 +78,7 @@ void EventRunner::run(EventRunner* runner) {
             this_thread::sleep_for(waitTime);
         }
 
-        if (status != RRP_STATUS::ACTIVE) {
+        if (runner->status() != RRP_STATUS::ACTIVE) {
             dlog_hnd << dlib::LWARN << "handler" << handler->name()
                      << ": handler status was not active attempting to reload";
             handler->reload();
@@ -89,7 +88,6 @@ void EventRunner::run(EventRunner* runner) {
     try {
         runner->_smg.setStatus(RRP_STATUS::SHUTTING_DOWN);
         handler->tearDown();
-        runner->timeout(handler, RRP_STATUS::TERMINATED);
         runner->_smg.setStatus(RRP_STATUS::TERMINATED);
     } catch (const std::exception& e) {
         dlog_hnd << dlib::LERROR << "handler: " << handler->name()
