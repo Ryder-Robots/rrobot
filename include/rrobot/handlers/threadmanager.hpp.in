@@ -23,7 +23,7 @@ class ThreadManager {
     /**
      * @
      */
-    ThreadManager(RrMapper& mapper, StateManager& smg, const string epath) : _mapper(mapper), _smg(smg) {
+    ThreadManager(RrMapper* mapper, StateManager& smg, const string epath) : _mapper(mapper), _smg(smg) {
         setup(epath);
     }
     ~ThreadManager() { teardown(); }
@@ -36,7 +36,7 @@ class ThreadManager {
 
     std::vector<std::thread*> _threads;
     std::vector<EventRunner> _eventRunners;
-    RrMapper& _mapper;
+    RrMapper* _mapper;
     StateManager& _smg;
     RrQueueManager* _qmg = nullptr;
     int _thread_wait_time = 0;

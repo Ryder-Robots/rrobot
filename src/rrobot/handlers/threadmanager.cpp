@@ -17,7 +17,7 @@ void ThreadManager::setup(const string epath) {
 
     try {
         dlog_tm << dlib::LINFO << "initializing application";
-        _mapper.init(env, _smg, epath);
+        _mapper->init(env, _smg, epath);
 
         dlog_tm << dlib::LINFO << "creating queue manager";
         _qmg = new RrQueueManager(env.getQueues().getLimit(),
@@ -27,7 +27,7 @@ void ThreadManager::setup(const string epath) {
         dlog_tm << dlib::LINFO << "created queue manager";
 
         dlog_tm << dlib::LINFO << "creating queues";
-        std::vector<RRP_QUEUES> qnames = _mapper.queueNames();
+        std::vector<RRP_QUEUES> qnames = _mapper->queueNames();
         for (auto qn : qnames) {
             _qmg->addQueue(qn);
         }
@@ -35,7 +35,7 @@ void ThreadManager::setup(const string epath) {
         dlog_tm << dlib::LINFO << "queues added";
         dlog_tm << dlib::LINFO << "creating threads";
         int i = 0;
-        for (auto h : _mapper.createEventHandlers()) {
+        for (auto h : _mapper->createEventHandlers()) {
             EventRunner runner = EventRunner(h, *_qmg, _smg, qnames[i], RRP_QUEUES::CATEGORIZER);
             std::thread* t = new std::thread(EventRunner::run, &runner);
             _eventRunners.push_back(runner);
@@ -103,7 +103,7 @@ void ThreadManager::run() {
                 continue;
             }
             Event* e = _qmg->dequeue(RRP_QUEUES::CATEGORIZER);
-            RRP_QUEUES q = _mapper.mapQueue(e);
+            RRP_QUEUES q = _mapper->mapQueue(e);
             if (_qmg->isFull(q)) {
                 dlog_tm << dlib::LWARN << "found full queue, ignoring event: " << e->getCommand()
                         << " and attempting to reset handlers";
