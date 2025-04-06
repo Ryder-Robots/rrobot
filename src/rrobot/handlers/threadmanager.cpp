@@ -20,9 +20,7 @@ void ThreadManager::setup(const string epath) {
         _mapper->init(env, _smg, epath);
 
         dlog_tm << dlib::LINFO << "creating queue manager";
-        _qmg = new RrQueueManager(env.getQueues().getLimit(),
-                                  std::chrono::milliseconds(env.getQueues().getThreadWaitTime()),
-                                  std::chrono::milliseconds(env.getQueues().getThreadProcessTime()));
+        _qmg = _mapper->queueManager(env);
         _thread_wait_time = env.getQueues().getThreadWaitTime();
         dlog_tm << dlib::LINFO << "created queue manager";
 
@@ -74,6 +72,7 @@ void ThreadManager::teardown() {
             t->join();
             delete (t);
         }
+        _threads.clear();
     }
 
     dlog_tm << dlib::LINFO << "shutting down application";

@@ -5,6 +5,7 @@
 #include <rrobot/events/eventhandler.hpp>
 #include <rrobot/state/rrpqueue_names.hpp>
 #include <rrobot/state/state_manager.hpp>
+#include <rrobot/state/rrqueue_manager.hpp>
 
 namespace rrobot {
 
@@ -52,6 +53,8 @@ class RrMapper {
      * creates the event handler mapping.
      */
     virtual std::vector<EventHandler*> createEventHandlers() = 0;
+
+    virtual RrQueueManager* queueManager(const Environment env) = 0;
 };
 }  // namespace rrobot
 

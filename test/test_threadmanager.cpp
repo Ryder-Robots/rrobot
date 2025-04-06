@@ -5,6 +5,7 @@
 
 using namespace rrobot;
 using testing::Return;
+using testing::_;
 
 class TestThreadManager : public ::testing::Test {
    protected:
@@ -28,19 +29,27 @@ class MockMapper : public RrMapper {
     MOCK_METHOD(std::vector<EventHandler*>, createEventHandlers, (), (override));
 
     void init(const Environment env, StateManager& smg) override {}
+
+    RrQueueManager* queueManager(Environment env) override {
+        _qmg = new RrQueueManager(env.getQueues().getLimit(),
+                                                 std::chrono::milliseconds(env.getQueues().getThreadWaitTime()),
+                                                 std::chrono::milliseconds(env.getQueues().getThreadProcessTime()));
+        return _qmg;
+    }
+
+    RrQueueManager* _qmg;
 };
 
 class MockHandler : public EventHandler {
    public:
+    MOCK_METHOD(Event*, produce, (StateManager&), (override));
 
-   MOCK_METHOD(Event*, produce, (StateManager&), (override));
-    
-   bool consume(StateManager& smg, Event* event) override {return true;}
-   string name() override {return "MockHandler";}
-   bool available() override {return true;}
+    bool consume(StateManager& smg, Event* event) override { return true; }
+    string name() override { return "MockHandler"; }
+    bool available() override { return false; }
 };
 
-TEST_F(TestThreadManager, ShouldSetup) {
+TEST_F(TestThreadManager, DISABLED_ShouldSetup) {
     MockMapper* mapper = new MockMapper();
     MockHandler* hdl = new MockHandler();
     std::vector<RRP_QUEUES> v = {RRP_QUEUES::AI_ENGINE};
@@ -54,26 +63,36 @@ TEST_F(TestThreadManager, ShouldSetup) {
 
     ThreadManager tmg = ThreadManager(mapper, _sm, "manifests/virtual.json");
 
+    // delete(mapper->_qmg);
+    delete (mapper);
+    delete (hdl);
+}
+
+static void runThreadRunner(ThreadManager* tmg) {
+    tmg->run();
+}
+
+TEST_F(TestThreadManager, shouldRun) {
+    MockMapper* mapper = new MockMapper();
+    MockHandler* hdl = new MockHandler();
+
+    std::vector<RRP_QUEUES> v = {RRP_QUEUES::AI_ENGINE};
+    std::vector<EventHandler*> v2 = {hdl};
+
+    EXPECT_CALL(*mapper, queueNames()).Times(1).WillOnce(Return(v));
+    EXPECT_CALL(*mapper, createEventHandlers()).Times(1).WillOnce(Return(v2));
+    EXPECT_CALL(*mapper, mapQueue(_)).WillRepeatedly(Return(RRP_QUEUES::AI_ENGINE));
+
+    ThreadManager tmg = ThreadManager(mapper, _sm, "manifests/virtual.json");
+    Event* e = new Event(MSPCOMMANDS::MSP_MOTOR, MSPDIRECTION::EXTERNAL_OUT);
+    mapper->_qmg->enqueue(RRP_QUEUES::CATEGORIZER, e);
+
+    std::thread t(runThreadRunner, &tmg);
+    this_thread::sleep_for(500ms);
+    _sm.setIsRunning(false);
+    this_thread::sleep_for(500ms);
+    t.join();
+    // delete(mapper->_qmg);
     delete (mapper);
     delete(hdl);
 }
-
-// TEST_F(TestThreadManager, shouldRun) {
-//     MockMapper* mapper = new MockMapper();
-//     MockHandler* hdl = new MockHandler();
-
-//     std::vector<RRP_QUEUES> v = {RRP_QUEUES::AI_ENGINE};
-//     std::vector<EventHandler*> v2 = {hdl};
-
-//     EXPECT_CALL(*mapper, queueNames()).Times(1).WillOnce(Return(v));
-//     EXPECT_CALL(*mapper, createEventHandlers()).Times(1).WillOnce(Return(v2));
-
-//     std::vector<RRP_QUEUES> v = {RRP_QUEUES::AI_ENGINE};
-//     std::vector<EventHandler*> v2 = {hdl};
-//     ThreadManager tmg = ThreadManager(mapper, _sm, "manifests/virtual.json");
-    
-//     tmg.run();
-    
-//     delete (mapper);
-//     delete(hdl);    
-// }
