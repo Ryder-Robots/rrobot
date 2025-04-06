@@ -63,7 +63,6 @@ TEST_F(TestThreadManager, DISABLED_ShouldSetup) {
 
     ThreadManager tmg = ThreadManager(mapper, _sm, "manifests/virtual.json");
 
-    // delete(mapper->_qmg);
     delete (mapper);
     delete (hdl);
 }
@@ -83,16 +82,16 @@ TEST_F(TestThreadManager, shouldRun) {
     EXPECT_CALL(*mapper, createEventHandlers()).Times(1).WillOnce(Return(v2));
     EXPECT_CALL(*mapper, mapQueue(_)).WillRepeatedly(Return(RRP_QUEUES::AI_ENGINE));
 
-    ThreadManager tmg = ThreadManager(mapper, _sm, "manifests/virtual.json");
+    ThreadManager *tmg = new ThreadManager(mapper, _sm, "manifests/virtual.json");
     Event* e = new Event(MSPCOMMANDS::MSP_MOTOR, MSPDIRECTION::EXTERNAL_OUT);
     mapper->_qmg->enqueue(RRP_QUEUES::CATEGORIZER, e);
 
-    std::thread t(runThreadRunner, &tmg);
+    std::thread t(runThreadRunner, tmg);
     this_thread::sleep_for(500ms);
     _sm.setIsRunning(false);
     this_thread::sleep_for(500ms);
     t.join();
-    // delete(mapper->_qmg);
+    delete(tmg);
     delete (mapper);
     delete(hdl);
 }

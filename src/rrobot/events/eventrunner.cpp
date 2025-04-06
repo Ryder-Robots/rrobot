@@ -86,13 +86,14 @@ void EventRunner::run(EventRunner* runner) {
         }
     }
     try {
-        runner->_smg.setStatus(RRP_STATUS::SHUTTING_DOWN);
+        runner->_status = RRP_STATUS::SHUTTING_DOWN;
         handler->tearDown();
-        runner->_smg.setStatus(RRP_STATUS::TERMINATED);
+        runner->_status = RRP_STATUS::TERMINATED;
     } catch (const std::exception& e) {
         dlog_hnd << dlib::LERROR << "handler: " << handler->name()
             << "reported :" << "error occured while shutting down: " << e.what();
         runner->_smg.setStatus(RRP_STATUS::ERROR);
+        runner->_status = RRP_STATUS::ERROR;
         handler->onError(e);
     }
 }

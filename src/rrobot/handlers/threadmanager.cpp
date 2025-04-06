@@ -82,10 +82,10 @@ void ThreadManager::teardown() {
 }
 
 bool ThreadManager::checkStatus(RRP_STATUS wanted) {
-    bool isActive = true;
+    bool isActive = false;
     for (EventRunner r : _eventRunners) {
-        if (r.status() != wanted) {
-            isActive = false;
+        if (r.status() & wanted) {
+            isActive = true;
             break;
         }
     }
