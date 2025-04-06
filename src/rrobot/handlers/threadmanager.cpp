@@ -62,10 +62,6 @@ void ThreadManager::teardown() {
         }
     }
 
-    if (!isTerminated) {
-        dlog_tm << dlib::LERROR << "not all handlers terminated!!!";
-    }
-
     dlog_tm << dlib::LINFO << "terminating and cleaning up threads";
     for (thread* t : _threads) {
         if (t->joinable()) {
@@ -81,9 +77,14 @@ void ThreadManager::teardown() {
     }
 }
 
+// Could look at disabling this in future versions,  and see if by consequence it gets rid of the memory leak,
+// waiting for the threads to join should be enough to make sure they have terminated.
 bool ThreadManager::checkStatus(RRP_STATUS wanted) {
     bool isActive = false;
     for (EventRunner r : _eventRunners) {
+
+        // Not sure about this,  but for some reason, status is not getting returned even though it is set
+        // this appears to also cause some sort of memory leak.
         if (r.status() & wanted) {
             isActive = true;
             break;

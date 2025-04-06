@@ -86,9 +86,11 @@ void EventRunner::run(EventRunner* runner) {
         }
     }
     try {
+        dlog_hnd << dlib::LINFO << handler->name() << " is now shutting down";
         runner->_status = RRP_STATUS::SHUTTING_DOWN;
         handler->tearDown();
         runner->_status = RRP_STATUS::TERMINATED;
+        dlog_hnd << dlib::LINFO << handler->name() << " is terminated";
     } catch (const std::exception& e) {
         dlog_hnd << dlib::LERROR << "handler: " << handler->name()
             << "reported :" << "error occured while shutting down: " << e.what();
