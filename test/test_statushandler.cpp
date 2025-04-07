@@ -26,6 +26,7 @@ TEST_F(TestStatusManager, shouldProduceEvent) {
     handler.consume(_sm, event);
 
     EXPECT_EQ(true, handler.available());
+    delete(event);
     event = handler.produce(_sm);
 
     EXPECT_EQ(true, event->hasPayload());
@@ -49,6 +50,7 @@ TEST_F(TestStatusManager, shouldReflectUpdates) {
     handler.consume(_sm, event);
 
     EXPECT_EQ(true, handler.available());
+    delete(event);
     event = handler.produce(_sm);
 
     EXPECT_EQ(true, event->hasPayload());

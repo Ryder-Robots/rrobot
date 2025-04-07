@@ -2,9 +2,9 @@
 #define STATE_MANAGER_HPP
 
 #include <mutex>
-#include <vector>
 #include <rrobot/state/rrpstatus.hpp>
 #include <rrobot/state/state.hpp>
+#include <vector>
 
 namespace rrobot {
 /**
@@ -14,16 +14,15 @@ namespace rrobot {
  */
 class StateManager {
    public:
+    StateManager() {}
 
-   StateManager(){}
+    ~StateManager() {}
 
-   ~StateManager(){}
-
-   /**
-    * @fn getFlags
-    * @brief
-    * returns raw copy of flags
-    */
+    /**
+     * @fn getFlags
+     * @brief
+     * returns raw copy of flags
+     */
     int32_t getFlags();
 
     /**
@@ -76,18 +75,47 @@ class StateManager {
      */
     void setMode(RR_CMODES mode);
 
+    /**
+     * @fn setCycleTime
+     * @brief
+     * refer to state documenation
+     */
     void setCycleTime(uint16_t v);
 
+    /**
+     * @fn getCycleTime
+     * @brief
+     * refer to state documenation
+     */
     uint16_t getCycleTime();
 
+    /**
+     * @fn setErrorCount
+     * @brief
+     * refer to state documenation
+     */
     void setErrorCount(uint16_t v);
 
+    /**
+     * @fn getErrorCount
+     * @brief
+     * refer to state documenation
+     */
     uint16_t getErrorCount();
 
+    /**
+     * @fn setSensors
+     * @brief
+     * refer to state documenation
+     */
     void setSensors(uint16_t v);
 
+    /**
+     * @fn getSensors
+     * @brief
+     * refer to state documenation
+     */
     uint16_t getSensors();
-
 
    private:
     State _state;

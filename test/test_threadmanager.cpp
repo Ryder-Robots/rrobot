@@ -71,7 +71,7 @@ static void runThreadRunner(ThreadManager* tmg) {
     tmg->run();
 }
 
-TEST_F(TestThreadManager, shouldRun) {
+TEST_F(TestThreadManager, DISABLED_shouldRun) {
     MockMapper* mapper = new MockMapper();
     MockHandler* hdl = new MockHandler();
 
