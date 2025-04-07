@@ -78,6 +78,7 @@ set(rrobot_INCLUDE
     rrobot/com/external.hpp
     rrobot/com/server.hpp
     rrobot/handlers/uihandler.hpp
+    rrobot/handlers/statushandler.hpp
     rrobot/handlers/rrmapper.hpp
     rrobot/handlers/threadmanager.hpp
 )

@@ -40,6 +40,13 @@ class State {
     int32_t getFlags() { return _flags; }
 
     /**
+     * @fn getCycleTime()
+     * @brief
+     * returns last cycle time, preferably from the micro-processor.
+     */
+    uint16_t getCycleTime() {return _cycleTime;}
+
+    /**
      * @fn setIsRunning
      * @brief
      * When set to false, system will start shutting down.

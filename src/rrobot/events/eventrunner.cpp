@@ -9,7 +9,7 @@ void EventRunner::handleConsumeEvents(EventHandler* handler) {
         dlog_hnd << dlib::LDEBUG << "consume events available:  " << handler->name();
         Event* event = _qmg.dequeue(_inbound);
         _handler->consume(_smg, event);
-        delete (event);
+        delete(event);
     }
 }
 
@@ -41,6 +41,7 @@ void EventRunner::timeout(EventHandler* handler, RRP_STATUS wanted) {
 void EventRunner::run(EventRunner* runner) {
     runner->_status = RRP_STATUS::INITILIZING;
     EventHandler* handler = runner->_handler;
+    StateManager& smg = runner->_smg;
     dlog_hnd << dlib::LDEBUG << "initializing:  " << handler->name();
     runner->_smg.setStatus(runner->status());
 
@@ -78,7 +79,7 @@ void EventRunner::run(EventRunner* runner) {
             this_thread::sleep_for(waitTime);
         }
 
-        if (runner->status() != RRP_STATUS::ACTIVE) {
+        if (smg.isRunning() && runner->status() != RRP_STATUS::ACTIVE) {
             dlog_hnd << dlib::LWARN << "handler" << handler->name()
                      << ": handler status was not active attempting to reload";
             handler->reload();

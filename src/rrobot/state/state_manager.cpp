@@ -55,3 +55,33 @@ void StateManager::setIsRunning(bool r) {
     const std::lock_guard<std::mutex> lock(_lock);
     return _state.setIsRunning(r);
 }
+
+void StateManager::setCycleTime(uint16_t v) {
+    const std::lock_guard<std::mutex> lock(_lock);
+    _state.setCycleTime(v);
+}
+
+uint16_t StateManager::getCycleTime() {
+    const std::lock_guard<std::mutex> lock(_lock);
+    return _state.getCycleTime();
+}
+
+void StateManager::setErrorCount(uint16_t v) {
+    const std::lock_guard<std::mutex> lock(_lock);
+    _state.setErrorCount(v);
+}
+
+uint16_t StateManager::getErrorCount() {
+    const std::lock_guard<std::mutex> lock(_lock);
+    return _state.getErrorCount();
+}
+
+void  StateManager::setSensors(uint16_t v) {
+    const std::lock_guard<std::mutex> lock(_lock);
+    _state.setSensors(v);
+}
+
+uint16_t StateManager::getSensors() {
+    const std::lock_guard<std::mutex> lock(_lock);
+    return _state.getSensors();
+}

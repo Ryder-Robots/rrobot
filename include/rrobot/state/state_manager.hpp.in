@@ -76,6 +76,18 @@ class StateManager {
      */
     void setMode(RR_CMODES mode);
 
+    void setCycleTime(uint16_t v);
+
+    uint16_t getCycleTime();
+
+    void setErrorCount(uint16_t v);
+
+    uint16_t getErrorCount();
+
+    void setSensors(uint16_t v);
+
+    uint16_t getSensors();
+
 
    private:
     State _state;

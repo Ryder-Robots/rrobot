@@ -1,0 +1,45 @@
+#ifndef STATUSHANDLER_HPP
+#define STATUSHANDLER_HPP
+
+#include <rrobot/events/eventhandler.hpp>
+
+namespace rrobot {
+/**
+ * @class RrStatusHandler
+ * @brief
+ * handles status requests and returns directly to the user interface.
+ */
+class RrStatusHandler : public EventHandler {
+   public:
+    /**
+     * @fn consume
+     * @brief
+     * consume status request, and produce status directed towards UI.  Note that the mapping for this should be:
+     *  (no payload) send to handler.
+     *  (payload) send to UI.
+     *
+     * direction can also be used, but can get confusing.
+     */
+    bool consume(StateManager& smg, Event* event) override;
+
+    /**
+     * @fn produce
+     * Produces status event as described in consume.
+     */
+    Event* produce(StateManager& sm) override;
+
+    /**
+     * @fn available
+     * @brief
+     * if request is available return true.
+     */
+    bool available() override;
+
+    string name() override { return "statushandler"; }
+
+   private:
+    bool _available = false;
+};
+}  // namespace rrobot
+
+#endif  // STATUSHANDLER_HPP

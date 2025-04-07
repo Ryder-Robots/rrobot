@@ -53,9 +53,10 @@ set(rrobot_SOURCES
         src/rrobot/protocols/curators/rrp/msp_mode_curator.cpp
         src/rrobot/events/eventrunner.cpp
         src/rrobot/events/serializers/jserializer.cpp
-        src/rrobot/handlers/uihandler.cpp
         src/rrobot/com/server.cpp
+        src/rrobot/handlers/uihandler.cpp
         src/rrobot/handlers/threadmanager.cpp
+        src/rrobot/handlers/statushandler.cpp
 )
 
 add_library(rrobot SHARED  ${rrobot_SOURCES})
@@ -124,3 +125,8 @@ add_executable(test_threadmanager test/test_threadmanager.cpp)
 set_target_properties(test_threadmanager PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
 target_link_libraries(test_threadmanager GTest::gtest_main rrobot dlib gmock)
 gtest_discover_tests(test_threadmanager  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")
+
+add_executable(test_statushandler test/test_statushandler.cpp)
+set_target_properties(test_statushandler PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
+target_link_libraries(test_statushandler GTest::gtest_main rrobot dlib gmock)
+gtest_discover_tests(test_statushandler  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")
