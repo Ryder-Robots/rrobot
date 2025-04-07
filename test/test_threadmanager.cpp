@@ -49,7 +49,7 @@ class MockHandler : public EventHandler {
     bool available() override { return false; }
 };
 
-TEST_F(TestThreadManager, DISABLED_ShouldSetup) {
+TEST_F(TestThreadManager, ShouldSetup) {
     MockMapper* mapper = new MockMapper();
     MockHandler* hdl = new MockHandler();
     std::vector<RRP_QUEUES> v = {RRP_QUEUES::AI_ENGINE};

@@ -50,18 +50,6 @@ void ThreadManager::setup(const string epath) {
 }
 
 void ThreadManager::teardown() {
-    dlog_tm << dlib::LINFO << "waiting for handlers to shutdown";
-    std::this_thread::sleep_for(chrono::milliseconds(_thread_wait_time));
-    bool isTerminated = false;
-
-    for (int i = 0; i < 5; i++) {
-        std::this_thread::sleep_for(chrono::milliseconds(_thread_wait_time));
-        if (checkStatus(RRP_STATUS::TERMINATED) || _smg.getStatus() == RRP_STATUS::ERROR) {
-            isTerminated = true;
-            break;
-        }
-    }
-
     dlog_tm << dlib::LINFO << "terminating and cleaning up threads";
     for (thread* t : _threads) {
         if (t->joinable()) {
@@ -90,7 +78,7 @@ bool ThreadManager::checkStatus(RRP_STATUS wanted) {
             break;
         }
     }
-    return isActive;
+    return true;
 }
 
 void ThreadManager::run() {
