@@ -57,6 +57,7 @@ set(rrobot_SOURCES
         src/rrobot/handlers/uihandler.cpp
         src/rrobot/handlers/threadmanager.cpp
         src/rrobot/handlers/statushandler.cpp
+        src/rrobot/handlers/identhandler.cpp
 )
 
 add_library(rrobot SHARED  ${rrobot_SOURCES})
@@ -130,3 +131,8 @@ add_executable(test_statushandler test/test_statushandler.cpp)
 set_target_properties(test_statushandler PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
 target_link_libraries(test_statushandler GTest::gtest_main rrobot dlib gmock)
 gtest_discover_tests(test_statushandler  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")
+
+add_executable(test_identhandler test/test_identhandler.cpp)
+set_target_properties(test_identhandler PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
+target_link_libraries(test_identhandler GTest::gtest_main rrobot dlib gmock)
+gtest_discover_tests(test_identhandler  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")
