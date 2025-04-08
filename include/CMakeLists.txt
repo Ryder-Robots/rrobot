@@ -75,6 +75,7 @@ set(rrobot_INCLUDE
     rrobot/events/serializers/serializer.hpp
     rrobot/events/serializers/jserializer.hpp
     rrobot/protocols/curators/rrp/rrpcuratorabstract.hpp
+    rrobot/protocols/curators/multiwii/crc.hpp
     rrobot/com/external.hpp
     rrobot/com/server.hpp
     rrobot/handlers/uihandler.hpp
@@ -83,7 +84,6 @@ set(rrobot_INCLUDE
     rrobot/handlers/threadmanager.hpp
     rrobot/handlers/identhandler.hpp
 )
-
 
 foreach(item ${rrobot_INCLUDE})
   configure_file("${item}.in" ${item} @ONLY)
@@ -147,6 +147,8 @@ set(CURATOR_PAIR "")
 set(MULTIWII_COMMANDS "")
 set(MULTWII_I 0)
 set(DECONSTRUCT_EVENT "")
+set(MULTIWII_COMMANDS "")
+set(MULTWII_I 0)
 
 foreach(item ${MSPCOMMANDS})
   separate_arguments(_elements UNIX_COMMAND ${item})
@@ -206,6 +208,7 @@ foreach(item ${MSPCOMMANDS})
   configure_file(rrobot/events/event.tmpl.hpp.in ${OUTPUT_NAME} @ONLY)
   configure_file(rrobot/protocols/curators/rrp/curator.tmpl.hpp.in ${OUTPUT_CURATOR_NAME} @ONLY)
 endforeach()
+configure_file(rrobot/protocols/curators/multiwii/rmultiwii.hpp.in rrobot/protocols/curators/multiwii/rmultiwii.hpp @ONLY)
 configure_file(rrobot/events/mspcommands.hpp.in rrobot/events/mspcommands.hpp @ONLY)
 configure_file(rrobot/protocols/curators/rrp/mspevent.hpp.in rrobot/protocols/curators/rrp/mspevent.hpp)
 configure_file(rrobot/protocols/curators/rrp/rrpcurator.hpp.in rrobot/protocols/curators/rrp/rrpcurator.hpp)

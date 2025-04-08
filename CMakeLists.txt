@@ -51,6 +51,7 @@ set(rrobot_SOURCES
         src/rrobot/state/state_manager.cpp
         src/rrobot/protocols/curators/rrp/msp_ident_curator.cpp
         src/rrobot/protocols/curators/rrp/msp_mode_curator.cpp
+        src/rrobot/protocols/curators/multiwii/rmultiwii.cpp
         src/rrobot/events/eventrunner.cpp
         src/rrobot/events/serializers/jserializer.cpp
         src/rrobot/com/server.cpp
@@ -136,3 +137,8 @@ add_executable(test_identhandler test/test_identhandler.cpp)
 set_target_properties(test_identhandler PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
 target_link_libraries(test_identhandler GTest::gtest_main rrobot dlib gmock)
 gtest_discover_tests(test_identhandler  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")
+
+add_executable(test_rmultiwii test/test_rmultiwii.cpp)
+set_target_properties(test_rmultiwii PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
+target_link_libraries(test_rmultiwii GTest::gtest_main rrobot dlib gmock)
+gtest_discover_tests(test_rmultiwii  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")

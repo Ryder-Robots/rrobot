@@ -1,0 +1,95 @@
+#ifndef RMMULTIWII_HPP
+#define RMMULTIWII_HPP
+
+#include <stdint.h>
+#include <dlib/logger.h>
+
+#include <rrobot/events/mspcommands.hpp>
+#include <rrobot/protocols/curators/multiwii/crc.hpp>
+#include <rrobot/environment/environment.hpp>
+#include <rrobot/exceptions/exceptions.hpp>
+
+namespace rrobot {
+
+/**
+ * @class RmMultiWii
+ *
+ * @brief
+ * encodes uint8_t array based upon the following specification.
+ *
+ * | element    | position      | type      | byte offset | optional |
+ * | ---------- | ------------- | --------  | ----------  | -------- |
+ * | command    | 0             | uint8_t   | 1           | no       |
+ * | size       | 1, 2          | uint16_t  | 2           | no       |
+ * | crc        | 3, 4, 5, 6    | uint32_t  | 4           | no       |
+ * | data       | 6             | uint8_t*  | 0 to n      | yes      |
+ * | term       | n + 1         | uint8_t*  | 1           | no       |
+ */
+class RmMultiWii {
+   public:
+    /**
+     * @fn ~RmMultiWii
+     * @brief
+     * class deconstructor, on deconstruction removes any references.
+     */
+    ~RmMultiWii();
+
+    /**
+     * @fn createInstance
+     * @brief
+     * Creates object instance baased upon inbound data recieved from external source.
+     */
+    static RmMultiWii createInstance(uint8_t* data, Crc32 crc);
+
+    /**
+     * @fn getCommand()
+     * @brief
+     * Returns command.
+     */
+    MSPCOMMANDS getCommand() { return _cmd; }
+
+    /**
+     * @fn getSize()
+     * @brief
+     * Returns byte size of object. This excludes headers termination etc.
+     */
+    uint16_t getSize() { return _sz; }
+
+    /**
+     * @fn getPayload()
+     * @brief
+     * returns payload.
+     */
+    const uint8_t* getPayload();
+
+    /**
+     * @fn encode
+     * @brief
+     * encodes object.
+     */
+    std::string encode(Crc32 crc);
+
+   private:
+    MSPCOMMANDS _cmd;
+    uint16_t _sz;
+    std::string _payload;
+    RmMultiWii(MSPCOMMANDS cmd, uint16_t sz) : _cmd(cmd), _sz(sz) {}
+
+    static const uint8_t _TERMINATION_CHAR = 0x1E;
+    static MSPCOMMANDS getSupportCommand(uint8_t c) {
+        MSPCOMMANDS rv = MSPCOMMANDS::MSP_ERROR;
+        uint8_t _mspCommands[@MULTWII_I@];
+@MULTIWII_COMMANDS@
+        for (int i = 0; i < @MULTWII_I@; i++) {
+            if (_mspCommands[i] == c) {
+                rv = static_cast<MSPCOMMANDS>(_mspCommands[i]);
+                break;
+            }
+        }
+
+        return rv;
+    }
+};
+}  // namespace rrobot
+
+#endif
