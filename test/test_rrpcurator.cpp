@@ -27,12 +27,12 @@ class TestRrpCurator : public ::testing::Test {
     msp_ident payload = msp_ident();
     payload.set_msp_version(MSP_VERSION::SKULD002);
     payload.set_multitype(MULTITYPE_T::QUADP);
-    payload.set_version(1);
+    payload.set_version("1.0.0");
     payload.set_capability(2);
 
     EXPECT_EQ(MSP_VERSION::SKULD002, payload.get_msp_version());
     EXPECT_EQ(MULTITYPE_T::QUADP, payload.get_multitype());
-    EXPECT_EQ(1, payload.get_version());
+    EXPECT_EQ("1.0.0", payload.get_version());
     EXPECT_EQ(2, payload.get_capability());
 }
 
@@ -41,7 +41,7 @@ TEST(TestRrpCurator, TestSingleCurator) {
     json inbound = {
         {"msp_version", "SKULD002"},
         {"multitype", "QUADP"},
-        {"version", 1},
+        {"version", "1.0.0"},
         {"capability", 2}
     };
 
@@ -51,7 +51,7 @@ TEST(TestRrpCurator, TestSingleCurator) {
 
     EXPECT_EQ(MSP_VERSION::SKULD002, payload.get_msp_version());
     EXPECT_EQ(MULTITYPE_T::QUADP, payload.get_multitype());
-    EXPECT_EQ(1, payload.get_version());
+    EXPECT_EQ("1.0.0", payload.get_version());
     EXPECT_EQ(2, payload.get_capability());
     delete(event); 
 }
@@ -60,7 +60,7 @@ TEST(TestRrpCurator, TestSerialize) {
     msp_ident *payload = new msp_ident();
     payload->set_msp_version(MSP_VERSION::SKULD002);
     payload->set_multitype(MULTITYPE_T::QUADP);
-    payload->set_version(1);
+    payload->set_version("1.0.0");
     payload->set_capability(2);
     Event event = Event(MSPCOMMANDS::MSP_IDENT, MSPDIRECTION::EXTERNAL_OUT, payload);
 
@@ -70,7 +70,7 @@ TEST(TestRrpCurator, TestSerialize) {
     EXPECT_EQ("MSP_IDENT", outbound["command"]);
     EXPECT_EQ("SKULD002", outbound["payload"]["msp_version"]);
     EXPECT_EQ("QUADP", outbound["payload"]["multitype"]);
-    EXPECT_EQ(1, outbound["payload"]["version"]);
+    EXPECT_EQ("1.0.0", outbound["payload"]["version"]);
     EXPECT_EQ(2, outbound["payload"]["capability"]);
 }
 

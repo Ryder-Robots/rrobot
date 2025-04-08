@@ -15,7 +15,7 @@ Event* RrStatusHandler::produce(StateManager& sm) {
     mspStatus->set_current_set(0);
     void* payload = static_cast<void*>(mspStatus);
 
-    Event* event = new Event(MSPCOMMANDS::MSP_IDENT, MSPDIRECTION::EXTERNAL_OUT, payload);
+    Event* event = new Event(MSPCOMMANDS::MSP_STATUS, MSPDIRECTION::EXTERNAL_OUT, payload);
     _available = true;
     return event;
 }

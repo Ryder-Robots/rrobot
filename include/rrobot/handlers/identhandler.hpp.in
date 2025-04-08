@@ -1,0 +1,30 @@
+#ifndef IDENTHANDLER_HPP
+#define IDENTHANDLER_HPP
+
+#include <rrobot/environment/environment.hpp>
+#include <rrobot/events/eventhandler.hpp>
+
+namespace rrobot {
+class IdentHandler : public EventHandler {
+   public:
+   IdentHandler(const Environment env);
+
+   bool consume(StateManager& smg, Event* event) override;
+
+   Event* produce(StateManager& sm) override;
+
+   string name() override {return "ident_handler";}
+
+   bool available() override {return _available;}
+
+   private:
+    std::string _version;
+    MULTITYPE_T _multitype;
+    MSP_VERSION _msp_version;
+    uint32_t _capability;
+
+    bool _available = false;
+};
+}  // namespace rrobot
+
+#endif  // IDENTHANDLER_HPP

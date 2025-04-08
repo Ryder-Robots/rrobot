@@ -59,6 +59,7 @@ TEST_F(TestStatusManager, shouldReflectUpdates) {
     EXPECT_EQ(30, status.get_i2c_errors_count());
     EXPECT_EQ(MSPSENSOR_FLAGS::BARO, status.get_sensor() &  MSPSENSOR_FLAGS::BARO);
     EXPECT_EQ(MSPSENSOR_FLAGS::SONAR, status.get_sensor() &  MSPSENSOR_FLAGS::SONAR);
+    EXPECT_EQ(MSPCOMMANDS::MSP_STATUS, event->getCommand());
     delete(event);
 }
 
