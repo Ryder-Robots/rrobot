@@ -78,6 +78,7 @@ set(rrobot_INCLUDE
     rrobot/protocols/curators/multiwii/crc.hpp
     rrobot/com/external.hpp
     rrobot/com/server.hpp
+    rrobot/com/rrserialmc.hpp
     rrobot/handlers/uihandler.hpp
     rrobot/handlers/statushandler.hpp
     rrobot/handlers/rrmapper.hpp

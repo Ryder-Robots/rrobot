@@ -1,0 +1,41 @@
+#ifndef RRSERIALMC_HPP
+#define RRSERIALMC_HPP
+
+#include <libserial/SerialPort.h>
+#include <rrobot/com/external.hpp>
+
+namespace rrobot {
+
+/**
+ * @class SerialUsb
+ * @brief
+ *
+ * integrates serial port wth rrobot
+ */
+class RrSerialMc : public External {
+   public:
+
+    RrSerialMc(const Environment env);
+
+    ssize_t recv_rr(void* buffer, size_t bufsz) override;
+
+    int accept_rr() override;
+
+    void close_rr() override;
+
+    ssize_t send_rr(const void* buf, size_t bufsz) override;
+    std::string recv_rr(size_t bufsz) override;
+
+    ssize_t available() override;
+
+    void init(StateManager& smg) override {}
+
+    int shutdown_rr() override;
+
+   private:
+    LibSerial::SerialPort _serial_port;
+    size_t _timeout_read = 100;  // 25 MS
+};
+}  // namespace rrobot
+
+#endif

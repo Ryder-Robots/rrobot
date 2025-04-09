@@ -55,6 +55,7 @@ set(rrobot_SOURCES
         src/rrobot/events/eventrunner.cpp
         src/rrobot/events/serializers/jserializer.cpp
         src/rrobot/com/server.cpp
+        src/rrobot/com/rrserialmc.cpp
         src/rrobot/handlers/uihandler.cpp
         src/rrobot/handlers/threadmanager.cpp
         src/rrobot/handlers/statushandler.cpp

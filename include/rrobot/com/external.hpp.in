@@ -33,6 +33,8 @@ class External {
      * @return actual bytes written to buffer, -1 if no bytes are available.
      */
     virtual ssize_t recv_rr(void* buffer, size_t bufsz) = 0;
+    virtual std::string recv_rr(size_t bufsz) {return nullptr;}
+
     /**
      * @fn accept_rr
      * @brief
