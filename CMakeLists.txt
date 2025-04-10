@@ -52,6 +52,7 @@ set(rrobot_SOURCES
         src/rrobot/protocols/curators/rrp/msp_ident_curator.cpp
         src/rrobot/protocols/curators/rrp/msp_mode_curator.cpp
         src/rrobot/protocols/curators/multiwii/rmultiwii.cpp
+        src/rrobot/protocols/curators/multiwii/rmultiwii_curator.cpp
         src/rrobot/events/eventrunner.cpp
         src/rrobot/events/serializers/jserializer.cpp
         src/rrobot/com/server.cpp

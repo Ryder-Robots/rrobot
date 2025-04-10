@@ -62,7 +62,7 @@ class RmMultiWii {
      * @brief
      * returns payload.
      */
-    const uint8_t* getPayload();
+    string getPayload();
 
     /**
      * @fn encode

@@ -7,7 +7,7 @@
 namespace rrobot {
 class AbstractRmultiiCurator {
    public:
-    virtual Event* deserialize(RmMultiWii& in);
+    virtual Event* deserialize(std::string in);
     virtual std::string serialize(Event* in);
 
    private:

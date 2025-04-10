@@ -22,7 +22,7 @@ RmMultiWii RmMultiWii::createInstance(std::string data, Crc32 crc) {
     }
 
     if (sz > 0) {
-        if (crc32 != crc.calculate(result.getPayload(), sz)) {
+        if (crc32 != crc.calculate(result.getPayload())) {
             throw RrIOException("failed CRC check");
         }
     }
@@ -36,8 +36,8 @@ RmMultiWii RmMultiWii::createInstance(std::string data, MSPCOMMANDS cmd) {
     return result;
 }
 
-const uint8_t* RmMultiWii::getPayload() {
-    return reinterpret_cast<const uint8_t*>(_payload.c_str());
+string RmMultiWii::getPayload() {
+    return _payload.c_str();
 }
 
 std::string RmMultiWii::encode(Crc32 crc) {
@@ -52,7 +52,7 @@ std::string RmMultiWii::encode(Crc32 crc) {
     uint32_t crc32 = 0;
 
     if (_sz != 0) {
-        crc32 = crc.calculate(getPayload(), _sz);
+        crc32 = crc.calculate(getPayload());
     }
     data += (_sz >> 24) & 0xFF;
     data += (_sz >> 16) & 0xFF;
