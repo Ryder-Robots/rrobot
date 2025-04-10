@@ -1,0 +1,29 @@
+#ifndef AIAIHANDLER_HPP
+#define AIAIHANDLER_HPP
+
+#include <rrobot/com/external.hpp>
+#include <rrobot/events/eventhandler.hpp>
+#include <rrobot/events/serializers/serializer.hpp>
+#include <rrobot/protocols/curators/multiwii/rmultiwii.hpp>
+
+
+namespace rrobot {
+    class AiHandler: public EventHandler {
+        public:
+
+        AiHandler(External& external, Serializer<RmMultiWii, Event*>& serializer, StateManager& smg, const Environment env);
+     
+        bool consume(StateManager& smg, Event* event) override;
+     
+        Event* produce(StateManager& sm) override;
+     
+        string name() override {return "ai_handler";}
+     
+        bool available() override {return _available;}
+
+        private:
+        bool _available = false;
+    };
+}
+
+#endif

@@ -39,7 +39,9 @@ class RmMultiWii {
      * @brief
      * Creates object instance baased upon inbound data recieved from external source.
      */
-    static RmMultiWii createInstance(uint8_t* data, Crc32 crc);
+    static RmMultiWii createInstance(std::string data, Crc32 crc);
+
+    static RmMultiWii createInstance(std::string data, MSPCOMMANDS cmd);
 
     /**
      * @fn getCommand()

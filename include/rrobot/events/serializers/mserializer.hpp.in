@@ -1,0 +1,28 @@
+#ifndef MSERIALIZER_HPP
+#define MSERIALIZER_HPP
+
+#include <rrobot/events/event.hpp>
+#include <rrobot/events/serializers/serializer.hpp>
+#include <rrobot/protocols/curators/multiwii/rmultiwii.hpp>
+
+namespace rrobot {
+/**
+ * @class MSerializer
+ * @brief
+ * Decode and encode events for the microprocessor.
+ */
+class MSerializer : public Serializer<RmMultiWii, Event*> {
+   public:
+    RmMultiWii serialize(Event* event) override;
+    Event* deserialize(RmMultiWii m) override;
+    Event* deserialize(RmMultiWii event, MSPDIRECTION direction) override;
+
+    /*
+     * Use constructor to maintain state.
+     */
+    MSerializer();
+    ~MSerializer();
+};
+}  // namespace rrobot
+
+#endif

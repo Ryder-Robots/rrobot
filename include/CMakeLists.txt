@@ -74,8 +74,10 @@ set(rrobot_INCLUDE
     rrobot/events/eventrunner.hpp
     rrobot/events/serializers/serializer.hpp
     rrobot/events/serializers/jserializer.hpp
+    rrobot/events/serializers/mserializer.hpp
     rrobot/protocols/curators/rrp/rrpcuratorabstract.hpp
     rrobot/protocols/curators/multiwii/crc.hpp
+    rrobot/protocols/curators/multiwii/rmultiwii_curator.hpp
     rrobot/com/external.hpp
     rrobot/com/server.hpp
     rrobot/com/rrserialmc.hpp
@@ -148,7 +150,6 @@ set(CURATOR_PAIR "")
 set(MULTIWII_COMMANDS "")
 set(MULTWII_I 0)
 set(DECONSTRUCT_EVENT "")
-set(MULTIWII_COMMANDS "")
 set(MULTWII_I 0)
 
 foreach(item ${MSPCOMMANDS})

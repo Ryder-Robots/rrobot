@@ -7,7 +7,7 @@ Memory checking results:
 Mismatched deallocation - 1
 Memory Leak - 1
  */
-RmMultiWii RmMultiWii::createInstance(uint8_t* data, Crc32 crc) {
+RmMultiWii RmMultiWii::createInstance(std::string data, Crc32 crc) {
     MSPCOMMANDS cmd = getSupportCommand(data[0]);
     int16_t sz = static_cast<uint16_t>(data[1] | (data[2] << 8));
     int32_t crc32 = static_cast<uint32_t>(data[3] | data[4] << 8 | data[5] << 16 | data[6] << 24);
@@ -26,6 +26,13 @@ RmMultiWii RmMultiWii::createInstance(uint8_t* data, Crc32 crc) {
             throw RrIOException("failed CRC check");
         }
     }
+    return result;
+}
+
+RmMultiWii RmMultiWii::createInstance(std::string data, MSPCOMMANDS cmd) {
+    RmMultiWii result = RmMultiWii(cmd, static_cast<uint16_t>(data.size()));
+    result._payload = data;
+    result._sz = static_cast<uint16_t>(data.size());
     return result;
 }
 

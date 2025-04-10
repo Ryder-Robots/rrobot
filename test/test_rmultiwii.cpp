@@ -21,7 +21,11 @@ class TestMultiWii : public ::testing::Test {
 
  TEST_F(TestMultiWii, shouldEncodeStatus) {
     Crc32 crc = Crc32();
-    uint8_t data[] = {101, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1E};
+    string data;
+    data.append(1, static_cast<char>(101));
+    data.append(6, static_cast<char>(0x00));
+    data.append(1, static_cast<char>(0x1E));
+
     RmMultiWii multiWii = RmMultiWii::createInstance(data, crc);
 
     ASSERT_EQ(MSPCOMMANDS::MSP_STATUS, multiWii.getCommand());
@@ -32,6 +36,25 @@ class TestMultiWii : public ::testing::Test {
     for (int i = 0; i < 8; i++) {
         ASSERT_EQ(data[i], data2[i]);
     }
+ }
+
+ TEST_F(TestMultiWii, shouldEncodeRequest) {
+    Crc32 crc = Crc32();
+    std::string data = "";
+
+    RmMultiWii multiWii = RmMultiWii::createInstance(data, MSPCOMMANDS::MSP_SENSOR);
+    ASSERT_EQ(MSPCOMMANDS::MSP_SENSOR, multiWii.getCommand());
+    ASSERT_EQ(0, multiWii.getSize());
+
+    const uint8_t* data2 = reinterpret_cast<const uint8_t*>(multiWii.encode(crc).c_str());
+    ASSERT_EQ(MSPCOMMANDS::MSP_SENSOR, data2[0]);
+    ASSERT_EQ(0x00, data2[1]);
+    ASSERT_EQ(0x00, data2[2]);
+    ASSERT_EQ(0x00, data2[3]);
+    ASSERT_EQ(0x00, data2[4]);
+    ASSERT_EQ(0x00, data2[5]);
+    ASSERT_EQ(0x00, data2[6]);
+    ASSERT_EQ(0x1E, data2[7]);
  }
 
 int main(int argc, char** argv) {
