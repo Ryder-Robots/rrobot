@@ -78,6 +78,7 @@ set(rrobot_INCLUDE
     rrobot/protocols/curators/rrp/rrpcuratorabstract.hpp
     rrobot/protocols/curators/multiwii/crc.hpp
     rrobot/protocols/curators/multiwii/rmultiwii_curator.hpp
+    rrobot/protocols/curators/multiwii/rmmsp_sensor_curator.hpp
     rrobot/com/external.hpp
     rrobot/com/server.hpp
     rrobot/com/rrserialmc.hpp
@@ -128,7 +129,8 @@ configure_file(rrobot/exceptions/exceptions.hpp.in rrobot/exceptions/exceptions.
 # 2 if true then generate serializer
 # 3 if true then generate deseralizer
 # 4 direction (which queue to message should be directed to)
-# 5..n members in pairs, type [attribute]
+# 5 if true supported by multiwii
+# 6..n members in pairs, type [attribute]
 
 set(MSPCOMMANDS 
   "MSP_NONE 0 INVALID 1 1 1"
