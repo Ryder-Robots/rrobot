@@ -12,10 +12,10 @@ std::string Encoder::encodeFloat(float in) {
 
     memcpy(msb_bytes, &in, sizeof(float));    
     std::string out = "";
-    out.append(1, msb_bytes[0]);
-    out.append(1, msb_bytes[1]);
-    out.append(1, msb_bytes[2]);
     out.append(1, msb_bytes[3]);
+    out.append(1, msb_bytes[2]);
+    out.append(1, msb_bytes[1]);
+    out.append(1, msb_bytes[0]);
     return out;
 }
 
@@ -30,10 +30,10 @@ float Encoder::decodeFloat(std::string in) {
         float value;
     };
     out_u out;
-    out.in[0] = in.c_str()[0] & 0xFF;
-    out.in[1] = in.c_str()[1] & 0xFF;
-    out.in[2] = in.c_str()[2] & 0xFF;
-    out.in[3] = in.c_str()[3] & 0xFF;
+    out.in[3] = in.c_str()[0] & 0xFF;
+    out.in[2] = in.c_str()[1] & 0xFF;
+    out.in[1] = in.c_str()[2] & 0xFF;
+    out.in[0] = in.c_str()[3] & 0xFF;
 
     return out.value;
 }
