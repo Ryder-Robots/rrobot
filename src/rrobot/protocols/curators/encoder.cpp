@@ -1,8 +1,5 @@
 #include <rrobot/protocols/curators/encoder.hpp>
 
-#include <string.h>
-#include <algorithm>
-
 using namespace rrobot;
 
 /**
