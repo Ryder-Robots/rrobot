@@ -23,10 +23,11 @@ std::string AbstractRmultiiCurator::encodeFloat(float f, std::string& in) {
 
 
 std::string AbstractRmultiiCurator::encodeUint32(uint32_t i, std::string& in) {
-    in.append(1, static_cast<char>((i >> 24) & 0xFF));
-    in.append(1, static_cast<char>((i >> 16) & 0xFF));
-    in.append(1, static_cast<char>((i >> 8) & 0xFF));
-    in.append(1, static_cast<char>(i & 0xFF));
+    uint8_t* bytePtr = (uint8_t*)&i; 
+    in.append(1, bytePtr[0]);
+    in.append(1, bytePtr[1]);
+    in.append(1, bytePtr[2]);
+    in.append(1, bytePtr[3]);
     return in;
 }
 

@@ -53,6 +53,8 @@ set(rrobot_SOURCES
         src/rrobot/protocols/curators/rrp/msp_mode_curator.cpp
         src/rrobot/protocols/curators/multiwii/rmultiwii.cpp
         src/rrobot/protocols/curators/multiwii/rmultiwii_curator.cpp
+        src/rrobot/protocols/curators/multiwii/rmmsp_sensor_curator.cpp
+        src/rrobot/protocols/curators/encoder.cpp
         src/rrobot/events/eventrunner.cpp
         src/rrobot/events/serializers/jserializer.cpp
         src/rrobot/com/server.cpp
@@ -144,3 +146,13 @@ add_executable(test_rmultiwii test/test_rmultiwii.cpp)
 set_target_properties(test_rmultiwii PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
 target_link_libraries(test_rmultiwii GTest::gtest_main rrobot dlib gmock)
 gtest_discover_tests(test_rmultiwii  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")
+
+add_executable(test_rmmsp_sensor_curator test/test_rmmsp_sensor_curator.cpp)
+set_target_properties(test_rmmsp_sensor_curator PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
+target_link_libraries(test_rmmsp_sensor_curator GTest::gtest_main rrobot dlib gmock)
+gtest_discover_tests(test_rmmsp_sensor_curator  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")
+
+add_executable(test_encoder test/test_encoder.cpp)
+set_target_properties(test_encoder PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
+target_link_libraries(test_encoder GTest::gtest_main rrobot dlib gmock)
+gtest_discover_tests(test_encoder  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")

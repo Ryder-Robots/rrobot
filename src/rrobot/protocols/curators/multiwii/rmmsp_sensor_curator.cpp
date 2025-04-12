@@ -57,6 +57,20 @@ Event* RmMspSensorCurator::deserializePayload(RmMultiWii& in) {
         payload.set_acc_x(decodeFloat(in.getPayload(), 1 * 4));
         payload.set_acc_y(decodeFloat(in.getPayload(), 2 * 4));
         payload.set_acc_z(decodeFloat(in.getPayload(), 3 * 4));
+
+        payload.set_gyro_avail(decodeUint32(in.getPayload(), 4 * 4));
+        payload.set_gyro_x(decodeFloat(in.getPayload(), 5 * 4));
+        payload.set_gyro_y(decodeFloat(in.getPayload(), 6 * 4));
+        payload.set_gyro_z(decodeFloat(in.getPayload(), 7 * 4));
+
+        payload.set_mag_avail(decodeUint32(in.getPayload(), 4 * 4));
+        payload.set_mag_x(decodeFloat(in.getPayload(), 8 * 4));
+        payload.set_mag_y(decodeFloat(in.getPayload(), 9 * 4));
+        payload.set_mag_z(decodeFloat(in.getPayload(), 10 * 4));
+
+        void* p = static_cast<void*>(malloc(in.getSize() * sizeof(uint8_t)));
+        memcpy(p, &payload, in.getSize());
+        e = new Event(in.getCommand(), MSPDIRECTION::EXTERNAL_IN, p);
     } else 
         e = new Event(in.getCommand(), MSPDIRECTION::EXTERNAL_IN);
     return e;

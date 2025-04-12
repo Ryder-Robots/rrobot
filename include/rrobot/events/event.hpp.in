@@ -22,7 +22,6 @@ class Event {
         
         _hasPayload = true;
     }
-
     // constructor for inbound request, payload is not set.
     Event(MSPCOMMANDS command, MSPDIRECTION direction)        
         : _command(command), 
@@ -39,6 +38,11 @@ class Event {
             // avoid null pointer error, in case delete is called twice.
             _hasPayload = false;
         }
+    
+    }
+
+    void setHasPaylod(bool hasPayload) {
+        _hasPayload = hasPayload;
     }
 
     /**

@@ -1,0 +1,21 @@
+#ifndef MSBENCODER_HPP
+#define MSBENCODER_HPP
+
+#include <string>
+
+namespace rrobot {
+    /**
+     * @class LsbEnocder
+     * @brief
+     * encodes native format, which happens to be LSB on raspberry pi.
+     */
+    class Encoder {
+        public:
+        static std::string encodeFloat(float v);
+        static std::string encodeUint32(uint32_t v);
+        static float decodeFloat(std::string v);
+        static uint32_t decodeInt32(std::string v);
+    };
+}
+
+#endif //MSBENCODER_HPP

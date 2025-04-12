@@ -123,6 +123,54 @@
                     "ignoreFailures": true
                 }
             ]           
+        },
+        {
+            "name": "(gdb) test_rmmsp_sensor_curator",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/test/test_rmmsp_sensor_curator",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/test/resources",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]           
+        },
+        {
+            "name": "(gdb) test_encoder",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/test/test_encoder",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/test/resources",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]           
         }
     ]
 }
