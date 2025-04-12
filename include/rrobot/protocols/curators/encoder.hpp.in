@@ -7,14 +7,19 @@ namespace rrobot {
     /**
      * @class LsbEnocder
      * @brief
-     * encodes native format, which happens to be LSB on raspberry pi.
+     * encodes native format, which happens to be MSB on raspberry pi.
      */
     class Encoder {
         public:
-        static std::string encodeFloat(float v);
+
         static std::string encodeUint32(uint32_t v);
-        static float decodeFloat(std::string v);
         static uint32_t decodeInt32(std::string v);
+
+        static std::string encodeFloat(float v);
+        static float decodeFloat(std::string v);
+
+        static std::string encodeUint16(uint16_t v);
+        static uint16_t dncodeUint16(std::string v);
     };
 }
 

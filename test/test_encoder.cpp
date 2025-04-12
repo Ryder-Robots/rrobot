@@ -35,6 +35,13 @@ TEST_F(TestEncoder, shouldEncodeInt32) {
 }
 
 
+TEST_F(TestEncoder, shouldEncodeFloat) {
+    std::string v = Encoder::encodeFloat(300.45f);
+    float f = Encoder::decodeFloat(v);
+    EXPECT_EQ(300.45f, f);
+}
+
+
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
