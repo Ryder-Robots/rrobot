@@ -41,7 +41,7 @@ pkg_check_modules(LIBSERIAL REQUIRED libserial)
 include_directories(${json_SOURCE_DIR}/include src ${LIBSERIAL_INCLUDE_DIRS} ${PROJECT_BINARY_DIR}/include)
 pkg_search_module(DLIB REQUIRED dlib-1)
 
-find_package(Boost 1.74.0 COMPONENTS program_options REQUIRED )
+find_package(Boost 1.74.0 REQUIRED )
 
 # Sources common to all drones
 set(rrobot_SOURCES

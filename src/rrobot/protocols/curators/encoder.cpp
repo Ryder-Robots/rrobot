@@ -48,11 +48,13 @@ float Encoder::decodeFloat(std::string in) {
  */
 std::string Encoder::encodeUint32(uint32_t in) {
     std::string out = "";
+    uint32_t msb_value = boost::endian::native_to_big(in);
+    uint8_t* bytes = reinterpret_cast<uint8_t*>(&msb_value);
 
-    out.append(1, in >> 24 & 0xFF);
-    out.append(1, in >> 16 & 0xFF);
-    out.append(1, in >> 8 & 0xFF);
-    out.append(1, in & 0xFF);
+    out.append(1, bytes[0]);
+    out.append(1, bytes[1]);
+    out.append(1, bytes[2]);
+    out.append(1, bytes[3]);
     return out;
 }
 
@@ -62,10 +64,24 @@ std::string Encoder::encodeUint32(uint32_t in) {
  * dencodes uint32.
  */
 uint32_t Encoder::decodeInt32(std::string in) {
-    uint32_t out = 0;
-    out = in[0] << 24 & 0xFF;
-    out = in[1] << 16 & 0xFF;
-    out = in[2] << 8 & 0xFF;
-    out = in[3];
-    return out;   
+    uint32_t big_endian_value;
+    std::memcpy(&big_endian_value, in.c_str(), sizeof(big_endian_value));
+    return boost::endian::big_to_native(big_endian_value);
+}
+
+std::string Encoder::encodeUint16(uint16_t in) {
+    std::string out = "";
+    uint16_t msb_value = boost::endian::native_to_big(in);
+    uint8_t* bytes = reinterpret_cast<uint8_t*>(&msb_value);
+
+    out.append(1, bytes[0]);
+    out.append(1, bytes[1]);
+    return out;
+}
+
+
+uint16_t Encoder::dncodeUint16(std::string in) {
+    uint16_t big_endian_value;
+    std::memcpy(&big_endian_value, in.c_str(), sizeof(big_endian_value));
+    return boost::endian::big_to_native(big_endian_value);
 }

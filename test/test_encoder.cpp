@@ -32,6 +32,9 @@ TEST_F(TestEncoder, shouldEncodeInt32) {
     EXPECT_EQ(0x34, v[1]);
     EXPECT_EQ(0x56, v[2]);
     EXPECT_EQ(0x78, v[3]);
+
+    uint32_t i = Encoder::decodeInt32(v);
+    EXPECT_EQ(305419896, i);
 }
 
 
@@ -41,6 +44,11 @@ TEST_F(TestEncoder, shouldEncodeFloat) {
     EXPECT_EQ(300.45f, f);
 }
 
+TEST_F(TestEncoder, shouldEncodeUint16) {
+    std::string v = Encoder::encodeUint16(34556);
+    uint16_t f = Encoder::dncodeUint16(v);
+    EXPECT_EQ(34556, f);
+}
 
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);

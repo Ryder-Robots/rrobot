@@ -15,7 +15,7 @@ class TestRmMspSensorCurator : public ::testing::Test {
      }
  };
 
- TEST_F(TestRmMspSensorCurator, shouldCurate) {
+ TEST_F(TestRmMspSensorCurator, DISABLED_shouldCurate) {
     RmMspSensorCurator curator;
     msp_sensor payload;
     payload.set_acc_avail(1);

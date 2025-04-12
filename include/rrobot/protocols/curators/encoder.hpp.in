@@ -2,6 +2,7 @@
 #define MSBENCODER_HPP
 
 #include <string>
+#include <boost/endian/conversion.hpp>
 
 namespace rrobot {
     /**
