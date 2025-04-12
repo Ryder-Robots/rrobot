@@ -3,6 +3,7 @@
 
 #include <rrobot/protocols/curators/multiwii/rmultiwii_curator.hpp>
 #include <rrobot/events/msp_sensor.hpp>
+#include <rrobot/protocols/curators/encoder.hpp>
 
 namespace rrobot {
     /**

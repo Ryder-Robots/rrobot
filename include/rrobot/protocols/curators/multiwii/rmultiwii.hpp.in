@@ -8,6 +8,7 @@
 #include <rrobot/protocols/curators/multiwii/crc.hpp>
 #include <rrobot/environment/environment.hpp>
 #include <rrobot/exceptions/exceptions.hpp>
+#include <rrobot/protocols/curators/encoder.hpp>
 
 namespace rrobot {
 

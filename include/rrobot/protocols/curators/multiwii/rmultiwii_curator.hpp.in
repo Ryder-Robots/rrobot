@@ -14,12 +14,6 @@ class AbstractRmultiiCurator {
     virtual std::string serializePayload(Event* in) = 0;
     virtual Event* deserializePayload(RmMultiWii& in) = 0;
 
-    protected:
-    std::string encodeFloat(float i, std::string& in);
-    std::string encodeUint32(uint32_t i, std::string& in);
-    uint32_t decodeUint32(std::string enc, int p);
-    float decodeFloat(std::string enc, int p);
-
    private:
     Crc32 _crc;
 };

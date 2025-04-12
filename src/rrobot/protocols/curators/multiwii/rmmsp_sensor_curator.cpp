@@ -25,24 +25,24 @@ using namespace rrobot;
     data += _sz & 0xFF;
   */
 std::string RmMspSensorCurator::serializePayload(Event* in) {
-    string enc;
+    string enc = "";
     if (in->hasPayload()) {
         msp_sensor payload = in->getPayload<msp_sensor>();
         // encode accelometer
-        enc = encodeUint32(payload.get_acc_avail(), enc);
-        enc = encodeFloat(payload.get_acc_x(), enc);
-        enc = encodeFloat(payload.get_acc_y(), enc);
-        enc = encodeFloat(payload.get_acc_z(), enc);
+        enc = Encoder::encodeUint32(payload.get_acc_avail());
+        enc += Encoder::encodeFloat(payload.get_acc_x());
+        enc += Encoder::encodeFloat(payload.get_acc_y());
+        enc += Encoder::encodeFloat(payload.get_acc_z());
         //encode gyro
-        enc = encodeUint32(payload.get_gyro_avail(), enc);
-        enc = encodeFloat(payload.get_gyro_x(), enc);
-        enc = encodeFloat(payload.get_gyro_y(), enc);
-        enc = encodeFloat(payload.get_gyro_z(), enc);
+        enc += Encoder::encodeUint32(payload.get_gyro_avail());
+        enc += Encoder::encodeFloat(payload.get_gyro_x());
+        enc += Encoder::encodeFloat(payload.get_gyro_y());
+        enc += Encoder::encodeFloat(payload.get_gyro_z());
         // encode mangnometer
-        enc = encodeUint32(payload.get_mag_avail(), enc);
-        enc = encodeFloat(payload.get_mag_x(), enc);
-        enc = encodeFloat(payload.get_mag_y(), enc);
-        enc = encodeFloat(payload.get_mag_z(), enc);
+        enc += Encoder::encodeUint32(payload.get_mag_avail());
+        enc += Encoder::encodeFloat(payload.get_mag_x());
+        enc += Encoder::encodeFloat(payload.get_mag_y());
+        enc += Encoder::encodeFloat(payload.get_mag_z());
     }
 
     return enc;
@@ -53,23 +53,24 @@ Event* RmMspSensorCurator::deserializePayload(RmMultiWii& in) {
 
     if (in.getSize() > 0) {
         msp_sensor payload;
-        payload.set_acc_avail(decodeUint32(in.getPayload(), 0));
-        payload.set_acc_x(decodeFloat(in.getPayload(), 1 * 4));
-        payload.set_acc_y(decodeFloat(in.getPayload(), 2 * 4));
-        payload.set_acc_z(decodeFloat(in.getPayload(), 3 * 4));
 
-        payload.set_gyro_avail(decodeUint32(in.getPayload(), 4 * 4));
-        payload.set_gyro_x(decodeFloat(in.getPayload(), 5 * 4));
-        payload.set_gyro_y(decodeFloat(in.getPayload(), 6 * 4));
-        payload.set_gyro_z(decodeFloat(in.getPayload(), 7 * 4));
+        payload.set_acc_avail(Encoder::decodeInt32(in.getPayload().substr(0, 4)));
+        payload.set_acc_x(Encoder::decodeFloat(in.getPayload().substr(4, 4)));
+        payload.set_acc_y(Encoder::decodeFloat(in.getPayload().substr(8, 4)));
+        payload.set_acc_z(Encoder::decodeFloat(in.getPayload().substr(14,4)));
 
-        payload.set_mag_avail(decodeUint32(in.getPayload(), 4 * 4));
-        payload.set_mag_x(decodeFloat(in.getPayload(), 8 * 4));
-        payload.set_mag_y(decodeFloat(in.getPayload(), 9 * 4));
-        payload.set_mag_z(decodeFloat(in.getPayload(), 10 * 4));
+        payload.set_gyro_avail(Encoder::decodeInt32(in.getPayload().substr(18,4)));
+        payload.set_gyro_x(Encoder::decodeFloat(in.getPayload().substr(22, 4)));
+        payload.set_gyro_y(Encoder::decodeFloat(in.getPayload().substr(26,4)));
+        payload.set_gyro_z(Encoder::decodeFloat(in.getPayload().substr(30,4)));
 
-        void* p = static_cast<void*>(malloc(in.getSize() * sizeof(uint8_t)));
-        memcpy(p, &payload, in.getSize());
+        payload.set_mag_avail(Encoder::decodeInt32(in.getPayload().substr(34, 4)));
+        payload.set_mag_x(Encoder::decodeFloat(in.getPayload().substr(38,4)));
+        payload.set_mag_y(Encoder::decodeFloat(in.getPayload().substr(44, 4)));
+        payload.set_mag_z(Encoder::decodeFloat(in.getPayload().substr(48, 4)));
+
+        void* p = static_cast<void*>(malloc(sizeof(payload)));
+        memcpy(p, &payload, sizeof(payload));
         e = new Event(in.getCommand(), MSPDIRECTION::EXTERNAL_IN, p);
     } else 
         e = new Event(in.getCommand(), MSPDIRECTION::EXTERNAL_IN);
