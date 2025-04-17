@@ -1,0 +1,53 @@
+#ifndef RROBOT_AI_AIFEATURES_HPP
+#define RROBOT_AI_AIFEATURES_HPP
+
+#include <rrobot/events/event.hpp>
+#include <vector>
+
+// Add your declarations and definitions here
+namespace rrobot {
+
+/**
+ * @class AiFeatures
+ * @brief Feature list that will be sent to AI handler.
+ * @details
+ * This class provides a list of features that will be sent to the AI handler.
+ * It includes the msp_sensor and sonar_altitude data.
+ * The msp_sensor data is used to retrieve the sensor data from the robot.
+ * The sonar_altitude data is used to retrieve the sonar altitude data from the robot.
+ */
+class AiFeatures {
+   public:
+    AiFeatures() = default;
+    ~AiFeatures() = default;
+
+    /**
+     * @fn addFeature
+     * @brief Adds a feature to the list.
+     * @param feature Pointer to the feature to be added.
+     */
+    void addFeature(rrobot::Event* feature) { _features.push_back(feature); }
+
+    /**
+     * @fn getFeatures
+     * @brief Retrieves the list of features.
+     * @return Vector of pointers to the features.
+     */
+    const std::vector<rrobot::Event*>& getFeatures() const { return _features; }
+    /**
+     * @fn clearFeatures
+     * @brief Clears the list of features.
+     */
+    void clearFeatures() {
+        for (auto feature : _features) {
+            delete feature;
+        }
+        _features.clear();
+    }
+
+   private:
+    std::vector<rrobot::Event*> _features;
+};
+}
+
+#endif  // RROBOT_AI_AIFEATURES_HPP

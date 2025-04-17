@@ -1,0 +1,67 @@
+#ifndef RROBOT_AI_AI_HPP
+#define RROBOT_AI_AI_HPP
+
+#include <vector>
+#include <rrobot/ai/aifeatures.hpp>
+#include <rrobot/state/state_manager.hpp>
+#include <rrobot/state/rrpstatus.hpp>
+
+/**
+ * @namespace rrobot
+ * The `rrobot` namespace encapsulates all classes and functionalities related to the rrobot project.
+ */
+
+namespace rrobot {
+
+/**
+ * @class ai
+ * @brief Abstract base class for AI operations.
+ *
+ * This class defines a set of pure virtual functions that must be implemented
+ * by derived classes to perform various AI-related tasks such as prediction,
+ * learning, training, testing, evaluation, and model management.
+ */
+class Ai {
+   public:
+    /**
+     * @fn watntedFeatures
+     * @brief Supplies list of MSPCOMMANDS used to generate features needed for Event (e)
+     */
+    virtual vector<MSPCOMMANDS> wantedFeatures(Event* e) = 0;
+
+    /**
+     * @fn exec
+     * @brief Executes the AI operation on the given event and features. If horizon is not found, and other events are
+     * needed then set status to INIT, otherwise if next command on stack can be executed then set ACTIVE.
+     * 
+     * Event retrurned by execute will immediatel be sent to Micro-Processor and trigger an action.
+     */
+    virtual Event* exec(Event* e, AiFeatures& f, StateManager& sm) = 0;
+
+    /**
+     * @fn eval
+     * @brief Evaluates the AI operation on the given event. Event is poped from stack.
+     */
+    virtual Event* eval(Event * e) = 0;
+
+    /**
+     * @fn getStatus
+     * @brief Returns the current status of the AI operation. Status indicates if stack should be updted or if
+     * next event on stack can be executed.  The following applies:
+     * 
+     *  - INIT: Before next event can be executed, other commands will need to be placed on stack.
+     *  - ACTIVE: Next event on stack can be executed.
+     *  - ERROR: An error has occurred.ACTIVE
+     *  - TERMINATED : Horizon has been reached, and no more events can be executed.
+     */
+    virtual RRP_STATUS getStatus() = 0;
+
+    /**
+     * @fn setStatus
+     * @brief Sets the status of the AI operation. This is used to update the status of the AI operation.
+     */
+    virtual void setStatus(RRP_STATUS s) = 0;
+};
+}  // namespace rrobot
+
+#endif  // RROBOT_AI_AI_HPP

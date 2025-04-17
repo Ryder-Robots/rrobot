@@ -88,7 +88,10 @@ set(rrobot_INCLUDE
     rrobot/handlers/rrmapper.hpp
     rrobot/handlers/threadmanager.hpp
     rrobot/handlers/identhandler.hpp
-)
+    rrobot/handlers/aihandler.hpp
+    rrobot/ai/aifeatures.hpp
+    rrobot/ai/ai.hpp
+)   
 
 foreach(item ${rrobot_INCLUDE})
   configure_file("${item}.in" ${item} @ONLY)

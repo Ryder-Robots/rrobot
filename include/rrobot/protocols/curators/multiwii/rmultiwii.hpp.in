@@ -72,13 +72,13 @@ class RmMultiWii {
      */
     std::string encode(Crc32 crc);
 
+    static const uint8_t _TERMINATION_CHAR = 0x1E;
+
    private:
     MSPCOMMANDS _cmd;
     uint16_t _sz;
     std::string _payload;
     RmMultiWii(MSPCOMMANDS cmd, uint16_t sz) : _cmd(cmd), _sz(sz) {}
-
-    static const uint8_t _TERMINATION_CHAR = 0x1E;
     static MSPCOMMANDS getSupportCommand(uint8_t c) {
         MSPCOMMANDS rv = MSPCOMMANDS::MSP_ERROR;
         uint8_t _mspCommands[@MULTWII_I@];

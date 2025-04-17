@@ -117,6 +117,8 @@ class StateManager {
      */
     uint16_t getSensors();
 
+    
+
    private:
     State _state;
     std::mutex _lock;
