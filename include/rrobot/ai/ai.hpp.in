@@ -42,7 +42,7 @@ class Ai {
      * @fn eval
      * @brief Evaluates the AI operation on the given event. Event is poped from stack.
      */
-    virtual Event* eval(Event * e) = 0;
+    virtual Event* eval(Event * e, AiFeatures& f) = 0;
 
     /**
      * @fn getStatus
