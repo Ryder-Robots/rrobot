@@ -1,6 +1,7 @@
 #ifndef STATE_HPP
 #define STATE_HPP
 
+#include <rrobot/ai/aifeatures.hpp>
 #include <rrobot/events/cmodes.hpp>
 
 namespace rrobot {
@@ -44,7 +45,7 @@ class State {
      * @brief
      * returns last cycle time, preferably from the micro-processor.
      */
-    uint16_t getCycleTime() {return _cycleTime;}
+    uint16_t getCycleTime() { return _cycleTime; }
 
     /**
      * @fn setIsRunning
@@ -84,12 +85,31 @@ class State {
      */
     void setFlags(uint32_t flags) { _flags = flags; }
 
+    /**
+     * @fn setFeatures
+     * @brief
+     * Sets the AI features for the system.
+     *
+     * @param features The AI features to be set.
+     */
+    void setFeatures(AiFeatures features) { _features = features; }
+
+    /**
+     * @fn getFeatures
+     * @brief
+     * Retrieves the AI features currently set for the system.
+     *
+     * @return The AI features of the system.
+     */
+    AiFeatures getFeatures() { return _features; }
+
    private:
     bool _is_running = true;
     uint16_t _error_count = 0;
     uint16_t _sensors = 0;
     uint16_t _cycleTime = 0;
     uint32_t _flags = CMODE_NOT_SET;
+    AiFeatures _features;
 };
 }  // namespace rrobot
 

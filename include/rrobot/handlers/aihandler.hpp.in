@@ -39,7 +39,7 @@ namespace rrobot  {
         Serializer<RmMultiWii, Event*>& _serializer;
         Crc32 _crc;
 
-        AiFeatures createFeatures(Event *);
+        AiFeatures createFeatures(StateManager& smg, Event *);
     };
 }
 

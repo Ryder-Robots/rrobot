@@ -85,3 +85,13 @@ uint16_t StateManager::getSensors() {
     const std::lock_guard<std::mutex> lock(_lock);
     return _state.getSensors();
 }
+
+void StateManager::setFeatures(AiFeatures features) {
+    const std::lock_guard<std::mutex> lock(_lock);
+    _state.setFeatures(features);
+}
+
+AiFeatures StateManager::getFeatures() {
+    const std::lock_guard<std::mutex> lock(_lock);
+    return _state.getFeatures();
+}

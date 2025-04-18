@@ -117,6 +117,25 @@ class StateManager {
      */
     uint16_t getSensors();
 
+        /**
+     * @fn setFeatures
+     * @brief
+     * Sets the AI features for the system.
+     * Refer to State documentation for details.
+     * 
+     * @param features The AI features to be set.
+     */
+    void setFeatures(AiFeatures features);
+
+    /**
+     * @fn getFeatures
+     * @brief
+     * Retrieves the AI features currently set for the system.
+     * Refer to State documentation for details.
+     * 
+     * @return The AI features of the system.
+     */
+    AiFeatures getFeatures();
     
 
    private:

@@ -89,6 +89,7 @@ set(rrobot_INCLUDE
     rrobot/handlers/threadmanager.hpp
     rrobot/handlers/identhandler.hpp
     rrobot/handlers/aihandler.hpp
+    rrobot/handlers/currentstatehandler.hpp
     rrobot/ai/aifeatures.hpp
     rrobot/ai/ai.hpp
 )   

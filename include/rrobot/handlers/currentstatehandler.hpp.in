@@ -1,0 +1,62 @@
+#ifndef RROBOT_HANDLERS_CURRENTSTATEHANDLER_HPP
+#define RROBOT_HANDLERS_CURRENTSTATEHANDLER_HPP
+
+#include "rrobot/events/eventhandler.hpp"
+
+namespace rrobot {
+
+/**
+ * @class CurrentStateHandler
+ * @brief Handles the current state events within the rrobot system.
+ *
+ * This class is responsible for processing and managing events related
+ * to the current state of the robot. It inherits from the EventHandler
+ * base class.
+ */
+class CurrentStateHandler : public EventHandler {
+   public:
+    /**
+     * @brief Default constructor.
+     */
+    CurrentStateHandler() = default;
+
+    /**
+     * @brief Destructor.
+     */
+    ~CurrentStateHandler() = default;
+
+    /**
+     * @brief Handles an event.
+     *
+     * This method overrides the base class's handleEvent method to
+     * provide specific handling for current state events.
+     *
+     * @param event The event to handle.
+     */
+    Event* produce(StateManager& sm) override;
+
+    /**
+     * @brief Consumes an event and processes it using the provided StateManager.
+     *
+     * Each call  to the method will move to the next attribute in feature list, until last member is reached
+     * then it will reset back to first.
+     *
+     * @param smg The StateManager instance used to manage the robot's state.
+     * @param event The event to be consumed and processed.
+     * @return True if the event was successfully consumed, false otherwise.
+     */
+    bool consume(StateManager& smg, Event* event) override;
+
+    string name() override { return "currentstatehandler"; }
+
+    bool available() override {return _available;}
+
+   private:
+   int _idx = 0;
+   bool _available = false;
+    // Add private members and methods as needed.
+};
+
+}  // namespace rrobot
+
+#endif  // RROBOT_HANDLERS_CURRENTSTATEHANDLER_HPP

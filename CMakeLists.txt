@@ -64,6 +64,7 @@ set(rrobot_SOURCES
         src/rrobot/handlers/statushandler.cpp
         src/rrobot/handlers/identhandler.cpp
         src/rrobot/handlers/aihandler.cpp
+        src/rrobot/handlers/currentstatehandler.cpp
 )
 
 add_library(rrobot SHARED  ${rrobot_SOURCES})
