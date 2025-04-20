@@ -17,7 +17,7 @@ bool AiHandler::consume(StateManager& smg, Event* event) {
         e = _ai.eval(e, f);
         if (_ai.getStatus() == RRP_STATUS::ACTIVE) {
             st.pop();
-            Event* a = _ai.exec(e, f, smg);
+            Event* a = _ai.exec(e, st, smg);
 
             // send command to micro-processor
             RmMultiWii m = _serializer.serialize(a);

@@ -40,7 +40,7 @@ class Ai {
      * @param features of current state
      * @param state-manager
      */
-    virtual Event* exec(Event* e, std::stack& st, StateManager& sm) = 0;
+    virtual Event* exec(Event* e, std::stack<Event*>& st, StateManager& sm) = 0;
 
     /**
      * @fn eval
