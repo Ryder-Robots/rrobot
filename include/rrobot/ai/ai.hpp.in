@@ -35,8 +35,12 @@ class Ai {
      * needed then set status to INIT, otherwise if next command on stack can be executed then set ACTIVE.
      * 
      * Event retrurned by execute will immediatel be sent to Micro-Processor and trigger an action.
+     * 
+     * @param event to be executed.
+     * @param features of current state
+     * @param state-manager
      */
-    virtual Event* exec(Event* e, AiFeatures& f, StateManager& sm) = 0;
+    virtual Event* exec(Event* e, std::stack& st, StateManager& sm) = 0;
 
     /**
      * @fn eval
