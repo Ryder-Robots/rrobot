@@ -5,6 +5,7 @@
 #include <rrobot/state/rrpstatus.hpp>
 #include <rrobot/state/state.hpp>
 #include <vector>
+#include <math.h>
 
 namespace rrobot {
 /**
@@ -136,6 +137,42 @@ class StateManager {
      * @return The AI features of the system.
      */
     AiFeatures getFeatures();
+
+    /**
+     * @fn getHeading
+     * @brief return current robot heading.
+     */
+    float getHeading();
+
+    /**
+     * @fn setHeadingFromRadians2(x, y)
+     * @brief given X, and Y cooridinates (RAD), convert to heading in degrees
+     * 
+     * Sumerised as:
+     * 
+     * | Compass Heading	| Degrees | Radians (deg × π/180) |	x (cos)	| y (sin)
+     * |------------------- | --------| ----------------------|---------|---------
+     * | North              |  0	  | 0.0000                | 1.0000  | 0.0000
+     * | Northeast          |  45     | 0.7854                | 0.7071  | 0.7071
+     * | East               | 90      | 1.5708                | 0.0000  | 1.0000
+     * | South              | 180     | 3.1416                | -1.0000 | 0.0000
+     * | West               | 270     | 4.7124                | 0.0000  | -1.0000
+     */
+    void setHeadingFromRadians2(float x, float y);
+
+    /**
+     * @fn getHeadingRadians
+     * @brief given empty float populate element 0, and element 1 with radians X, and Y from current 
+     */
+    void getHeadingRadians(float* x, float* y);
+
+    /**
+     * @fn rotate
+     * @brief rotate robot "degrees" degrees. Will not automatically update heading.  This needs to be done 
+     * explicitly and should be read from  the micro-process, or magnometer. The method only returns headings 
+     * that can be used in the argument to the magnometer.
+     */
+    void rotate(float degrees, float* x, float* y);
     
 
    private:

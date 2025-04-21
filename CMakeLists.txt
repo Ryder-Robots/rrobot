@@ -64,16 +64,11 @@ set(rrobot_SOURCES
         src/rrobot/handlers/statushandler.cpp
         src/rrobot/handlers/identhandler.cpp
         src/rrobot/handlers/aihandler.cpp
-
+        src/rrobot/handlers/currentstatehandler.cpp
 )
 
-
-#
-#src/rrobot/handlers/currentstatehandler.cpp
-
-
 add_library(rrobot SHARED  ${rrobot_SOURCES})
-target_link_libraries(rrobot pthread  ${LIBSERIAL_LIBRARIES} ${EXTRA_LIBS}  ${Boost_LIBRARIES})
+target_link_libraries(rrobot pthread m  ${LIBSERIAL_LIBRARIES} ${EXTRA_LIBS}  ${Boost_LIBRARIES})
 
 configure_file(
   ${CMAKE_CURRENT_SOURCE_DIR}/resources/rrobot.pc.in

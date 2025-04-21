@@ -127,13 +127,15 @@ set(GENERATED_INCLUDES ${INCLUDE_CONTENT})
 configure_file(rrobot/exceptions/exceptions.hpp.in rrobot/exceptions/exceptions.hpp @ONLY)
 
 
+# MSP104 and MSP215 should be obsleted.
+
 # MSP COMMANDS
 # structure of hash is
 # 0 command
 # 1 command value
-# 2 if true then generate serializer
-# 3 if true then generate deseralizer
-# 4 direction (which queue to message should be directed to)
+# 2 direction (which queue to message should be directed to)
+# 3 if true then generate serializer
+# 4 if true then generate deseralizer
 # 5 if true supported by multiwii
 # 6..n members in pairs, type [attribute]
 
@@ -147,7 +149,9 @@ set(MSPCOMMANDS
   "MSP_STATUS 101 EXTERNAL_OUT 1 1 1 uint16_t cycletime uint16_t i2c_errors_count uint16_t sensor uint32_t flag uint8_t current_set"
   "MSP_MOTOR 104 EXTERNAL_OUT 1 1 1 int8_t roll int8_t pitch int8_t yaw uint16_t throttle int8_t aux1 int8_t aux2 int8_t aux3 int8_t aux4"
   "MSP_SET_MOTOR_HBRIDGE 215 EXTERNAL_IN 1 1 0 uint16_t motor1 uint16_t motor2 uint16_t motor3 uint16_t motor4 uint8_t in"
-  "MSP_SENSOR 216 EXTERNAL_IN 1 1 1 uint32_t acc_avail float acc_x float acc_y float acc_z uint32_t gyro_avail float gyro_x float gyro_y float gyro_z uint32_t mag_avail float mag_x float mag_y float mag_z")
+  "MSP_SENSOR 216 EXTERNAL_IN 1 1 1 uint32_t acc_avail float acc_x float acc_y float acc_z uint32_t gyro_avail float gyro_x float gyro_y float gyro_z uint32_t mag_avail float mag_x float mag_y float mag_z"
+  "MSP_DELTA_XY 217 EXTERNAL_OUT 1 1 1 float x float y float heading"
+  "MSP_ORIENTATION 218 EXTERNAL_OUT 1 1 1 float x float y")
 
 set(LOOP_CONTENT "")
 set(VALID_MSPCOMMANDS "")

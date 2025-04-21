@@ -103,6 +103,25 @@ class State {
      */
     AiFeatures getFeatures() { return _features; }
 
+    /**
+     * @fn set_orientation
+     * @brief set orientation of robot converted to degrees
+     */
+    void setHeading(float x, float y) {
+        _mag_x = x;
+        _mag_y = y;
+    }
+
+    /**
+     * @fn getOrientation
+     * @brief return orientation converted to dgrees, this can be used for a compass heading, where
+     * 0 is magnetic north, 90 is east (north rotated 90 degrees), 180 is south, and 270 is west.
+     */
+    void getHeading(float* x, float* y) { 
+        *x = _mag_x;
+        *y = _mag_y;
+    }
+
    private:
     bool _is_running = true;
     uint16_t _error_count = 0;
@@ -110,6 +129,8 @@ class State {
     uint16_t _cycleTime = 0;
     uint32_t _flags = CMODE_NOT_SET;
     AiFeatures _features;
+    float _mag_x;
+    float _mag_y;
 };
 }  // namespace rrobot
 

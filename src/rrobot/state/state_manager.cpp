@@ -95,3 +95,33 @@ AiFeatures StateManager::getFeatures() {
     const std::lock_guard<std::mutex> lock(_lock);
     return _state.getFeatures();
 }
+
+void StateManager::setHeadingFromRadians2(float x, float y) {
+    _state.setHeading(x, y);
+}
+
+void StateManager::getHeadingRadians(float* x, float* y) {
+    const std::lock_guard<std::mutex> lock(_lock);
+    _state.getHeading(x, y);
+}
+
+void StateManager::rotate(float degrees, float* x, float* y) {
+
+    _state.getHeading(x, y);
+    if (degrees == 0) {
+         return;
+    }
+    float radians = atan2(*y, *x);
+    float headingDegrees = (radians * 180 / M_PI) + degrees;
+    radians = headingDegrees * (M_PI / 180);
+    *x = cosf(radians);
+    *y = sinf(radians);
+}
+
+float StateManager::getHeading() {
+    const std::lock_guard<std::mutex> lock(_lock);
+    float x, y;
+    _state.getHeading(&x, &y);
+    float headingRadians = atan2(y, x);
+    return headingRadians * 180 / M_PI;
+}

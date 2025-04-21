@@ -18,7 +18,7 @@ class TestStateManager : public ::testing::Test {
          // Teardown code
      }
 
-     StateManager sm = StateManager();
+     StateManager sm;
  };
 
 TEST_F(TestStateManager, TestIsRunning) {
@@ -90,4 +90,72 @@ TEST_F(TestStateManager, TestBitMaps) {
     EXPECT_EQ(CMODE_MANUAL_FLIGHT, MODE_BITMASK(test));
     test = ACTIVE + INITILIZING + CMODE_MANUAL_FLIGHT;
     EXPECT_EQ(ACTIVE + INITILIZING, STATUS_BITMASK(test)); 
+}
+
+TEST_F(TestStateManager, TestHeadingsFromRadians) {
+    // north
+    sm.setHeadingFromRadians2(0, 0);
+    float degrees = sm.getHeading();
+    EXPECT_FLOAT_EQ(0, degrees);
+
+    // Northeast
+    sm.setHeadingFromRadians2(0.7071, 0.7071);
+    degrees = sm.getHeading();
+    EXPECT_FLOAT_EQ(45, degrees);
+
+    // East
+    sm.setHeadingFromRadians2(0, 1);
+    degrees = sm.getHeading();
+    EXPECT_FLOAT_EQ(90, degrees);
+
+    // South
+    sm.setHeadingFromRadians2(-1, 0);
+    degrees = sm.getHeading();
+    EXPECT_FLOAT_EQ(180, degrees);
+
+    // West (note that this can also be 270, but -90 is more correct)
+    sm.setHeadingFromRadians2(0, -1);
+    degrees = sm.getHeading();
+    EXPECT_FLOAT_EQ(-90, degrees);
+}
+
+TEST_F(TestStateManager, getHeadingRadians) {
+
+    // North
+    float x, y;
+    sm.setHeadingFromRadians2(0, 0);
+    sm.getHeadingRadians(&x, &y);
+    EXPECT_FLOAT_EQ(0, x);
+    EXPECT_FLOAT_EQ(0, y);
+
+    // Northeast
+    sm.setHeadingFromRadians2(0.7071, 0.7071);
+    sm.getHeadingRadians(&x, &y);
+    EXPECT_FLOAT_EQ(0.7071, x);
+    EXPECT_FLOAT_EQ(0.7071, y);   
+}
+
+TEST_F(TestStateManager, TestRotate) {
+    // set to north first
+    sm.setHeadingFromRadians2(0, 0);
+    float degrees = sm.getHeading();
+    EXPECT_FLOAT_EQ(0, degrees);
+
+    // Rotate to the east.
+    float x, y;
+    sm.rotate(90, &x, &y);
+    EXPECT_FLOAT_EQ(0, round(x));
+    EXPECT_FLOAT_EQ(1, round(y));
+    sm.setHeadingFromRadians2(x, y);
+
+    // rotate south
+    sm.rotate(90, &x, &y);
+    EXPECT_FLOAT_EQ(-1, round(x));
+    EXPECT_FLOAT_EQ(0, round(y));
+
+}
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
