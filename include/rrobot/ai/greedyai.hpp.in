@@ -2,24 +2,39 @@
 #define GREEDYAI_HPP
 
 #include <queue>
-#include <vector>
 #include <rrobot/ai/ai.hpp>
 #include <rrobot/state/state_manager.hpp>
+#include <vector>
 
 namespace rrobot {
-    class GreedyAi  {
-        public: 
-        queue<Event *> calcPath(Event* e);
 
-        private:
+enum PSTATE {
+    P_AVAILABLE,
+    P_NOT_AVAIL,
+};
 
-        float absDistance(float n1, float n2);
+class GreedyAi {
+   public:
+    GreedyAi(StateManager& smg) : _smg(smg) {}
+    ~GreedyAi() = default;
 
-        // previously explored deltas
-        vector<Event*> _explored;
-        vector<Event*> _excluded;
-        StateManager& _smg;
-    };
-}
+    queue<Event*> calcPath(Event* e);
+    float absDistance(float n1, float n2);
+    float sqr(float n);
+    PSTATE traveresePath(queue<Event*>& q,  msp_delta_xy c,  msp_delta_xy d);
 
-#endif // GREEDYAI_HPP
+   private:
+
+   bool isExp(msp_delta_xy x, vector<Event*> exp);
+   bool isExplored(msp_delta_xy x);
+   bool isExcluded(msp_delta_xy x);
+   bool isValid(float x, float y, msp_delta_xy& nc, msp_delta_xy d, float dc);
+
+    // previously explored deltas
+    vector<Event*> _explored;
+    vector<Event*> _excluded;
+    StateManager& _smg;
+};
+}  // namespace rrobot
+
+#endif  // GREEDYAI_HPP

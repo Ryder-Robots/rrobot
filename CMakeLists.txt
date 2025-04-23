@@ -159,3 +159,8 @@ add_executable(test_encoder test/test_encoder.cpp)
 set_target_properties(test_encoder PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
 target_link_libraries(test_encoder GTest::gtest_main rrobot dlib gmock)
 gtest_discover_tests(test_encoder  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")
+
+add_executable(test_greedyai test/test_greedyai.cpp)
+set_target_properties(test_greedyai PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
+target_link_libraries(test_greedyai GTest::gtest_main rrobot dlib gmock)
+gtest_discover_tests(test_greedyai  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")
