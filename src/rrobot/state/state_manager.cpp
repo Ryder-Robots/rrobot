@@ -125,3 +125,13 @@ float StateManager::getHeading() {
     float headingRadians = atan2(y, x);
     return headingRadians * 180 / M_PI;
 }
+
+void StateManager::setCurrentDelta(msp_delta_xy cdelta) {
+    const std::lock_guard<std::mutex> lock(_lock);
+    _state.setCurrentDelta(cdelta);
+}
+
+msp_delta_xy StateManager::getCurrentDelta() {
+    const std::lock_guard<std::mutex> lock(_lock);
+    return _state.getCurrentDelta();
+}

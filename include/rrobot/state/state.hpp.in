@@ -3,6 +3,7 @@
 
 #include <rrobot/ai/aifeatures.hpp>
 #include <rrobot/events/cmodes.hpp>
+#include <rrobot/events/msp_delta_xy.hpp>
 
 namespace rrobot {
 /**
@@ -122,6 +123,24 @@ class State {
         *y = _mag_y;
     }
 
+
+    /**
+     * @fn setCurrentDelta
+     * @brief set the delta for x/y for the current location of the robot, relative to the original orientation of the robot. 
+     */
+    void setCurrentDelta(msp_delta_xy cdelta) {
+        _cdelta = cdelta;
+    }
+
+    /**
+     * @fn getCurrentDelta
+     * @brief return current location of robot. X, and Y start at 0,0 and transverse in for each delta with X and Y in relation to
+     * the original orientation of the robot.
+     */
+    msp_delta_xy getCurrentDelta() {
+        return _cdelta;
+    }
+
    private:
     bool _is_running = true;
     uint16_t _error_count = 0;
@@ -131,6 +150,7 @@ class State {
     AiFeatures _features;
     float _mag_x;
     float _mag_y;
+    msp_delta_xy _cdelta = msp_delta_xy();
 };
 }  // namespace rrobot
 

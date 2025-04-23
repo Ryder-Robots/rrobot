@@ -15,7 +15,12 @@ namespace rrobot {
  */
 class StateManager {
    public:
-    StateManager() {}
+    StateManager() {
+        msp_delta_xy currentLocation;
+        currentLocation.set_x(0);
+        currentLocation.set_y(0);
+        _state.setCurrentDelta(currentLocation);
+    }
 
     ~StateManager() {}
 
@@ -173,6 +178,18 @@ class StateManager {
      * that can be used in the argument to the magnometer.
      */
     void rotate(float degrees, float* x, float* y);
+
+    /**
+     * @fn setCurrentDelta
+     * @brief set current robot location.
+     */
+    void setCurrentDelta(msp_delta_xy cdelta);
+
+    /**
+     * @fn getCurrentDelta
+     * @brief returns current location of robot.
+     */
+    msp_delta_xy getCurrentDelta();
     
 
    private:

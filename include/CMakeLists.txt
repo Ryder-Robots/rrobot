@@ -92,6 +92,7 @@ set(rrobot_INCLUDE
     rrobot/handlers/currentstatehandler.hpp
     rrobot/ai/aifeatures.hpp
     rrobot/ai/ai.hpp
+    rrobot/ai/greedyai.hpp
 )   
 
 foreach(item ${rrobot_INCLUDE})
@@ -150,7 +151,7 @@ set(MSPCOMMANDS
   "MSP_MOTOR 104 EXTERNAL_OUT 1 1 1 int8_t roll int8_t pitch int8_t yaw uint16_t throttle int8_t aux1 int8_t aux2 int8_t aux3 int8_t aux4"
   "MSP_SET_MOTOR_HBRIDGE 215 EXTERNAL_IN 1 1 0 uint16_t motor1 uint16_t motor2 uint16_t motor3 uint16_t motor4 uint8_t in"
   "MSP_SENSOR 216 EXTERNAL_IN 1 1 1 uint32_t acc_avail float acc_x float acc_y float acc_z uint32_t gyro_avail float gyro_x float gyro_y float gyro_z uint32_t mag_avail float mag_x float mag_y float mag_z"
-  "MSP_DELTA_XY 217 EXTERNAL_OUT 1 1 1 float x float y float heading"
+  "MSP_DELTA_XY 217 EXTERNAL_OUT 1 1 0 float x float y float heading"
   "MSP_ORIENTATION 218 EXTERNAL_OUT 1 1 1 float x float y")
 
 set(LOOP_CONTENT "")

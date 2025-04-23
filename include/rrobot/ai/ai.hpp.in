@@ -2,6 +2,7 @@
 #define RROBOT_AI_AI_HPP
 
 #include <vector>
+#include <stack>
 #include <rrobot/ai/aifeatures.hpp>
 #include <rrobot/state/state_manager.hpp>
 #include <rrobot/state/rrpstatus.hpp>

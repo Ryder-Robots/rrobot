@@ -1,0 +1,25 @@
+#ifndef GREEDYAI_HPP
+#define GREEDYAI_HPP
+
+#include <queue>
+#include <vector>
+#include <rrobot/ai/ai.hpp>
+#include <rrobot/state/state_manager.hpp>
+
+namespace rrobot {
+    class GreedyAi  {
+        public: 
+        queue<Event *> calcPath(Event* e);
+
+        private:
+
+        float absDistance(float n1, float n2);
+
+        // previously explored deltas
+        vector<Event*> _explored;
+        vector<Event*> _excluded;
+        StateManager& _smg;
+    };
+}
+
+#endif // GREEDYAI_HPP

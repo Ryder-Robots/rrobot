@@ -153,6 +153,11 @@ TEST_F(TestStateManager, TestRotate) {
     EXPECT_FLOAT_EQ(-1, round(x));
     EXPECT_FLOAT_EQ(0, round(y));
 
+    // Change heading by reversing 90 degrees
+    sm.setHeadingFromRadians2(0, 0);
+    sm.rotate(-90, &x, &y);
+    EXPECT_FLOAT_EQ(0, round(x));
+    EXPECT_FLOAT_EQ(-1, round(y));
 }
 
 int main(int argc, char **argv) {
