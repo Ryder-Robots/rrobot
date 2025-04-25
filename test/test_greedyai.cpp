@@ -64,6 +64,41 @@ class TestGreedyAi : public ::testing::Test {
     delete(e2);
  }
 
+ TEST_F(TestGreedyAi, isExplored) {
+    msp_delta_xy cdelta;
+    GreedyAi gai(_sm);
+
+    msp_delta_xy payload1;
+    payload1.set_x(0);
+    payload1.set_y(1);
+    Event* e1 = new Event(MSPCOMMANDS::MSP_DELTA_XY, MSPDIRECTION::EXTERNAL_OUT, &payload1);
+    gai._explored.push_back(e1);
+
+    msp_delta_xy payload2;
+    payload2.set_x(0);
+    payload2.set_y(-1);
+    Event* e2 = new Event(MSPCOMMANDS::MSP_DELTA_XY, MSPDIRECTION::EXTERNAL_OUT, &payload2);
+    gai._explored.push_back(e2);
+
+    msp_delta_xy t;
+    t.set_x(0);
+    t.set_y(1);
+    EXPECT_TRUE(gai.isExplored(t));
+
+    t.set_x(0);
+    t.set_y(-1);
+    EXPECT_TRUE(gai.isExplored(t));
+
+    t.set_x(-1);
+    t.set_y(0);
+    EXPECT_FALSE(gai.isExplored(t));
+
+    e1->setHasPaylod(false);
+    e2->setHasPaylod(false);
+    delete(e1);
+    delete(e2);
+ }
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
