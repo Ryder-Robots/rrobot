@@ -1,24 +1,25 @@
 #include <gtest/gtest.h>
+
 #include <rrobot/ai/greedyai.hpp>
 
 using namespace rrobot;
 
 class TestGreedyAi : public ::testing::Test {
-    protected:
-     void SetUp() override {
-         // Setup code
-         _sm.setIsRunning(true);
-     }
- 
-     void TearDown() override {
-         // Teardown code
-         _sm.setIsRunning(false);
-     }
- 
-     StateManager _sm;
- };
+   protected:
+    void SetUp() override {
+        // Setup code
+        _sm.setIsRunning(true);
+    }
 
- TEST_F(TestGreedyAi, absDistance) {
+    void TearDown() override {
+        // Teardown code
+        _sm.setIsRunning(false);
+    }
+
+    StateManager _sm;
+};
+
+TEST_F(TestGreedyAi, absDistance) {
     GreedyAi gai(_sm);
 
     EXPECT_FLOAT_EQ(4, gai.absDistance(-2, 2));
@@ -27,9 +28,9 @@ class TestGreedyAi : public ::testing::Test {
     EXPECT_FLOAT_EQ(4, gai.absDistance(4, 0));
     EXPECT_FLOAT_EQ(4, gai.absDistance(-8, -4));
     EXPECT_FLOAT_EQ(4, gai.absDistance(-4, -8));
- }
+}
 
- TEST_F(TestGreedyAi, isExcluded) {
+TEST_F(TestGreedyAi, isExcluded) {
     msp_delta_xy cdelta;
     GreedyAi gai(_sm);
 
@@ -60,11 +61,11 @@ class TestGreedyAi : public ::testing::Test {
 
     e1->setHasPaylod(false);
     e2->setHasPaylod(false);
-    delete(e1);
-    delete(e2);
- }
+    delete (e1);
+    delete (e2);
+}
 
- TEST_F(TestGreedyAi, isExplored) {
+TEST_F(TestGreedyAi, isExplored) {
     GreedyAi gai(_sm);
 
     msp_delta_xy payload1;
@@ -94,11 +95,11 @@ class TestGreedyAi : public ::testing::Test {
 
     e1->setHasPaylod(false);
     e2->setHasPaylod(false);
-    delete(e1);
-    delete(e2);
- }
+    delete (e1);
+    delete (e2);
+}
 
- TEST_F(TestGreedyAi, isValid) {
+TEST_F(TestGreedyAi, isValid) {
     GreedyAi gai(_sm);
     msp_delta_xy ex, ep1, ep2;
     // up excluded
@@ -114,10 +115,10 @@ class TestGreedyAi : public ::testing::Test {
     ep2.set_y(0);
 
     // valid = 0, -1
-    Event *evx  = new Event(MSPCOMMANDS::MSP_DELTA_XY, MSPDIRECTION::EXTERNAL_OUT, &ex), 
-          *evp1 = new Event(MSPCOMMANDS::MSP_DELTA_XY, MSPDIRECTION::EXTERNAL_OUT, &ep1), 
+    Event *evx = new Event(MSPCOMMANDS::MSP_DELTA_XY, MSPDIRECTION::EXTERNAL_OUT, &ex),
+          *evp1 = new Event(MSPCOMMANDS::MSP_DELTA_XY, MSPDIRECTION::EXTERNAL_OUT, &ep1),
           *evp2 = new Event(MSPCOMMANDS::MSP_DELTA_XY, MSPDIRECTION::EXTERNAL_OUT, &ep2);
-    
+
     gai._explored.push_back(evx);
     gai._excluded.push_back(evp1);
     gai._excluded.push_back(evp2);
@@ -137,19 +138,52 @@ class TestGreedyAi : public ::testing::Test {
     // move right
     EXPECT_FALSE(gai.isValid(c.get_x() - 1, c.get_y()));
 
+    evx->setHasPaylod(false);
+    evp1->setHasPaylod(false);
+    evp2->setHasPaylod(false);
+
+    delete (evx);
+    delete (evp1);
+    delete (evp2);
+}
+
+TEST_F(TestGreedyAi, traversePath) {
+    GreedyAi gai(_sm);
+    msp_delta_xy ex, ep1, ep2;
+    // up excluded
+    ex.set_x(0);
+    ex.set_y(1);
+
+    // left
+    ep1.set_x(-1);
+    ep1.set_y(0);
+
+    // right
+    ep2.set_x(1);
+    ep2.set_y(0);
+
+    // valid = 0, -1
+    Event *evx = new Event(MSPCOMMANDS::MSP_DELTA_XY, MSPDIRECTION::EXTERNAL_OUT, &ex),
+          *evp1 = new Event(MSPCOMMANDS::MSP_DELTA_XY, MSPDIRECTION::EXTERNAL_OUT, &ep1),
+          *evp2 = new Event(MSPCOMMANDS::MSP_DELTA_XY, MSPDIRECTION::EXTERNAL_OUT, &ep2);
+
+    gai._explored.push_back(evx);
+    gai._excluded.push_back(evp1);
+    gai._excluded.push_back(evp2);
+
+    queue<Event*> path;
+    gai.calcPath(path);
 
     evx->setHasPaylod(false);
     evp1->setHasPaylod(false);
     evp2->setHasPaylod(false);
 
-    delete(evx);
-    delete(evp1);
-    delete(evp2);
- }
+    delete (evx);
+    delete (evp1);
+    delete (evp2);
+}
 
- 
-
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 }

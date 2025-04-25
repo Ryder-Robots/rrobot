@@ -21,10 +21,16 @@ class GreedyAi {
         _explored.clear();
     }
 
-    queue<Event*> calcPath(Event* e);
     float absDistance(float n1, float n2);
     float sqr(float n);
-    PSTATE traveresePath(queue<Event*>& q,  msp_delta_xy c,  msp_delta_xy d);
+
+    /**
+     * @fn calcPath
+     * @brief find the most viable delta, if one is available.
+     * @param path queue.
+     * @return returns P_AVAILABLE if a path is available, or P_NOT_AVAIL if a path is not available.
+     */
+    PSTATE calcPath(queue<Event*>& q);
     
     vector<Event*> _explored;
     vector<Event*> _excluded;
