@@ -16,23 +16,28 @@ enum PSTATE {
 class GreedyAi {
    public:
     GreedyAi(StateManager& smg) : _smg(smg) {}
-    ~GreedyAi() = default;
+    ~GreedyAi() {
+        _excluded.clear();
+        _explored.clear();
+    }
 
     queue<Event*> calcPath(Event* e);
     float absDistance(float n1, float n2);
     float sqr(float n);
     PSTATE traveresePath(queue<Event*>& q,  msp_delta_xy c,  msp_delta_xy d);
+    
+    vector<Event*> _explored;
+    vector<Event*> _excluded;
+
+    bool isExplored(msp_delta_xy x);
+    bool isExcluded(msp_delta_xy x);
+    bool isValid(float x, float y, msp_delta_xy& nc, msp_delta_xy d, float dc);
 
    private:
 
    bool isExp(msp_delta_xy x, vector<Event*> exp);
-   bool isExplored(msp_delta_xy x);
-   bool isExcluded(msp_delta_xy x);
-   bool isValid(float x, float y, msp_delta_xy& nc, msp_delta_xy d, float dc);
-
     // previously explored deltas
-    vector<Event*> _explored;
-    vector<Event*> _excluded;
+
     StateManager& _smg;
 };
 }  // namespace rrobot

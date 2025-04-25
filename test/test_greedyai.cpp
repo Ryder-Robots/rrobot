@@ -29,6 +29,41 @@ class TestGreedyAi : public ::testing::Test {
     EXPECT_FLOAT_EQ(4, gai.absDistance(-4, -8));
  }
 
+ TEST_F(TestGreedyAi, isExcluded) {
+    msp_delta_xy cdelta;
+    GreedyAi gai(_sm);
+
+    msp_delta_xy payload1;
+    payload1.set_x(0);
+    payload1.set_y(1);
+    Event* e1 = new Event(MSPCOMMANDS::MSP_DELTA_XY, MSPDIRECTION::EXTERNAL_OUT, &payload1);
+    gai._excluded.push_back(e1);
+
+    msp_delta_xy payload2;
+    payload2.set_x(0);
+    payload2.set_y(-1);
+    Event* e2 = new Event(MSPCOMMANDS::MSP_DELTA_XY, MSPDIRECTION::EXTERNAL_OUT, &payload2);
+    gai._excluded.push_back(e2);
+
+    msp_delta_xy t;
+    t.set_x(0);
+    t.set_y(1);
+    EXPECT_TRUE(gai.isExcluded(t));
+
+    t.set_x(0);
+    t.set_y(-1);
+    EXPECT_TRUE(gai.isExcluded(t));
+
+    t.set_x(-1);
+    t.set_y(0);
+    EXPECT_FALSE(gai.isExcluded(t));
+
+    e1->setHasPaylod(false);
+    e2->setHasPaylod(false);
+    delete(e1);
+    delete(e2);
+ }
+
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
