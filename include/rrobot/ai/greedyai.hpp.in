@@ -31,7 +31,7 @@ class GreedyAi {
 
     bool isExplored(msp_delta_xy x);
     bool isExcluded(msp_delta_xy x);
-    bool isValid(float x, float y, msp_delta_xy& nc, msp_delta_xy d, float dc);
+    bool isValid(float x, float y);
 
    private:
 

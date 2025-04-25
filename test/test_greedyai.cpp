@@ -65,7 +65,6 @@ class TestGreedyAi : public ::testing::Test {
  }
 
  TEST_F(TestGreedyAi, isExplored) {
-    msp_delta_xy cdelta;
     GreedyAi gai(_sm);
 
     msp_delta_xy payload1;
@@ -98,6 +97,57 @@ class TestGreedyAi : public ::testing::Test {
     delete(e1);
     delete(e2);
  }
+
+ TEST_F(TestGreedyAi, isValid) {
+    GreedyAi gai(_sm);
+    msp_delta_xy ex, ep1, ep2;
+    // up excluded
+    ex.set_x(0);
+    ex.set_y(1);
+
+    // left
+    ep1.set_x(-1);
+    ep1.set_y(0);
+
+    // right
+    ep2.set_x(1);
+    ep2.set_y(0);
+
+    // valid = 0, -1
+    Event *evx  = new Event(MSPCOMMANDS::MSP_DELTA_XY, MSPDIRECTION::EXTERNAL_OUT, &ex), 
+          *evp1 = new Event(MSPCOMMANDS::MSP_DELTA_XY, MSPDIRECTION::EXTERNAL_OUT, &ep1), 
+          *evp2 = new Event(MSPCOMMANDS::MSP_DELTA_XY, MSPDIRECTION::EXTERNAL_OUT, &ep2);
+    
+    gai._explored.push_back(evx);
+    gai._excluded.push_back(evp1);
+    gai._excluded.push_back(evp2);
+
+    msp_delta_xy c = _sm.getCurrentDelta();
+    msp_delta_xy nc;
+
+    // move up
+    EXPECT_FALSE(gai.isValid(c.get_x(), c.get_y() + 1));
+
+    // move right
+    EXPECT_FALSE(gai.isValid(c.get_x() + 1, c.get_y()));
+
+    // move down
+    EXPECT_TRUE(gai.isValid(c.get_x(), c.get_y() - 1));
+
+    // move right
+    EXPECT_FALSE(gai.isValid(c.get_x() - 1, c.get_y()));
+
+
+    evx->setHasPaylod(false);
+    evp1->setHasPaylod(false);
+    evp2->setHasPaylod(false);
+
+    delete(evx);
+    delete(evp1);
+    delete(evp2);
+ }
+
+ 
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
