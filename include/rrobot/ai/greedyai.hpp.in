@@ -15,7 +15,7 @@ enum PSTATE {
 
 class GreedyAi {
    public:
-    GreedyAi(StateManager& smg) : _smg(smg) {}
+    GreedyAi(StateManager& smg) : _smg(smg) { init();}
     ~GreedyAi() {
         _excluded.clear();
         _explored.clear();
@@ -30,10 +30,10 @@ class GreedyAi {
      * @param path queue.
      * @return returns P_AVAILABLE if a path is available, or P_NOT_AVAIL if a path is not available.
      */
-    PSTATE calcPath(queue<Event*>& q);
+    PSTATE calcPath(msp_delta_xy d);
     
-    vector<Event*> _explored;
-    vector<Event*> _excluded;
+    vector<msp_delta_xy> _explored;
+    vector<msp_delta_xy> _excluded;
 
     bool isExplored(msp_delta_xy x);
     bool isExcluded(msp_delta_xy x);
@@ -41,7 +41,10 @@ class GreedyAi {
 
    private:
 
-   bool isExp(msp_delta_xy x, vector<Event*> exp);
+   void init();
+   void teardown();
+
+   bool isExp(msp_delta_xy x, vector<msp_delta_xy> exp);
     // previously explored deltas
 
     StateManager& _smg;

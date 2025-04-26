@@ -14,10 +14,9 @@ float GreedyAi::absDistance(float d, float c) {
 
 float GreedyAi::sqr(float n) { return n * n; }
 
-bool GreedyAi::isExp(msp_delta_xy x, vector<Event*> exp) {
+bool GreedyAi::isExp(msp_delta_xy x, vector<msp_delta_xy> exp) {
     for (auto ex : exp) {
-        msp_delta_xy exp = ex->getPayload<msp_delta_xy>();
-        if (exp.get_x() == x.get_x() && exp.get_y() == x.get_y()) {
+        if (ex.get_x() == x.get_x() && ex.get_y() == x.get_y()) {
             return true;
         }
     }
@@ -38,50 +37,31 @@ bool GreedyAi::isValid(float x, float y) {
     return true;
 }
 
-PSTATE GreedyAi::calcPath(queue<Event*>& q) {
-    // float dc = floor(sqrt(
-    //     sqr(absDistance(d.get_x(), c.get_x())) + sqr(absDistance(d.get_y(), c.get_y()))
-    // ));
+PSTATE GreedyAi::calcPath(msp_delta_xy d) {
+    float dc = floor(sqrt(
+        sqr(absDistance(d.get_x(),  _smg.getCurrentDelta().get_x())) + sqr(absDistance(d.get_y(),  _smg.getCurrentDelta().get_y()))
+    ));
+    
+    while (dc != 0) {
+        float heading = _smg.getHeading();
 
-    // if (dc == 0) {
+        // calulate possible deltas first.
+        float paths[4];
+        int i = 0;
+
+        // add penalties.
+        dc = 0;
+
+    }
     return PSTATE::P_AVAILABLE;
-    // }
 
-    // // floor(sqrt(sqr(absDistance(d.get_x(), nc.get_x())) + sqr(absDistance(d.get_y(), nc.get_y())))) < dc
+}
 
-    // msp_delta_xy nc;
-    // float x = 0, y = 0;
+void GreedyAi::init() {
 
-    // // try add 1 to x first
-    // if (isValid(c.get_x()+ 1, c.get_y(), nc, d, dc)) {
-    //     x = c.get_x()+ 1;
-    //     y = c.get_y();
-    // }
-    // // try adding one to y
-    // else if (isValid(c.get_x(), c.get_y() + 1, nc, d, dc)) {
-    //     x = c.get_x();
-    //     y = c.get_y() + 1;
-    // }
+}
 
-    // // try reducing one from x
-    // if (isValid(c.get_x()- 1, c.get_y(), nc, d, dc)) {
-    //     x = c.get_x()- 1;
-    //     y = c.get_y();
-    // }
-
-    // // try removing one from y
-    // else if (isValid(c.get_x(), c.get_y() - 1, nc, d, dc)) {
-    //     x = c.get_x();
-    //     y = c.get_y() - 1;
-    // }
-
-    // if (x - y == 0) {
-    //     return PSTATE::P_NOT_AVAIL;
-    // }
-    // msp_delta_xy* pl = new  msp_delta_xy();
-    // pl->set_x(nc.get_x());
-    // pl->set_y(nc.get_y());
-    // Event* e = new Event(MSPCOMMANDS::MSP_DELTA_XY, MSPDIRECTION::EXTERNAL_OUT, pl);
-    // q.push(e);
-    // return traveresePath(q, nc, d);
+void GreedyAi::teardown() {
+    _excluded.clear();
+    _explored.clear();
 }
