@@ -96,18 +96,37 @@ AiFeatures StateManager::getFeatures() {
     return _state.getFeatures();
 }
 
-void StateManager::setHeadingFromRadians2(float x, float y) {
-    _state.setHeading(x, y);
+msp_delta_xy StateManager::setHeadingFromRadian2(msp_delta_xy delta, float x, float y) {
+    float radians = atan2(y, x);
+    float headingDegrees = (radians * 180 / M_PI);
+    delta.set_heading(headingDegrees);
+    return delta;
 }
+
+void StateManager::setHeadingFromRadians2(float x, float y) {
+    const std::lock_guard<std::mutex> lock(_lock);
+    msp_delta_xy cdelta = setHeadingFromRadian2(_state.getCurrentDelta(), x, y);
+    _state.setCurrentDelta(cdelta);
+}
+
+void StateManager::setOrigHeadingFromRadians2(float x, float y) {
+    const std::lock_guard<std::mutex> lock(_lock);
+    msp_delta_xy odelta = setHeadingFromRadian2(_state.getOrigDelta(), x, y);
+    _state.setOrigDelta(odelta);
+}
+
 
 void StateManager::getHeadingRadians(float* x, float* y) {
     const std::lock_guard<std::mutex> lock(_lock);
-    _state.getHeading(x, y);
+    float headingDegrees = _state.getCurrentDelta().get_heading();
+    float radians = headingDegrees * (M_PI / 180);
+    *x = cosf(radians);
+    *y = sinf(radians);
 }
 
 void StateManager::rotate(float degrees, float* x, float* y) {
 
-    _state.getHeading(x, y);
+    getHeadingRadians(x, y);
     if (degrees == 0) {
          return;
     }
@@ -121,10 +140,7 @@ void StateManager::rotate(float degrees, float* x, float* y) {
 // TODO this can be part of current delta
 float StateManager::getHeading() {
     const std::lock_guard<std::mutex> lock(_lock);
-    float x, y;
-    _state.getHeading(&x, &y);
-    float headingRadians = atan2(y, x);
-    return headingRadians * 180 / M_PI;
+    return _state.getCurrentDelta().get_heading();
 }
 
 void StateManager::setCurrentDelta(msp_delta_xy cdelta) {

@@ -104,25 +104,6 @@ class State {
      */
     AiFeatures getFeatures() { return _features; }
 
-    /**
-     * @fn set_orientation
-     * @brief set orientation of robot converted to degrees
-     */
-    void setHeading(float x, float y) {
-        _mag_x = x;
-        _mag_y = y;
-    }
-
-    /**
-     * @fn getOrientation
-     * @brief return orientation converted to dgrees, this can be used for a compass heading, where
-     * 0 is magnetic north, 90 is east (north rotated 90 degrees), 180 is south, and 270 is west.
-     */
-    void getHeading(float* x, float* y) { 
-        *x = _mag_x;
-        *y = _mag_y;
-    }
-
 
     /**
      * @fn setCurrentDelta
@@ -130,6 +111,10 @@ class State {
      */
     void setCurrentDelta(msp_delta_xy cdelta) {
         _cdelta = cdelta;
+    }
+
+    void setOrigDelta(msp_delta_xy odelta) {
+        _odelta = odelta;
     }
 
     /**
@@ -141,6 +126,15 @@ class State {
         return _cdelta;
     }
 
+        /**
+     * @fn getOrigDelta
+     * @brief return original location of robot. X, and Y start at 0,0 and transverse in for each delta with X and Y in relation to
+     * the original orientation of the robot.
+     */
+    msp_delta_xy getOrigDelta() {
+        return _odelta;
+    }
+
    private:
     bool _is_running = true;
     uint16_t _error_count = 0;
@@ -148,9 +142,8 @@ class State {
     uint16_t _cycleTime = 0;
     uint32_t _flags = CMODE_NOT_SET;
     AiFeatures _features;
-    float _mag_x;
-    float _mag_y;
-    msp_delta_xy _cdelta = msp_delta_xy();
+    msp_delta_xy _cdelta;  // current delta
+    msp_delta_xy _odelta;  // original delta, all other deltas are relative to this.
 };
 }  // namespace rrobot
 

@@ -166,6 +166,12 @@ class StateManager {
     void setHeadingFromRadians2(float x, float y);
 
     /**
+     * @fn setOrigHeadingFromRadians2
+     * @brief set original heading, this should only be done once.
+     */
+    void setOrigHeadingFromRadians2(float x, float y);
+
+    /**
      * @fn getHeadingRadians
      * @brief given empty float populate element 0, and element 1 with radians X, and Y from current 
      */
@@ -193,6 +199,7 @@ class StateManager {
     
 
    private:
+    msp_delta_xy setHeadingFromRadian2(msp_delta_xy delta, float x, float y);
     State _state;
     std::mutex _lock;
     const int32_t DRONE_ARMED = 0 | INITILIZING | ERROR | RELOADING | SHUTTING_DOWN | TERMINATED;
