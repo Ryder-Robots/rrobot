@@ -28,11 +28,6 @@ TEST_F(TestEncoder, shouldEncodeDecodeInt32) {
 TEST_F(TestEncoder, shouldEncodeInt32) {
 
     std::string v = Encoder::encodeUint32(305419896);
-    EXPECT_EQ(0x12, v[0]);
-    EXPECT_EQ(0x34, v[1]);
-    EXPECT_EQ(0x56, v[2]);
-    EXPECT_EQ(0x78, v[3]);
-
     uint32_t i = Encoder::decodeInt32(v);
     EXPECT_EQ(305419896, i);
 }

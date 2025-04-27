@@ -22,6 +22,12 @@ namespace rrobot {
 
         static std::string encodeUint16(uint16_t v);
         static uint16_t dncodeUint16(std::string v);
+
+        static uint32_t decodeInt32Msb(std::string in);
+        static std::string encodeUint32Msb(uint32_t in);
+
+        static std::string encodeUint16Msb(uint16_t in);
+        static uint16_t dncodeUint16Msb(std::string in);
     };
 }
 

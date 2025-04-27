@@ -11,3 +11,13 @@ Event* AbstractRmultiiCurator::deserialize(std::string in) {
 std::string AbstractRmultiiCurator::serialize(Event* in) {
     return (RmMultiWii::createInstance(serializePayload(in), in->getCommand())).encode(_crc);    
 }
+
+
+std::vector<std::string>  AbstractRmultiiCurator::decodeTokens(std::string payload) {
+    std::vector<std::string> tokens;
+    return boost::split(tokens, payload, boost::is_any_of(";"));
+}
+
+std::string  AbstractRmultiiCurator::encodeTokens(std::vector<std::string> tokens) {
+    return boost::join(tokens, ";");
+}

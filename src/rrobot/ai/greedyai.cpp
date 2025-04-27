@@ -57,9 +57,7 @@ PSTATE GreedyAi::calcPath(msp_delta_xy d) {
     return PSTATE::P_AVAILABLE;
 }
 
-AiFeatures GreedyAi::createFeatures(MSPCOMMANDS cmd) {
-    AiFeatures f;
-
+RmMultiWii GreedyAi::requestFeature(MSPCOMMANDS cmd) {
     RmMultiWii m = RmMultiWii::createInstance("", cmd);
     _ext.send_rr(m.encode(_crc).c_str(), m.getSize());
 
@@ -72,13 +70,24 @@ AiFeatures GreedyAi::createFeatures(MSPCOMMANDS cmd) {
         _ext.recv_rr(&buf, 1);
         data += buf;
     }
-    m = RmMultiWii::createInstance(data, _crc);
-    // f.addFeature(_serializer.deserialize(m));
-    _smg.setFeatures(f);
-    return f;
+    return RmMultiWii::createInstance(data, Crc32());
 }
 
-void GreedyAi::init() {}
+void GreedyAi::init() {
+    // Set inital othogonal view.
+    RmMultiWii m = requestFeature(MSPCOMMANDS::MSP_SENSOR);
+    msp_sensor sensor = _curatorSensor.deserializem(m);
+
+    msp_delta_xy cdelta, odelta;
+
+    cdelta.set_x(0);
+    cdelta.set_y(0);
+    odelta.set_x(0);
+    odelta.set_y(0);
+
+    _smg.setHeadingFromRadians2(sensor.get_mag_x(), sensor.get_mag_y());
+    _smg.setOrigHeadingFromRadians2(sensor.get_mag_x(), sensor.get_mag_y());
+}
 
 void GreedyAi::teardown() {
     _excluded.clear();

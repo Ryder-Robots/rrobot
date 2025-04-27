@@ -10,8 +10,8 @@ Memory Leak - 1
 RmMultiWii RmMultiWii::createInstance(std::string data, Crc32 crc) {
     MSPCOMMANDS cmd = getSupportCommand(data[0]);
 
-    int16_t sz = Encoder::dncodeUint16(data.substr(1,2));
-    int32_t crc32 = Encoder::decodeInt32(data.substr(3, 4));
+    int16_t sz = Encoder::dncodeUint16Msb(data.substr(1,2));
+    int32_t crc32 = Encoder::decodeInt32Msb(data.substr(3, 4));
     RmMultiWii result = RmMultiWii(cmd, sz);
 
     for (int i = 0; i < sz; i++) {
@@ -46,7 +46,7 @@ std::string RmMultiWii::encode(Crc32 crc) {
     data = static_cast<char>(_cmd);
     
     // size
-    data += Encoder::encodeUint16(_sz);
+    data += Encoder::encodeUint16Msb(_sz);
 
     // calculate CRC
     uint32_t crc32 = 0;
@@ -54,7 +54,7 @@ std::string RmMultiWii::encode(Crc32 crc) {
     if (_sz != 0) {
         crc32 = crc.calculate(getPayload());
     }
-    data += Encoder::encodeUint32(crc32);
+    data += Encoder::encodeUint32Msb(crc32);
 
     if (_sz != 0) {
         for (int i = 0;i < _sz; i++) 

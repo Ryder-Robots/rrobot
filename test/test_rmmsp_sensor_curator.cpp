@@ -23,8 +23,8 @@ class TestRmMspSensorCurator : public ::testing::Test {
     payload.set_acc_y(2);
     payload.set_acc_z(3);
     payload.set_gyro_avail(5);
-    payload.set_gyro_x(8);
-    payload.set_gyro_y(13);
+    payload.set_gyro_x(1);
+    payload.set_gyro_y(1);
     payload.set_gyro_z(21);
     payload.set_mag_avail(34);
     payload.set_mag_x(55);

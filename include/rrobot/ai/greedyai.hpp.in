@@ -8,6 +8,7 @@
 #include <rrobot/protocols/curators/multiwii/rmultiwii.hpp>
 #include <rrobot/state/state_manager.hpp>
 #include <vector>
+#include <rrobot/protocols/curators/multiwii/rmmsp_sensor_curator.hpp>
 
 namespace rrobot {
 
@@ -48,7 +49,7 @@ class GreedyAi {
     bool isValid(float x, float y);
 
     float computePenalty(float heading);
-    AiFeatures createFeatures(MSPCOMMANDS cmd);
+    RmMultiWii requestFeature(MSPCOMMANDS cmd);
 
    private:
     void init();
@@ -60,6 +61,8 @@ class GreedyAi {
     StateManager& _smg;
     External& _ext;
     Crc32 _crc;
+    RmMspSensorCurator _curatorSensor;
+
 };
 }  // namespace rrobot
 

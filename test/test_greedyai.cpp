@@ -5,15 +5,54 @@
 
 using namespace rrobot;
 
+
 class MockExt : public External {
-    public: 
-    MOCK_METHOD(void, init, (StateManager&), (override));
-    MOCK_METHOD(ssize_t, recv_rr, (void* buffer, size_t bufsz), (override));
+    public:
+    MOCK_METHOD(std::string, recv_rr, (size_t bufsz), (override));
     MOCK_METHOD(int, accept_rr, (), (override));
     MOCK_METHOD(void, close_rr, (), (override));
     MOCK_METHOD(ssize_t, send_rr, (const void* buf, size_t bufsz), (override));
-    MOCK_METHOD(ssize_t, available, (), (override));
     MOCK_METHOD(int, shutdown_rr, (), (override));
+
+    void init(StateManager&) override {}
+
+    void init_north_0_0() {
+        msp_sensor response;
+        response.set_acc_avail(0);
+        response.set_acc_x(0);
+        response.set_acc_y(0);
+        response.set_acc_z(0);
+
+        response.set_gyro_avail(0);
+        response.set_gyro_x(0);
+        response.set_gyro_y(0);
+        response.set_gyro_z(0);
+
+        response.set_mag_avail(1);
+        response.set_mag_x(1);
+        response.set_mag_y(1);
+        RmMspSensorCurator curator;
+    
+        std::string r = curator.serializem(response);
+        RmMultiWii m = RmMultiWii::createInstance(r, MSPCOMMANDS::MSP_SENSOR);
+        _response = m.encode(Crc32());
+        _count = 0;
+    }
+
+    ssize_t recv_rr(void* buffer, size_t bufsz) override {
+        uint8_t r[] = {_response.at(_count)};
+        memcpy(buffer, r, 1);
+        _count++;
+        return 1;
+    }
+
+    ssize_t available() override {
+        return 1;
+    }
+
+    private:
+    int _count = 0;
+    std::string _response = "";
 };
 
 class TestGreedyAi : public ::testing::Test {
@@ -21,6 +60,7 @@ class TestGreedyAi : public ::testing::Test {
     void SetUp() override {
         // Setup code
         _sm.setIsRunning(true);
+        _ext.init_north_0_0();
     }
 
     void TearDown() override {
@@ -28,12 +68,12 @@ class TestGreedyAi : public ::testing::Test {
         _sm.setIsRunning(false);
     }
 
+
     StateManager _sm;
-    // MockExt _ext;
+    MockExt _ext;
 };
 
 TEST_F(TestGreedyAi, absDistance) {
-    MockExt _ext;
     GreedyAi gai(_sm, _ext);
 
     EXPECT_FLOAT_EQ(4, gai.absDistance(-2, 2));
@@ -46,7 +86,6 @@ TEST_F(TestGreedyAi, absDistance) {
 
 TEST_F(TestGreedyAi, isExcluded) {
     msp_delta_xy cdelta;
-    MockExt _ext;
     GreedyAi gai(_sm, _ext);
 
     msp_delta_xy payload1;
@@ -74,7 +113,6 @@ TEST_F(TestGreedyAi, isExcluded) {
 }
 
 TEST_F(TestGreedyAi, isExplored) {
-    MockExt _ext;
     GreedyAi gai(_sm, _ext);
 
     msp_delta_xy payload1;
@@ -102,7 +140,6 @@ TEST_F(TestGreedyAi, isExplored) {
 }
 
 TEST_F(TestGreedyAi, isValid) {
-    MockExt _ext;
     GreedyAi gai(_sm, _ext);
     msp_delta_xy ex, ep1, ep2;
     // up excluded
@@ -139,7 +176,6 @@ TEST_F(TestGreedyAi, isValid) {
 }
 
 TEST_F(TestGreedyAi, traversePath) {
-    MockExt _ext;
     GreedyAi gai(_sm, _ext);
     msp_delta_xy ex, ep1, ep2;
     // up excluded
@@ -169,7 +205,6 @@ TEST_F(TestGreedyAi, traversePath) {
 }
 
 TEST_F(TestGreedyAi, calcPenalty) {
-    MockExt _ext;
     GreedyAi gai(_sm, _ext);
 
     // facing east

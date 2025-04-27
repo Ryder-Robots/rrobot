@@ -195,6 +195,30 @@
                     "ignoreFailures": true
                 }
             ]           
+        },
+        {
+            "name": "(gdb) test_rmultiwii",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/test/test_rmultiwii",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/test/resources",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ]           
         }
     ]
 }
