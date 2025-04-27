@@ -150,6 +150,12 @@ class StateManager {
     float getHeading();
 
     /**
+     * @fn getOHeading
+     * @brief get orig heading
+     */
+    float getOHeading();
+
+    /**
      * @fn setHeadingFromRadians2(x, y)
      * @brief given X, and Y cooridinates (RAD), convert to heading in degrees
      * 

@@ -137,10 +137,14 @@ void StateManager::rotate(float degrees, float* x, float* y) {
     *y = sinf(radians);
 }
 
-// TODO this can be part of current delta
 float StateManager::getHeading() {
     const std::lock_guard<std::mutex> lock(_lock);
     return _state.getCurrentDelta().get_heading();
+}
+
+float StateManager::getOHeading() {
+    const std::lock_guard<std::mutex> lock(_lock);
+    return _state.getOrigDelta().get_heading();
 }
 
 void StateManager::setCurrentDelta(msp_delta_xy cdelta) {

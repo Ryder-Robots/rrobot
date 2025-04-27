@@ -37,17 +37,17 @@ bool GreedyAi::isValid(float x, float y) {
     return true;
 }
 
+float  GreedyAi::computePenalty(float heading) {
+    return 0;
+}
+
 PSTATE GreedyAi::calcPath(msp_delta_xy d) {
-    float dc = floor(sqrt(
-        sqr(absDistance(d.get_x(),  _smg.getCurrentDelta().get_x())) + sqr(absDistance(d.get_y(),  _smg.getCurrentDelta().get_y()))
-    ));
+    msp_delta_xy c = _smg.getCurrentDelta();
+    float dc = DELTA_DISTANCE(c.get_x(), d.get_x(), c.get_y(), d.get_y());
     
     while (dc != 0) {
-        float heading = _smg.getHeading();
-
-        // calulate possible deltas first.
-        float paths[4];
-        int i = 0;
+        float offset = _smg.getHeading() - _smg.getOHeading();
+        // ^: y up, 90 x: left ->, 180 v: y down, 270 x left <-
 
         // add penalties.
         dc = 0;
