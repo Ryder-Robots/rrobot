@@ -1,8 +1,20 @@
 #include <gtest/gtest.h>
-
+#include <gmock/gmock.h>
 #include <rrobot/ai/greedyai.hpp>
+#include <string>
 
 using namespace rrobot;
+
+class MockExt : public External {
+    public: 
+    MOCK_METHOD(void, init, (StateManager&), (override));
+    MOCK_METHOD(ssize_t, recv_rr, (void* buffer, size_t bufsz), (override));
+    MOCK_METHOD(int, accept_rr, (), (override));
+    MOCK_METHOD(void, close_rr, (), (override));
+    MOCK_METHOD(ssize_t, send_rr, (const void* buf, size_t bufsz), (override));
+    MOCK_METHOD(ssize_t, available, (), (override));
+    MOCK_METHOD(int, shutdown_rr, (), (override));
+};
 
 class TestGreedyAi : public ::testing::Test {
    protected:
@@ -17,10 +29,12 @@ class TestGreedyAi : public ::testing::Test {
     }
 
     StateManager _sm;
+    // MockExt _ext;
 };
 
 TEST_F(TestGreedyAi, absDistance) {
-    GreedyAi gai(_sm);
+    MockExt _ext;
+    GreedyAi gai(_sm, _ext);
 
     EXPECT_FLOAT_EQ(4, gai.absDistance(-2, 2));
     EXPECT_FLOAT_EQ(6, gai.absDistance(4, -2));
@@ -32,7 +46,8 @@ TEST_F(TestGreedyAi, absDistance) {
 
 TEST_F(TestGreedyAi, isExcluded) {
     msp_delta_xy cdelta;
-    GreedyAi gai(_sm);
+    MockExt _ext;
+    GreedyAi gai(_sm, _ext);
 
     msp_delta_xy payload1;
     payload1.set_x(0);
@@ -59,7 +74,8 @@ TEST_F(TestGreedyAi, isExcluded) {
 }
 
 TEST_F(TestGreedyAi, isExplored) {
-    GreedyAi gai(_sm);
+    MockExt _ext;
+    GreedyAi gai(_sm, _ext);
 
     msp_delta_xy payload1;
     payload1.set_x(0);
@@ -86,7 +102,8 @@ TEST_F(TestGreedyAi, isExplored) {
 }
 
 TEST_F(TestGreedyAi, isValid) {
-    GreedyAi gai(_sm);
+    MockExt _ext;
+    GreedyAi gai(_sm, _ext);
     msp_delta_xy ex, ep1, ep2;
     // up excluded
     ex.set_x(0);
@@ -122,7 +139,8 @@ TEST_F(TestGreedyAi, isValid) {
 }
 
 TEST_F(TestGreedyAi, traversePath) {
-    GreedyAi gai(_sm);
+    MockExt _ext;
+    GreedyAi gai(_sm, _ext);
     msp_delta_xy ex, ep1, ep2;
     // up excluded
     ex.set_x(0);
@@ -140,7 +158,35 @@ TEST_F(TestGreedyAi, traversePath) {
     gai._excluded.push_back(ep1);
     gai._excluded.push_back(ep2);
 
-    //gai.calcPath(path);
+    _sm.setOrigHeadingFromRadians2(0, 0);
+    _sm.setHeadingFromRadians2(0, 0);
+
+    msp_delta_xy d;
+    d.set_x(4);
+    d.set_y(-4);
+
+    gai.calcPath(d);
+}
+
+TEST_F(TestGreedyAi, calcPenalty) {
+    MockExt _ext;
+    GreedyAi gai(_sm, _ext);
+
+    // facing east
+    _sm.setOrigHeadingFromRadians2(0, 1);
+    _sm.setHeadingFromRadians2(0, -1);
+
+    // rotate 90 degrees (facing south)
+    EXPECT_EQ(0.5, gai.computePenalty(90));
+
+    // rotate 180 degrees (facing west)
+    EXPECT_EQ(1, gai.computePenalty(180));
+
+    // rotate -90 facing north
+    EXPECT_EQ(0.5, gai.computePenalty(-90));
+
+    // no rotation
+    EXPECT_EQ(0, gai.computePenalty(0));
 }
 
 int main(int argc, char** argv) {

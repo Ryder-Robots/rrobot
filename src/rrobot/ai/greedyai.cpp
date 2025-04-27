@@ -37,29 +37,48 @@ bool GreedyAi::isValid(float x, float y) {
     return true;
 }
 
-float  GreedyAi::computePenalty(float heading) {
-    return 0;
+float GreedyAi::computePenalty(float heading) {
+    float x = (abs(heading) + abs(_smg.getHeading())) - abs(_smg.getHeading());
+    x = x / 180;
+    return x;
 }
 
 PSTATE GreedyAi::calcPath(msp_delta_xy d) {
     msp_delta_xy c = _smg.getCurrentDelta();
     float dc = DELTA_DISTANCE(c.get_x(), d.get_x(), c.get_y(), d.get_y());
-    
+    float xl = _smg.getOHeading() - 90, xr = _smg.getOHeading() + 90, yf = _smg.getOHeading(),
+          yb = _smg.getOHeading() - 180;
+
     while (dc != 0) {
-        float offset = _smg.getHeading() - _smg.getOHeading();
-        // ^: y up, 90 x: left ->, 180 v: y down, 270 x left <-
+        // Look in the direction the robot is facing and see if there is any obstacles.
 
-        // add penalties.
         dc = 0;
-
     }
     return PSTATE::P_AVAILABLE;
-
 }
 
-void GreedyAi::init() {
+AiFeatures GreedyAi::createFeatures(MSPCOMMANDS cmd) {
+    AiFeatures f;
 
+    RmMultiWii m = RmMultiWii::createInstance("", cmd);
+    _ext.send_rr(m.encode(_crc).c_str(), m.getSize());
+
+    while (!_ext.available()) {
+    }
+    uint8_t buf = '\0';
+    std::string data = "";
+
+    while (buf != RmMultiWii::_TERMINATION_CHAR) {
+        _ext.recv_rr(&buf, 1);
+        data += buf;
+    }
+    m = RmMultiWii::createInstance(data, _crc);
+    // f.addFeature(_serializer.deserialize(m));
+    _smg.setFeatures(f);
+    return f;
 }
+
+void GreedyAi::init() {}
 
 void GreedyAi::teardown() {
     _excluded.clear();
