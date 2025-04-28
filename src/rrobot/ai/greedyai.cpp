@@ -70,7 +70,8 @@ RmMultiWii GreedyAi::requestFeature(MSPCOMMANDS cmd) {
         _ext.recv_rr(&buf, 1);
         data += buf;
     }
-    return RmMultiWii::createInstance(data, Crc32());
+    m = RmMultiWii::createInstance(data, Crc32());
+    return m;
 }
 
 void GreedyAi::init() {

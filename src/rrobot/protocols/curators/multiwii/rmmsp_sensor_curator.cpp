@@ -1,4 +1,5 @@
 #include <rrobot/protocols/curators/multiwii/rmmsp_sensor_curator.hpp>
+#include <optional>
 
 using namespace rrobot;
 
@@ -52,6 +53,11 @@ msp_sensor RmMspSensorCurator::deserializem(RmMultiWii& in) {
 
     if (in.getSize() > 0) {
         vector<std::string> tokens = decodeTokens(in.getPayload());
+
+        if (tokens.size() != 12) {
+            throw InvalidFormat("sensor had incorrect number of returned parameters");
+        }
+
         payload.set_acc_avail(Encoder::decodeInt32(tokens.at(0)));
         payload.set_acc_x(Encoder::decodeFloat(tokens.at(1)));
         payload.set_acc_y(Encoder::decodeFloat(tokens.at(2)));

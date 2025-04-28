@@ -17,7 +17,19 @@ std::string Encoder::encodeFloat(float in) {
  * convert encoded string into floating point number.
  */
 float Encoder::decodeFloat(std::string in) {
-    return std::stof(in);
+    std:string s; 
+    if (in.empty()) {
+        s = "0";
+    } else {
+       s = in;
+    }
+    float v = 0;
+    try {
+        v = std::stof(s);
+    } catch (...) {
+        throw InvalidFormat("argument was not an int32");
+    }
+    return v;
 }
 
 /**
@@ -35,7 +47,19 @@ std::string Encoder::encodeUint32(uint32_t in) {
  * dencodes uint32.
  */
 uint32_t Encoder::decodeInt32(std::string in) {
-    return std::stoi(in);
+    std:string s; 
+    if (in.empty()) {
+        s = "0";
+    } else {
+       s = in;
+    }
+    uint32_t v = 0;
+    try {
+        v = std::stoi(s);
+    } catch (...) {
+        throw InvalidFormat("argument was not an int32");
+    }
+    return v;
 }
 
 std::string Encoder::encodeUint16(uint16_t in) {
@@ -44,7 +68,19 @@ std::string Encoder::encodeUint16(uint16_t in) {
 
 
 uint16_t Encoder::dncodeUint16(std::string in) {
-    return std::stol(in);
+    std:string s; 
+    if (in.empty()) {
+        s = "0";
+    } else {
+       s = in;
+    }
+    uint16_t v = 0;
+    try {
+        v = std::stol(s);
+    } catch (...) {
+        throw InvalidFormat("argument was not a long");
+    }
+    return v;
 }
 
 
