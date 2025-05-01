@@ -1,0 +1,60 @@
+#ifndef RMMSP_SONIC_CURATOR_HPP
+#define RMMSP_SONIC_CURATOR_HPP
+
+#include <rrobot/protocols/curators/multiwii/rmultiwii_curator.hpp>
+
+/**
+ * @class RmMspSonicCurator
+ * @brief A curator class for handling MultiWii MSP (MultiWii Serial Protocol) sonic sensor data.
+ *
+ * This class provides functionality to serialize and deserialize payloads related to
+ * MultiWii MSP sonic sensors. It extends the AbstractRmultiiCurator class and implements
+ * methods for handling specific MSP sensor data.
+ *
+ * Encoding order:
+ * 0 - distance
+ * 1 - temprature
+ * 
+ * Responsibilities:
+ * - Serialize event data into a format suitable for MSP communication.
+ * - Deserialize MSP data into event objects.
+ * - Handle specific MSP sensor data serialization and deserialization.
+ */
+namespace rrobot {
+class RmMspSonicCurator : public AbstractRmultiiCurator {
+   public:
+    /**
+     * @brief Serializes the given event into a string payload.
+     *
+     * @param in Pointer to the Event object to be serialized.
+     * @return A string representing the serialized payload of the event.
+     */
+    std::string serializePayload(Event* in) override;
+
+    /**
+     * @brief Deserializes the payload from the given RmMultiWii object into an Event.
+     *
+     * @param in Reference to the RmMultiWii object containing the payload to be deserialized.
+     * @return A pointer to the deserialized Event object.
+     */
+    Event* deserializePayload(RmMultiWii& in) override;
+
+    /**
+     * @brief Deserializes the payload from the given RmMultiWii object into an msp_sensor structure.
+     *
+     * @param in Reference to the RmMultiWii object containing the payload to be deserialized.
+     * @return An msp_sonar_altitude structure representing the deserialized data.
+     */
+    msp_sonar_altitude deserializem(RmMultiWii& in);
+
+    /**
+     * @brief Serializes the given msp_sensor structure into a string payload.
+     *
+     * @param in The msp_sonar_altitude structure to be serialized.
+     * @return A string representing the serialized payload of the msp_sonar_altitude structure.
+     */
+    std::string serializem(msp_sonar_altitude in);
+};
+}  // namespace rrobot
+
+#endif

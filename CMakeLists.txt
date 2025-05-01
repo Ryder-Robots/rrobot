@@ -54,6 +54,7 @@ set(rrobot_SOURCES
         src/rrobot/protocols/curators/multiwii/rmultiwii.cpp
         src/rrobot/protocols/curators/multiwii/rmultiwii_curator.cpp
         src/rrobot/protocols/curators/multiwii/rmmsp_sensor_curator.cpp
+        src/rrobot/protocols/curators/multiwii/rmmsp_sonic_curator.cpp
         src/rrobot/protocols/curators/encoder.cpp
         src/rrobot/events/eventrunner.cpp
         src/rrobot/events/serializers/jserializer.cpp

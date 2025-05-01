@@ -2,9 +2,10 @@
 #include <gmock/gmock.h>
 #include <rrobot/ai/greedyai.hpp>
 #include <string>
+#include <rrobot/environment/environmentProcessor.hpp>
 
 using namespace rrobot;
-
+namespace fs = std::filesystem;
 
 class MockExt : public External {
     public:
@@ -16,7 +17,7 @@ class MockExt : public External {
 
     void init(StateManager&) override {}
 
-    void init_north_0_0() {
+    string init_north_0_0() {
         msp_sensor response;
         response.set_acc_avail(0);
         response.set_acc_x(0);
@@ -31,12 +32,25 @@ class MockExt : public External {
         response.set_mag_avail(1);
         response.set_mag_x(1);
         response.set_mag_y(1);
-        RmMspSensorCurator curator;
-    
-        std::string r = curator.serializem(response);
+        response.set_mag_z(0);
+        
+        std::string r = _curator.serializem(response);
         RmMultiWii m = RmMultiWii::createInstance(r, MSPCOMMANDS::MSP_SENSOR);
-        _response = m.encode(Crc32());
+        return m.encode(Crc32());
+    }
+
+    string init_sonic_clear() {
+        msp_sonar_altitude response;
+        response.set_distance(100);
+        response.set_temperature(24);
+        std::string r = _sonic_curator.serializem(response);
+        RmMultiWii m = RmMultiWii::createInstance(r, MSPCOMMANDS::MSP_SONAR_ALTITUDE);
+        return m.encode(Crc32());
+    }
+
+    void init() {
         _count = 0;
+        _response = init_north_0_0() + init_sonic_clear();
     }
 
     ssize_t recv_rr(void* buffer, size_t bufsz) override {
@@ -53,6 +67,8 @@ class MockExt : public External {
     private:
     int _count = 0;
     std::string _response = "";
+    RmMspSensorCurator _curator;
+    RmMspSonicCurator _sonic_curator;
 };
 
 class TestGreedyAi : public ::testing::Test {
@@ -60,7 +76,12 @@ class TestGreedyAi : public ::testing::Test {
     void SetUp() override {
         // Setup code
         _sm.setIsRunning(true);
-        _ext.init_north_0_0();
+        _ext.init();
+
+        const fs::path filepath = "manifests/virtual.json";
+        std::ifstream ifs(filepath);
+        _manifest = json::parse(ifs);
+        ifs.close();
     }
 
     void TearDown() override {
@@ -71,10 +92,11 @@ class TestGreedyAi : public ::testing::Test {
 
     StateManager _sm;
     MockExt _ext;
+    json _manifest;
 };
 
 TEST_F(TestGreedyAi, absDistance) {
-    GreedyAi gai(_sm, _ext);
+    GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
 
     EXPECT_FLOAT_EQ(4, gai.absDistance(-2, 2));
     EXPECT_FLOAT_EQ(6, gai.absDistance(4, -2));
@@ -86,7 +108,7 @@ TEST_F(TestGreedyAi, absDistance) {
 
 TEST_F(TestGreedyAi, isExcluded) {
     msp_delta_xy cdelta;
-    GreedyAi gai(_sm, _ext);
+    GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
 
     msp_delta_xy payload1;
     payload1.set_x(0);
@@ -113,7 +135,7 @@ TEST_F(TestGreedyAi, isExcluded) {
 }
 
 TEST_F(TestGreedyAi, isExplored) {
-    GreedyAi gai(_sm, _ext);
+    GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
 
     msp_delta_xy payload1;
     payload1.set_x(0);
@@ -140,7 +162,7 @@ TEST_F(TestGreedyAi, isExplored) {
 }
 
 TEST_F(TestGreedyAi, isValid) {
-    GreedyAi gai(_sm, _ext);
+    GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
     msp_delta_xy ex, ep1, ep2;
     // up excluded
     ex.set_x(0);
@@ -176,7 +198,7 @@ TEST_F(TestGreedyAi, isValid) {
 }
 
 TEST_F(TestGreedyAi, traversePath) {
-    GreedyAi gai(_sm, _ext);
+    GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
     msp_delta_xy ex, ep1, ep2;
     // up excluded
     ex.set_x(0);
@@ -205,7 +227,7 @@ TEST_F(TestGreedyAi, traversePath) {
 }
 
 TEST_F(TestGreedyAi, calcPenalty) {
-    GreedyAi gai(_sm, _ext);
+    GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
 
     // facing east
     _sm.setOrigHeadingFromRadians2(0, 1);

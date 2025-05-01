@@ -2,6 +2,8 @@
 
 using namespace rrobot;
 
+dlib::logger dlog_ai("rr_robot_ai");
+
 float GreedyAi::absDistance(float d, float c) {
     if (d < 0 && c > 0) {
         return abs(d) + c;
@@ -51,6 +53,8 @@ PSTATE GreedyAi::calcPath(msp_delta_xy d) {
 
     while (dc != 0) {
         // Look in the direction the robot is facing and see if there is any obstacles.
+        RmMultiWii m = requestFeature(MSPCOMMANDS::MSP_SONAR_ALTITUDE);
+        msp_sonar_altitude sonar = _curatorSonar.deserializem(m);
 
         dc = 0;
     }
@@ -74,7 +78,10 @@ RmMultiWii GreedyAi::requestFeature(MSPCOMMANDS cmd) {
     return m;
 }
 
-void GreedyAi::init() {
+void GreedyAi::init(Environment env) {
+    dlog_ai.set_level(env.getLogging().getLogLevel());
+    dlog_ai << dlib::LINFO << "configurating greedyAi algorithm";
+
     // Set inital othogonal view.
     RmMultiWii m = requestFeature(MSPCOMMANDS::MSP_SENSOR);
     msp_sensor sensor = _curatorSensor.deserializem(m);

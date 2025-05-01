@@ -9,6 +9,7 @@
 #include <rrobot/state/state_manager.hpp>
 #include <vector>
 #include <rrobot/protocols/curators/multiwii/rmmsp_sensor_curator.hpp>
+#include <rrobot/protocols/curators/multiwii/rmmsp_sonic_curator.hpp>
 
 namespace rrobot {
 
@@ -21,13 +22,13 @@ enum PSTATE {
 
 class GreedyAi {
    public:
-    GreedyAi(StateManager& smg, External& ext)
+    GreedyAi(StateManager& smg, External& ext, const Environment env)
         : _smg(smg), _ext(ext) {
-        init();
+        init(env);
     }
+
     ~GreedyAi() {
-        _excluded.clear();
-        _explored.clear();
+        teardown();
     }
 
     float absDistance(float n1, float n2);
@@ -52,7 +53,7 @@ class GreedyAi {
     RmMultiWii requestFeature(MSPCOMMANDS cmd);
 
    private:
-    void init();
+    void init(Environment env);
     void teardown();
 
     bool isExp(msp_delta_xy x, vector<msp_delta_xy> exp);
@@ -62,6 +63,7 @@ class GreedyAi {
     External& _ext;
     Crc32 _crc;
     RmMspSensorCurator _curatorSensor;
+    RmMspSonicCurator _curatorSonar;
 
 };
 }  // namespace rrobot
