@@ -17,7 +17,7 @@ class MockExt : public External {
 
     void init(StateManager&) override {}
 
-    string init_north_0_0() {
+    string init_north_1_0() {
         msp_sensor response;
         response.set_acc_avail(0);
         response.set_acc_x(0);
@@ -29,9 +29,10 @@ class MockExt : public External {
         response.set_gyro_y(0);
         response.set_gyro_z(0);
 
+        // magnometer indicates that it is facing north during itialization.
         response.set_mag_avail(1);
         response.set_mag_x(1);
-        response.set_mag_y(1);
+        response.set_mag_y(0);
         response.set_mag_z(0);
         
         std::string r = _curator.serializem(response);
@@ -48,16 +49,27 @@ class MockExt : public External {
         return m.encode(Crc32());
     }
 
+    string init_sonic_obstacle() {
+        msp_sonar_altitude response;
+        response.set_distance(50);
+        response.set_temperature(24);
+        std::string r = _sonic_curator.serializem(response);
+        RmMultiWii m = RmMultiWii::createInstance(r, MSPCOMMANDS::MSP_SONAR_ALTITUDE);
+        return m.encode(Crc32());       
+    }
+
     void init() {
         _count = 0;
-        _response = init_north_0_0() + init_sonic_clear();
+        _response =  init_sonic_clear() + init_north_1_0() + 
+            init_sonic_clear() + init_north_1_0() + 
+            init_sonic_obstacle() + init_north_1_0();
     }
 
     ssize_t recv_rr(void* buffer, size_t bufsz) override {
         uint8_t r[] = {_response.at(_count)};
-        memcpy(buffer, r, 1);
+        memcpy(buffer, r, bufsz);
         _count++;
-        return 1;
+        return bufsz;
     }
 
     ssize_t available() override {
@@ -199,22 +211,22 @@ TEST_F(TestGreedyAi, isValid) {
 
 TEST_F(TestGreedyAi, traversePath) {
     GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
-    msp_delta_xy ex, ep1, ep2;
-    // up excluded
-    ex.set_x(0);
-    ex.set_y(1);
+    // msp_delta_xy ex, ep1, ep2;
+    // // up excluded
+    // ex.set_x(0);
+    // ex.set_y(1);
 
-    // left
-    ep1.set_x(-1);
-    ep1.set_y(0);
+    // // left
+    // ep1.set_x(-1);
+    // ep1.set_y(0);
 
-    // right
-    ep2.set_x(1);
-    ep2.set_y(0);
+    // // right
+    // ep2.set_x(1);
+    // ep2.set_y(0);
 
-    gai._explored.push_back(ex);
-    gai._excluded.push_back(ep1);
-    gai._excluded.push_back(ep2);
+    // gai._explored.push_back(ex);
+    // gai._excluded.push_back(ep1);
+    // gai._excluded.push_back(ep2);
 
     _sm.setOrigHeadingFromRadians2(0, 0);
     _sm.setHeadingFromRadians2(0, 0);

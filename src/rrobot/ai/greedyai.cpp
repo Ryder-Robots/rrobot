@@ -13,6 +13,7 @@ PSTATE GreedyAi::calcPath(msp_delta_xy d) {
         // Look in the direction the robot is facing and see if there is any obstacles.
         msp_sonar_altitude sonar = requestSonar();
         msp_sensor sensors = requestSensor();
+
         c = _smg.getCurrentDelta();
         x = c.get_x(), y = c.get_y();
         if (OBJ_AVOID_DIST - sonar.get_distance() <= OBJ_AVOID_DIST) {
@@ -22,7 +23,7 @@ PSTATE GreedyAi::calcPath(msp_delta_xy d) {
             ex.set_x(x);
             ex.set_y(y);
             _excluded.push_back(ex);
-        } else if (isValid(x, y) && DELTA_DISTANCE(x, d.get_x(), y, d.get_y()) <= dc) {
+        } else if (isValid(x, y) && DELTA_DISTANCE(x, y, d.get_x(), d.get_y()) <= dc) {
             offset(c.get_heading(), &x, &y);
             moveForward();
             msp_delta_xy delta;
@@ -32,21 +33,31 @@ PSTATE GreedyAi::calcPath(msp_delta_xy d) {
             _smg.setCurrentDelta(delta);
             _explored.push_back(delta);
             _transvered.push(delta);
+            dc = DELTA_DISTANCE(c.get_x(),  c.get_y(), d.get_x(), d.get_y());
             continue;
         }
 
-        float dgs[] = {90, 180, -90};
+        float dgs[] = {90, 180, -90}, f = -1, pd = DELTA_DISTANCE(x, y, d.get_x(), d.get_y());
         for (auto dg : dgs) {
             float mx = sensors.get_mag_x(), my = sensors.get_mag_y();
             _smg.rotate(dg, &mx, &my);
-            _smg.setHeadingFromRadian2(c, mx, my);
+            c = _smg.setHeadingFromRadian2(c, mx, my);
             x = c.get_x(), y = c.get_y();
             offset(c.get_heading(), &x, &y);
             if (isValid(x, y)) {
-
-                //_ext.send_rr();
-                continue;
+                if (f == -1 || DELTA_DISTANCE(x, y, d.get_x(), d.get_y()) + computePenalty(c.get_heading()) < pd) {
+                    pd = DELTA_DISTANCE(x, y, d.get_x(), d.get_y());
+                    f = dg;
+                }
             }
+        }
+
+        if (f != -1) {
+            float mx = sensors.get_mag_x(), my = sensors.get_mag_y();
+            _smg.rotate(f, &mx, &my);
+            // sendCommand
+            _smg.setHeadingFromRadians2(mx, my);
+            continue;
         }
 
         // if there are no valid paths take a step back.
@@ -75,7 +86,9 @@ void GreedyAi::init(Environment env) {
     dlog_ai.set_level(env.getLogging().getLogLevel());
     dlog_ai << dlib::LINFO << "configurating greedyAi algorithm";
 
-    // Set inital othogonal view.
+    // Set inital othogonal view. Sonar is also requested, but this is just used to update
+    // the features list, so that UI gets a view of if anything is in the path of the drone.
+    requestSonar();
     msp_sensor sensor = requestSensor();
     msp_delta_xy cdelta, odelta;
 
