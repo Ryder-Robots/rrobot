@@ -45,8 +45,11 @@ int  RrSerialMc::accept_rr() {
 
 ssize_t RrSerialMc::send_rr(const void* buf, size_t bufsz) {
     std::string str(reinterpret_cast<const char*>(buf), bufsz);
-    _serial_port.Write(str);
+    return send_rr(str);
+}
 
+ssize_t RrSerialMc::send_rr(const std::string str) {
+    _serial_port.Write(str);
     return str.size();
 }
 

@@ -2,52 +2,56 @@
 #define RROBOT_AI_AIFEATURES_HPP
 
 #include <rrobot/events/event.hpp>
-#include <vector>
 
-// Add your declarations and definitions here
 namespace rrobot {
 
 /**
- * @class AiFeatures
- * @brief Feature list that will be sent to AI handler.
- * @details
- * This class provides a list of features that will be sent to the AI handler.
- * It includes the msp_sensor and sonar_altitude data.
- * The msp_sensor data is used to retrieve the sensor data from the robot.
- * The sonar_altitude data is used to retrieve the sonar altitude data from the robot.
+ * @brief Represents a collection of AI-related features.
  */
 class AiFeatures {
    public:
+    /**
+     * @brief Default constructor for AiFeatures.
+     */
     AiFeatures() = default;
+
+    /**
+     * @brief Default destructor for AiFeatures.
+     */
     ~AiFeatures() = default;
 
     /**
-     * @fn addFeature
-     * @brief Adds a feature to the list.
-     * @param feature Pointer to the feature to be added.
+     * @brief Sets the sonar altitude data.
+     *
+     * @param sonar The sonar altitude data to set.
      */
-    void addFeature(rrobot::Event* feature) { _features.push_back(feature); }
+    void setSonar(msp_sonar_altitude sonar) { _sonar = sonar; }
 
     /**
-     * @fn getFeatures
-     * @brief Retrieves the list of features.
-     * @return Vector of pointers to the features.
+     * @brief Retrieves the sonar altitude data.
+     *
+     * @return The current sonar altitude data.
      */
-    const std::vector<rrobot::Event*>& getFeatures() const { return _features; }
+    msp_sonar_altitude getSonar() { return _sonar; }
+
     /**
-     * @fn clearFeatures
-     * @brief Clears the list of features.
+     * @brief Sets the sensor data.
+     *
+     * @param sensors The sensor data to set.
      */
-    void clearFeatures() {
-        for (auto feature : _features) {
-            delete feature;
-        }
-        _features.clear();
-    }
+    void setSensors(msp_sensor sensors) { _sensors = sensors; }
+
+    /**
+     * @brief Retrieves the sensor data.
+     *
+     * @return The current sensor data.
+     */
+    msp_sensor getSensors() { return _sensors; }
 
    private:
-    std::vector<rrobot::Event*> _features;
+    msp_sensor _sensors;        ///< Stores the sensor data.
+    msp_sonar_altitude _sonar;  ///< Stores the sonar altitude data.
 };
-}
+}  // namespace rrobot
 
 #endif  // RROBOT_AI_AIFEATURES_HPP

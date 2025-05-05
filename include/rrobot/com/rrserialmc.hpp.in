@@ -24,6 +24,9 @@ class RrSerialMc : public External {
     void close_rr() override;
 
     ssize_t send_rr(const void* buf, size_t bufsz) override;
+
+    ssize_t send_rr(const std::string dataString) override;
+
     std::string recv_rr(size_t bufsz) override;
 
     ssize_t available() override;

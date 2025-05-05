@@ -4,6 +4,68 @@ using namespace rrobot;
 
 dlib::logger dlog_ai("rr_robot_ai");
 
+PSTATE GreedyAi::calcPath(msp_delta_xy d) {
+    msp_delta_xy c = _smg.getCurrentDelta();
+    float dc = DELTA_DISTANCE(c.get_x(), d.get_x(), c.get_y(), d.get_y());
+    float xl = _smg.getOHeading() - 90, xr = _smg.getOHeading() + 90, yf = _smg.getOHeading(),
+          yb = _smg.getOHeading() - 180;
+
+    while (dc != 0) {
+        // Look in the direction the robot is facing and see if there is any obstacles.
+        msp_sonar_altitude sonar = requestSonar();
+        if (OBJ_AVOID_DIST - sonar.get_distance() <= OBJ_AVOID_DIST) {
+            // must turn to avoid collision.
+        }
+        // if moving forward is an option, then move forward, before doing anything else.
+        else if (DELTA_DISTANCE(c.get_x(), d.get_x(), c.get_y() + 1, d.get_y()) <= dc) {
+            // move forward
+            moveForward();
+
+            dc = DELTA_DISTANCE(c.get_x(), d.get_x(), c.get_y() + 1, d.get_y());
+            continue;
+        }
+
+        dc = 0;
+    }
+    return PSTATE::P_AVAILABLE;
+}
+
+void GreedyAi::init(Environment env) {
+    dlog_ai.set_level(env.getLogging().getLogLevel());
+    dlog_ai << dlib::LINFO << "configurating greedyAi algorithm";
+
+    // Set inital othogonal view.
+    msp_sensor sensor = requestSensor();
+    msp_delta_xy cdelta, odelta;
+
+    cdelta.set_x(0);
+    cdelta.set_y(0);
+    odelta.set_x(0);
+    odelta.set_y(0);
+
+    _smg.setHeadingFromRadians2(sensor.get_mag_x(), sensor.get_mag_y());
+    _smg.setOrigHeadingFromRadians2(sensor.get_mag_x(), sensor.get_mag_y());
+}
+
+void GreedyAi::teardown() {
+    dlog_ai << dlib::LINFO << "tearing down algorithm";
+    _excluded.clear();
+    _explored.clear();
+}
+
+// potentially all methods below will be moved to a common class.
+void GreedyAi::moveForward() {
+    msp_motor motor;
+    motor.set_roll(0);
+    motor.set_pitch(1);
+    motor.set_yaw(0);
+    motor.set_throttle(SPEED_CRUISE);
+    motor.set_aux1(0);
+    motor.set_aux2(0);
+    motor.set_aux3(0);
+    motor.set_aux4(0);
+}
+
 float GreedyAi::absDistance(float d, float c) {
     if (d < 0 && c > 0) {
         return abs(d) + c;
@@ -45,20 +107,24 @@ float GreedyAi::computePenalty(float heading) {
     return x;
 }
 
-PSTATE GreedyAi::calcPath(msp_delta_xy d) {
-    msp_delta_xy c = _smg.getCurrentDelta();
-    float dc = DELTA_DISTANCE(c.get_x(), d.get_x(), c.get_y(), d.get_y());
-    float xl = _smg.getOHeading() - 90, xr = _smg.getOHeading() + 90, yf = _smg.getOHeading(),
-          yb = _smg.getOHeading() - 180;
+msp_sonar_altitude GreedyAi::requestSonar() {
+    dlog_ai << dlib::LINFO << "updating sonar and barometer from micro-processor";
+    RmMultiWii m = requestFeature(MSPCOMMANDS::MSP_SONAR_ALTITUDE);
+    msp_sonar_altitude sonar = _curatorSonar.deserializem(m);
+    AiFeatures features;
+    features.setSonar(sonar);
+    _smg.setFeatures(features);
+    return sonar;
+}
 
-    while (dc != 0) {
-        // Look in the direction the robot is facing and see if there is any obstacles.
-        RmMultiWii m = requestFeature(MSPCOMMANDS::MSP_SONAR_ALTITUDE);
-        msp_sonar_altitude sonar = _curatorSonar.deserializem(m);
-
-        dc = 0;
-    }
-    return PSTATE::P_AVAILABLE;
+msp_sensor GreedyAi::requestSensor() {
+    dlog_ai << dlib::LINFO << "updating sensors (gyro, mag, and accelometer) from micro-processor";
+    RmMultiWii m = requestFeature(MSPCOMMANDS::MSP_SENSOR);
+    msp_sensor sensors = _curatorSensor.deserializem(m);
+    AiFeatures features;
+    features.setSensors(sensors);
+    _smg.setFeatures(features);
+    return sensors;
 }
 
 RmMultiWii GreedyAi::requestFeature(MSPCOMMANDS cmd) {
@@ -78,26 +144,8 @@ RmMultiWii GreedyAi::requestFeature(MSPCOMMANDS cmd) {
     return m;
 }
 
-void GreedyAi::init(Environment env) {
-    dlog_ai.set_level(env.getLogging().getLogLevel());
-    dlog_ai << dlib::LINFO << "configurating greedyAi algorithm";
-
-    // Set inital othogonal view.
-    RmMultiWii m = requestFeature(MSPCOMMANDS::MSP_SENSOR);
-    msp_sensor sensor = _curatorSensor.deserializem(m);
-
-    msp_delta_xy cdelta, odelta;
-
-    cdelta.set_x(0);
-    cdelta.set_y(0);
-    odelta.set_x(0);
-    odelta.set_y(0);
-
-    _smg.setHeadingFromRadians2(sensor.get_mag_x(), sensor.get_mag_y());
-    _smg.setOrigHeadingFromRadians2(sensor.get_mag_x(), sensor.get_mag_y());
-}
-
-void GreedyAi::teardown() {
-    _excluded.clear();
-    _explored.clear();
+void GreedyAi::sendCommand(RmMultiWii m) {
+    if (_ext.send_rr(m.encode(_crc)) == -1) {
+        //TODO: throw exception here.
+    }
 }
