@@ -1,11 +1,12 @@
 #ifndef STATE_MANAGER_HPP
 #define STATE_MANAGER_HPP
 
+#include <math.h>
+
 #include <mutex>
 #include <rrobot/state/rrpstatus.hpp>
 #include <rrobot/state/state.hpp>
 #include <vector>
-#include <math.h>
 
 namespace rrobot {
 /**
@@ -13,6 +14,7 @@ namespace rrobot {
  * @brief
  * performs operations on state.
  */
+
 class StateManager {
    public:
     StateManager() {
@@ -123,12 +125,12 @@ class StateManager {
      */
     uint16_t getSensors();
 
-        /**
+    /**
      * @fn setFeatures
      * @brief
      * Sets the AI features for the system.
      * Refer to State documentation for details.
-     * 
+     *
      * @param features The AI features to be set.
      */
     void setFeatures(AiFeatures features);
@@ -138,7 +140,7 @@ class StateManager {
      * @brief
      * Retrieves the AI features currently set for the system.
      * Refer to State documentation for details.
-     * 
+     *
      * @return The AI features of the system.
      */
     AiFeatures getFeatures();
@@ -150,6 +152,19 @@ class StateManager {
     float getHeading();
 
     /**
+     * @fn setOrigDelta
+     * @brief Sets the original delta (position offset) for the robot.
+     *
+     * This method is used to define the initial position offset of the robot.
+     * It should typically be called during initialization or when resetting
+     * the robot's position to a known state.
+     *
+     * @param o The original delta (position offset) to be set, represented as
+     *          an `msp_delta_xy` object containing x and y coordinates.
+     */
+    void setOrigDelta(const msp_delta_xy o);
+
+    /**
      * @fn getOHeading
      * @brief get orig heading
      */
@@ -158,9 +173,9 @@ class StateManager {
     /**
      * @fn setHeadingFromRadians2(x, y)
      * @brief given X, and Y cooridinates (RAD), convert to heading in degrees
-     * 
+     *
      * Sumerised as:
-     * 
+     *
      * | Compass Heading	| Degrees | Radians (deg × π/180) |	x (cos)	| y (sin)
      * |------------------- | --------| ----------------------|---------|---------
      * | North              |  0	  | 0.0000                | 1.0000  | 0.0000
@@ -179,14 +194,14 @@ class StateManager {
 
     /**
      * @fn getHeadingRadians
-     * @brief given empty float populate element 0, and element 1 with radians X, and Y from current 
+     * @brief given empty float populate element 0, and element 1 with radians X, and Y from current
      */
     void getHeadingRadians(float* x, float* y);
 
     /**
      * @fn rotate
-     * @brief rotate robot "degrees" degrees. Will not automatically update heading.  This needs to be done 
-     * explicitly and should be read from  the micro-process, or magnometer. The method only returns headings 
+     * @brief rotate robot "degrees" degrees. Will not automatically update heading.  This needs to be done
+     * explicitly and should be read from  the micro-process, or magnometer. The method only returns headings
      * that can be used in the argument to the magnometer.
      */
     void rotate(float degrees, float* x, float* y);
@@ -202,10 +217,10 @@ class StateManager {
      * @brief returns current location of robot.
      */
     msp_delta_xy getCurrentDelta();
-    
+
+    msp_delta_xy setHeadingFromRadian2(msp_delta_xy delta, float x, float y);
 
    private:
-    msp_delta_xy setHeadingFromRadian2(msp_delta_xy delta, float x, float y);
     State _state;
     std::mutex _lock;
     const int32_t DRONE_ARMED = 0 | INITILIZING | ERROR | RELOADING | SHUTTING_DOWN | TERMINATED;

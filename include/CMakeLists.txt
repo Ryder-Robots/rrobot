@@ -153,7 +153,8 @@ set(MSPCOMMANDS
   "MSP_SET_MOTOR_HBRIDGE 215 EXTERNAL_IN 1 1 0 uint16_t motor1 uint16_t motor2 uint16_t motor3 uint16_t motor4 uint8_t in"
   "MSP_SENSOR 216 EXTERNAL_IN 1 1 1 uint32_t acc_avail float acc_x float acc_y float acc_z uint32_t gyro_avail float gyro_x float gyro_y float gyro_z uint32_t mag_avail float mag_x float mag_y float mag_z"
   "MSP_DELTA_XY 217 EXTERNAL_OUT 1 1 0 float x float y float heading"
-  "MSP_ORIENTATION 218 EXTERNAL_OUT 1 1 1 float x float y")
+  "MSP_ORIENTATION 218 EXTERNAL_OUT 1 1 1 float x float y"
+  "MSP_MOVE_FORWARD 219 EXTERNAL_OUT 1 1 1")
 
 set(LOOP_CONTENT "")
 set(VALID_MSPCOMMANDS "")

@@ -7,26 +7,67 @@ dlib::logger dlog_ai("rr_robot_ai");
 PSTATE GreedyAi::calcPath(msp_delta_xy d) {
     msp_delta_xy c = _smg.getCurrentDelta();
     float dc = DELTA_DISTANCE(c.get_x(), d.get_x(), c.get_y(), d.get_y());
-    float xl = _smg.getOHeading() - 90, xr = _smg.getOHeading() + 90, yf = _smg.getOHeading(),
-          yb = _smg.getOHeading() - 180;
+    float x = c.get_x(), y = c.get_y();
 
     while (dc != 0) {
         // Look in the direction the robot is facing and see if there is any obstacles.
         msp_sonar_altitude sonar = requestSonar();
+        msp_sensor sensors = requestSensor();
+        c = _smg.getCurrentDelta();
+        x = c.get_x(), y = c.get_y();
         if (OBJ_AVOID_DIST - sonar.get_distance() <= OBJ_AVOID_DIST) {
-            // must turn to avoid collision.
-        }
-        // if moving forward is an option, then move forward, before doing anything else.
-        else if (DELTA_DISTANCE(c.get_x(), d.get_x(), c.get_y() + 1, d.get_y()) <= dc) {
-            // move forward
+            msp_delta_xy ex;            
+            offset(_smg.getHeading(), &x, &y);
+            ex.set_heading(c.get_heading());
+            ex.set_x(x);
+            ex.set_y(y);
+            _excluded.push_back(ex);
+        } else if (isValid(x, y) && DELTA_DISTANCE(x, d.get_x(), y, d.get_y()) <= dc) {
+            offset(c.get_heading(), &x, &y);
             moveForward();
-
-            dc = DELTA_DISTANCE(c.get_x(), d.get_x(), c.get_y() + 1, d.get_y());
+            msp_delta_xy delta;
+            delta.set_heading(c.get_heading());
+            delta.set_x(x);
+            delta.set_y(y);
+            _smg.setCurrentDelta(delta);
+            _explored.push_back(delta);
+            _transvered.push(delta);
             continue;
         }
 
-        dc = 0;
+        float dgs[] = {90, 180, -90};
+        for (auto dg : dgs) {
+            float mx = sensors.get_mag_x(), my = sensors.get_mag_y();
+            _smg.rotate(dg, &mx, &my);
+            _smg.setHeadingFromRadian2(c, mx, my);
+            x = c.get_x(), y = c.get_y();
+            offset(c.get_heading(), &x, &y);
+            if (isValid(x, y)) {
+
+                //_ext.send_rr();
+                continue;
+            }
+        }
+
+        // if there are no valid paths take a step back.
+        if (!_transvered.empty()) {
+            float mx = sensors.get_mag_x(), my = sensors.get_mag_y();
+            _smg.rotate(180, &mx, &my);
+            moveForward();
+            c = _transvered.top();
+            mx = sensors.get_mag_x(), my = sensors.get_mag_y();
+            _smg.setHeadingFromRadian2(c, mx, my);
+            _transvered.pop();
+            _smg.setCurrentDelta(c);
+        } else {
+            dlog_ai << dlib::LWARN << "unable to continue, no valid path can be found";
+            return PSTATE::P_NOT_AVAIL;
+        }
     }
+
+    dlog_ai << dlib::LINFO << "reset position of delta";
+    _smg.setOrigDelta(c);
+    
     return PSTATE::P_AVAILABLE;
 }
 
@@ -55,15 +96,8 @@ void GreedyAi::teardown() {
 
 // potentially all methods below will be moved to a common class.
 void GreedyAi::moveForward() {
-    msp_motor motor;
-    motor.set_roll(0);
-    motor.set_pitch(1);
-    motor.set_yaw(0);
-    motor.set_throttle(SPEED_CRUISE);
-    motor.set_aux1(0);
-    motor.set_aux2(0);
-    motor.set_aux3(0);
-    motor.set_aux4(0);
+    RmMultiWii m = RmMultiWii::createInstance("", MSPCOMMANDS::MSP_MOVE_FORWARD);
+    sendCommand(m);
 }
 
 float GreedyAi::absDistance(float d, float c) {
@@ -146,6 +180,36 @@ RmMultiWii GreedyAi::requestFeature(MSPCOMMANDS cmd) {
 
 void GreedyAi::sendCommand(RmMultiWii m) {
     if (_ext.send_rr(m.encode(_crc)) == -1) {
-        //TODO: throw exception here.
+        // TODO: throw exception here.
     }
+}
+
+void GreedyAi::offset(const float h, float *x, float *y) {
+    float c = _smg.getOHeading(), xi = _smg.getCurrentDelta().get_x(),
+          yi = _smg.getCurrentDelta().get_y();
+
+    if (h == 0) {
+        yi++;
+    } else if (h > 0 && h < 180) {
+        xi++;
+    } else if (h < 0 && h < -180) {
+        xi--;
+    } else {
+        yi--;
+    }
+
+    *x = xi;
+    *y = yi;
+}
+
+//  may be too convoluted
+void GreedyAi::offset(const float degrees, float *x, float *y, const float gx, const float gy) {
+    float gix = gx, giy = gy;
+    _smg.rotate(degrees, &gix, &giy);
+    msp_delta_xy delta;
+    delta.set_heading(0);
+    delta.set_x(*x);
+    delta.set_y(*y);
+    delta = _smg.setHeadingFromRadian2(delta, gix, giy);
+    offset(delta.get_heading(), x, y);
 }

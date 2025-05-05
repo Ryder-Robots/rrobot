@@ -54,6 +54,11 @@ class GreedyAi {
     float computePenalty(float heading);
     RmMultiWii requestFeature(MSPCOMMANDS cmd);
     void sendCommand(RmMultiWii m);
+    
+    // given the othoginal direction of the drone, and what position it is getting asked to move, compute
+    // if X, or Y should be incremented and return it.
+    void offset(const float heading, float *x, float *y);
+    void offset(const float degrees, float *x, float *y, const float gx, const float gy);
 
    private:
     void init(Environment env);
@@ -74,6 +79,7 @@ class GreedyAi {
     Crc32 _crc;
     RmMspSensorCurator _curatorSensor;
     RmMspSonicCurator _curatorSonar;
+    std::stack<msp_delta_xy> _transvered;
 };
 }  // namespace rrobot
 

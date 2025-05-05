@@ -115,6 +115,11 @@ void StateManager::setOrigHeadingFromRadians2(float x, float y) {
     _state.setOrigDelta(odelta);
 }
 
+void StateManager::setOrigDelta(const msp_delta_xy o) {
+    const std::lock_guard<std::mutex> lock(_lock);
+    _state.setOrigDelta(o);
+}
+
 
 void StateManager::getHeadingRadians(float* x, float* y) {
     const std::lock_guard<std::mutex> lock(_lock);

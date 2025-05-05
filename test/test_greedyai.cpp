@@ -246,6 +246,37 @@ TEST_F(TestGreedyAi, calcPenalty) {
     EXPECT_EQ(0, gai.computePenalty(0));
 }
 
+TEST_F(TestGreedyAi, offset) {
+    GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
+    _sm.setOrigHeadingFromRadians2(1, 0);
+   
+    float x = 0, y = 0;
+
+    //facing North
+    _sm.setHeadingFromRadians2(1, 0);
+    gai.offset(_sm.getHeading(), &x, &y);
+    EXPECT_EQ(0, x);
+    EXPECT_EQ(1, y);
+
+    // facing East
+    _sm.setHeadingFromRadians2(0, 1);
+    gai.offset(_sm.getHeading(),&x, &y);
+    EXPECT_EQ(1, x);
+    EXPECT_EQ(0, y);
+
+    // facing south so foward should be y - 1
+    _sm.setHeadingFromRadians2(-1, 0);
+    gai.offset(_sm.getHeading(),&x, &y);
+    EXPECT_EQ(0, x);
+    EXPECT_EQ(-1, y);
+
+    // facing west
+    _sm.setHeadingFromRadians2(0, -1);
+    gai.offset(_sm.getHeading(),&x, &y);
+    EXPECT_EQ(0, x);
+    EXPECT_EQ(-1, y);   
+}
+
 int main(int argc, char** argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
