@@ -211,23 +211,6 @@ TEST_F(TestGreedyAi, isValid) {
 
 TEST_F(TestGreedyAi, traversePath) {
     GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
-    // msp_delta_xy ex, ep1, ep2;
-    // // up excluded
-    // ex.set_x(0);
-    // ex.set_y(1);
-
-    // // left
-    // ep1.set_x(-1);
-    // ep1.set_y(0);
-
-    // // right
-    // ep2.set_x(1);
-    // ep2.set_y(0);
-
-    // gai._explored.push_back(ex);
-    // gai._excluded.push_back(ep1);
-    // gai._excluded.push_back(ep2);
-
     _sm.setOrigHeadingFromRadians2(0, 0);
     _sm.setHeadingFromRadians2(0, 0);
 
