@@ -198,6 +198,8 @@ class StateManager {
      */
     void getHeadingRadians(float* x, float* y);
 
+    void getHeadingRadians(const float d, float* x, float* y);
+
     /**
      * @fn rotate
      * @brief rotate robot "degrees" degrees. Will not automatically update heading.  This needs to be done

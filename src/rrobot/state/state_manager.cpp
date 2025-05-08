@@ -123,10 +123,13 @@ void StateManager::setOrigDelta(const msp_delta_xy o) {
 
 void StateManager::getHeadingRadians(float* x, float* y) {
     const std::lock_guard<std::mutex> lock(_lock);
-    float headingDegrees = _state.getCurrentDelta().get_heading();
-    float radians = headingDegrees * (M_PI / 180);
+    getHeadingRadians(_state.getCurrentDelta().get_heading(), x, y);
+}
+
+void StateManager::getHeadingRadians(const float d, float* x, float* y) {
+    float radians = d * (M_PI / 180);
     *x = cosf(radians);
-    *y = sinf(radians);
+    *y = sinf(radians);   
 }
 
 void StateManager::rotate(float degrees, float* x, float* y) {

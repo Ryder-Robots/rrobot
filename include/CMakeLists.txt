@@ -80,6 +80,7 @@ set(rrobot_INCLUDE
     rrobot/protocols/curators/multiwii/rmultiwii_curator.hpp
     rrobot/protocols/curators/multiwii/rmmsp_sensor_curator.hpp
     rrobot/protocols/curators/multiwii/rmmsp_sonic_curator.hpp
+    rrobot/protocols/curators/multiwii/rmmsp_orientation_curator.hpp
     rrobot/protocols/curators/encoder.hpp
     rrobot/com/external.hpp
     rrobot/com/server.hpp
@@ -154,7 +155,8 @@ set(MSPCOMMANDS
   "MSP_SENSOR 216 EXTERNAL_IN 1 1 1 uint32_t acc_avail float acc_x float acc_y float acc_z uint32_t gyro_avail float gyro_x float gyro_y float gyro_z uint32_t mag_avail float mag_x float mag_y float mag_z"
   "MSP_DELTA_XY 217 EXTERNAL_OUT 1 1 0 float x float y float heading"
   "MSP_ORIENTATION 218 EXTERNAL_OUT 1 1 1 float x float y"
-  "MSP_MOVE_FORWARD 219 EXTERNAL_OUT 1 1 1")
+  "MSP_MOVE_FORWARD 219 EXTERNAL_OUT 1 1 1"
+  "MSP_STOP 220 EXTERNAL_OUT 1 1 1")
 
 set(LOOP_CONTENT "")
 set(VALID_MSPCOMMANDS "")

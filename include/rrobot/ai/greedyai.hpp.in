@@ -7,6 +7,7 @@
 #include <rrobot/events/serializers/serializer.hpp>
 #include <rrobot/protocols/curators/multiwii/rmmsp_sensor_curator.hpp>
 #include <rrobot/protocols/curators/multiwii/rmmsp_sonic_curator.hpp>
+#include <rrobot/protocols/curators/multiwii/rmmsp_orientation_curator.hpp>
 #include <rrobot/protocols/curators/multiwii/rmultiwii.hpp>
 #include <rrobot/state/state_manager.hpp>
 #include <vector>
@@ -79,6 +80,7 @@ class GreedyAi {
     Crc32 _crc;
     RmMspSensorCurator _curatorSensor;
     RmMspSonicCurator _curatorSonar;
+    RmMspOrientationCurator _curatorOrientation;
     std::stack<msp_delta_xy> _transvered;
 };
 }  // namespace rrobot

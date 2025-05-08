@@ -1,5 +1,4 @@
 #include <rrobot/protocols/curators/multiwii/rmmsp_sensor_curator.hpp>
-#include <optional>
 
 using namespace rrobot;
 

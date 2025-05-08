@@ -18,6 +18,10 @@ class MockExt : public External {
     void init(StateManager&) override {}
 
     string init_north_1_0() {
+        return init_delta(1, 0);
+    }
+
+    string init_delta(float x, float y) {
         msp_sensor response;
         response.set_acc_avail(0);
         response.set_acc_x(0);
@@ -31,8 +35,8 @@ class MockExt : public External {
 
         // magnometer indicates that it is facing north during itialization.
         response.set_mag_avail(1);
-        response.set_mag_x(1);
-        response.set_mag_y(0);
+        response.set_mag_x(x);
+        response.set_mag_y(y);
         response.set_mag_z(0);
         
         std::string r = _curator.serializem(response);
@@ -62,7 +66,11 @@ class MockExt : public External {
         _count = 0;
         _response =  init_sonic_clear() + init_north_1_0() + 
             init_sonic_clear() + init_north_1_0() + 
-            init_sonic_obstacle() + init_north_1_0();
+            init_sonic_obstacle() + init_north_1_0() + 
+            init_sonic_clear() + init_delta(0, 1) +
+            init_sonic_clear() + init_delta(0, 1) + 
+            init_sonic_clear() + init_delta(0, 1) +
+            init_sonic_clear() + init_delta(0, 1);
     }
 
     ssize_t recv_rr(void* buffer, size_t bufsz) override {

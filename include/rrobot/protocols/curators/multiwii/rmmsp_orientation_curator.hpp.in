@@ -1,0 +1,31 @@
+#ifndef RMMSP_ROTATE_HPP
+#define RMMSP_ROTATE_HPP
+
+#include <rrobot/events/msp_orientation.hpp>
+#include <rrobot/protocols/curators/encoder.hpp>
+#include <rrobot/protocols/curators/multiwii/rmultiwii_curator.hpp>
+
+namespace rrobot {
+class RmMspOrientationCurator : public AbstractRmultiiCurator {
+   public:
+    /**
+     * @fn serializePayload
+     * @brief
+     * deserialize events from Pi and convert them to MicroProcessor format.
+     */
+    std::string serializePayload(Event* in) override;
+
+    /**
+     * @fn
+     * @brief
+     * encode events from micro-processor to RRP events.
+     */
+    Event* deserializePayload(RmMultiWii& in) override;
+
+    msp_orientation deserializem(RmMultiWii& in);
+
+    std::string serializem(msp_orientation in);
+};
+}  // namespace rrobot
+
+#endif
