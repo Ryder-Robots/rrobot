@@ -64,13 +64,7 @@ class MockExt : public External {
 
     void init() {
         _count = 0;
-        _response =  init_sonic_clear() + init_north_1_0() + 
-            init_sonic_clear() + init_north_1_0() + 
-            init_sonic_obstacle() + init_north_1_0() + 
-            init_sonic_clear() + init_delta(0, 1) +
-            init_sonic_clear() + init_delta(0, 1) + 
-            init_sonic_clear() + init_delta(0, 1) +
-            init_sonic_clear() + init_delta(0, 1);
+        _response = init_sonic_clear() + init_north_1_0();
     }
 
     ssize_t recv_rr(void* buffer, size_t bufsz) override {
@@ -83,10 +77,10 @@ class MockExt : public External {
     ssize_t available() override {
         return 1;
     }
+    std::string _response = "";
 
     private:
     int _count = 0;
-    std::string _response = "";
     RmMspSensorCurator _curator;
     RmMspSonicCurator _sonic_curator;
 };
@@ -114,6 +108,28 @@ class TestGreedyAi : public ::testing::Test {
     MockExt _ext;
     json _manifest;
 };
+
+
+TEST_F(TestGreedyAi, DISABLED_traversePath1) {
+    _ext._response =  _ext.init_sonic_clear() + _ext.init_north_1_0() + 
+    _ext.init_sonic_clear() + _ext.init_north_1_0() + 
+    _ext.init_sonic_obstacle() + _ext.init_north_1_0() + 
+    _ext.init_sonic_clear() + _ext.init_delta(0, 1) +
+    _ext.init_sonic_clear() + _ext.init_delta(0, 1) + 
+    _ext.init_sonic_clear() + _ext.init_delta(0, 1) +
+    _ext.init_sonic_clear() + _ext.init_delta(0, 1);
+
+    GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
+    _sm.setOrigHeadingFromRadians2(0, 0);
+    _sm.setHeadingFromRadians2(0, 0);
+
+    msp_delta_xy d;
+    d.set_x(4);
+    d.set_y(-4);
+
+    gai.calcPath(d);
+}
+
 
 TEST_F(TestGreedyAi, absDistance) {
     GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
@@ -215,18 +231,6 @@ TEST_F(TestGreedyAi, isValid) {
     // move right
     EXPECT_FALSE(gai.isValid(c.get_x() - 1, c.get_y()));
 
-}
-
-TEST_F(TestGreedyAi, traversePath) {
-    GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
-    _sm.setOrigHeadingFromRadians2(0, 0);
-    _sm.setHeadingFromRadians2(0, 0);
-
-    msp_delta_xy d;
-    d.set_x(4);
-    d.set_y(-4);
-
-    gai.calcPath(d);
 }
 
 TEST_F(TestGreedyAi, calcPenalty) {

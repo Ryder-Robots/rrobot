@@ -57,45 +57,27 @@ PSTATE GreedyAi::calcPath(msp_delta_xy d) {
         } else {
             float mx = sensors.get_mag_x(), my = sensors.get_mag_y();
             if (f == -1) {
-
+                if (_transvered.empty()) {
+                    dlog_ai << dlib::LWARN << "no paths left to transverse";
+                    // stop here.
+                    sendCommand(RmMultiWii::createInstance("", MSPCOMMANDS::MSP_STOP));
+                    return PSTATE::P_NOT_AVAIL;
+                }
+                msp_delta_xy l = _transvered.top();
+                _transvered.pop();
+                _smg.rotate(c.get_heading() - l.get_heading(), &mx, &my);
+            } else {
+                _smg.rotate(f, &mx, &my);
             }
-            
-        } 
-        
-        // else if (f != -1) {
-        //     // rotate then move forward
-        //     ** float mx = sensors.get_mag_x(), my = sensors.get_mag_y();
-        //     _smg.rotate(f, &mx, &my);
-        //     msp_orientation m;
-        //     m.set_x(mx);
-        //     m.set_y(my);
-        //     sendCommand(RmMultiWii::createInstance(_curatorOrientation.serializem(m), MSPCOMMANDS::MSP_ORIENTATION));
-        //     sensors = requestSensor();
-        //     _smg.setHeadingFromRadian2(c, mx, my);
-        //     offset(c.get_heading(), &x, &y);
 
-        // } else {
-        //     // recurse backward, but if there are no reverse paths state than and exit
-        //     if (_transvered.empty()) {
-        //         dlog_ai << dlib::LWARN << "no paths left to transverse";
-        //         // stop here.
-        //         sendCommand(RmMultiWii::createInstance("", MSPCOMMANDS::MSP_STOP));
-        //         return PSTATE::P_NOT_AVAIL;
-        //     }
-        //     msp_delta_xy l = _transvered.top();
-        //     _transvered.pop();
-
-        //     // create the offset
-        //     ** float mx = sensors.get_mag_x(), my = sensors.get_mag_y();
-        //     _smg.rotate(c.get_heading() - l.get_heading(), &mx, &my);
-        //     msp_orientation m;
-        //     m.set_x(mx);
-        //     m.set_y(my);
-        //     sendCommand(RmMultiWii::createInstance(_curatorOrientation.serializem(m), MSPCOMMANDS::MSP_ORIENTATION));
-        //     sensors = requestSensor();
-        //     _smg.setHeadingFromRadian2(c, mx, my);
-        //     offset(c.get_heading(), &x, &y);
-        // }
+            msp_orientation m;
+            m.set_x(mx);
+            m.set_y(my);
+            sendCommand(RmMultiWii::createInstance(_curatorOrientation.serializem(m), MSPCOMMANDS::MSP_ORIENTATION));
+            sensors = requestSensor();
+            _smg.setHeadingFromRadian2(c, mx, my);
+            offset(c.get_heading(), &x, &y);
+        }
         moveForward();
         c.set_x(x);
         c.set_y(y);
@@ -111,7 +93,6 @@ PSTATE GreedyAi::calcPath(msp_delta_xy d) {
     // update origin delta here.
     return PSTATE::P_AVAILABLE;
 }
-
 
 void GreedyAi::init(Environment env) {
     dlog_ai.set_level(env.getLogging().getLogLevel());
