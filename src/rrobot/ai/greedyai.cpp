@@ -21,7 +21,7 @@ PSTATE GreedyAi::calcPath(msp_delta_xy d) {
 
         // if there are any obstacles exclude the next path
         sonar = requestSonar();
-        if (OBJ_AVOID_DIST - sonar.get_distance() <= OBJ_AVOID_DIST) {
+        if (sonar.get_distance() <= OBJ_AVOID_DIST) {
             dlog_ai << dlib::LINFO << "detected object, excluding possible path";
             msp_delta_xy ex;
             offset(_smg.getHeading(), &x, &y);
@@ -73,7 +73,7 @@ PSTATE GreedyAi::calcPath(msp_delta_xy d) {
             m.set_y(my);
             sendCommand(RmMultiWii::createInstance(_curatorOrientation.serializem(m), MSPCOMMANDS::MSP_ORIENTATION));
             sensors = requestSensor();
-            _smg.setHeadingFromRadian2(c, mx, my);
+            c = _smg.setHeadingFromRadian2(c, mx, my);
             offset(c.get_heading(), &x, &y);
         }
         moveForward();
