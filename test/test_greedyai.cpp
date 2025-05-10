@@ -1,14 +1,15 @@
-#include <gtest/gtest.h>
 #include <gmock/gmock.h>
+#include <gtest/gtest.h>
+
 #include <rrobot/ai/greedyai.hpp>
-#include <string>
 #include <rrobot/environment/environmentProcessor.hpp>
+#include <string>
 
 using namespace rrobot;
 namespace fs = std::filesystem;
 
 class MockExt : public External {
-    public:
+   public:
     MOCK_METHOD(std::string, recv_rr, (size_t bufsz), (override));
     MOCK_METHOD(int, accept_rr, (), (override));
     MOCK_METHOD(void, close_rr, (), (override));
@@ -17,9 +18,7 @@ class MockExt : public External {
 
     void init(StateManager&) override {}
 
-    string init_north_1_0() {
-        return init_delta(1, 0);
-    }
+    string init_north_1_0() { return init_delta(1, 0); }
 
     string init_delta(float x, float y) {
         msp_sensor response;
@@ -38,7 +37,7 @@ class MockExt : public External {
         response.set_mag_x(x);
         response.set_mag_y(y);
         response.set_mag_z(0);
-        
+
         std::string r = _curator.serializem(response);
         RmMultiWii m = RmMultiWii::createInstance(r, MSPCOMMANDS::MSP_SENSOR);
         return m.encode(Crc32());
@@ -59,7 +58,7 @@ class MockExt : public External {
         response.set_temperature(24);
         std::string r = _sonic_curator.serializem(response);
         RmMultiWii m = RmMultiWii::createInstance(r, MSPCOMMANDS::MSP_SONAR_ALTITUDE);
-        return m.encode(Crc32());       
+        return m.encode(Crc32());
     }
 
     void init() {
@@ -74,12 +73,10 @@ class MockExt : public External {
         return bufsz;
     }
 
-    ssize_t available() override {
-        return 1;
-    }
+    ssize_t available() override { return 1; }
     std::string _response = "";
 
-    private:
+   private:
     int _count = 0;
     RmMspSensorCurator _curator;
     RmMspSonicCurator _sonic_curator;
@@ -103,21 +100,16 @@ class TestGreedyAi : public ::testing::Test {
         _sm.setIsRunning(false);
     }
 
-
     StateManager _sm;
     MockExt _ext;
     json _manifest;
 };
 
-
 TEST_F(TestGreedyAi, DISABLED_traversePath1) {
-    _ext._response =  _ext.init_sonic_clear() + _ext.init_north_1_0() + 
-    _ext.init_sonic_clear() + _ext.init_north_1_0() + 
-    _ext.init_sonic_obstacle() + _ext.init_north_1_0() + 
-    _ext.init_sonic_clear() + _ext.init_delta(0, 1) +
-    _ext.init_sonic_clear() + _ext.init_delta(0, 1) + 
-    _ext.init_sonic_clear() + _ext.init_delta(0, 1) +
-    _ext.init_sonic_clear() + _ext.init_delta(0, 1);
+    _ext._response = _ext.init_sonic_clear() + _ext.init_north_1_0() + _ext.init_sonic_clear() + _ext.init_north_1_0() +
+                     _ext.init_sonic_obstacle() + _ext.init_north_1_0() + _ext.init_sonic_clear() +
+                     _ext.init_delta(0, 1) + _ext.init_sonic_clear() + _ext.init_delta(0, 1) + _ext.init_sonic_clear() +
+                     _ext.init_delta(0, 1) + _ext.init_sonic_clear() + _ext.init_delta(0, 1);
 
     GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
     _sm.setOrigHeadingFromRadians2(0, 0);
@@ -130,6 +122,31 @@ TEST_F(TestGreedyAi, DISABLED_traversePath1) {
     gai.calcPath(d);
 }
 
+// Straight line to destination.
+TEST_F(TestGreedyAi, traversePath12) {
+    _ext._response = _ext.init_sonic_clear() + _ext.init_north_1_0();
+    GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
+    _sm.setOrigHeadingFromRadians2(0, 0);
+    _sm.setHeadingFromRadians2(0, 0);
+
+    msp_delta_xy d;
+    d.set_x(0);
+    d.set_y(7);
+
+    // Give ultra sonic clear view ahead
+    _ext._response = _ext.init_sonic_clear() + _ext.init_north_1_0() + 
+        _ext.init_sonic_clear() + _ext.init_north_1_0() + 
+        _ext.init_sonic_clear() + _ext.init_north_1_0() +
+        _ext.init_sonic_clear() + _ext.init_north_1_0() +
+        _ext.init_sonic_clear() + _ext.init_north_1_0() +
+        _ext.init_sonic_clear() + _ext.init_north_1_0() +
+        _ext.init_sonic_clear() + _ext.init_north_1_0() +
+        _ext.init_sonic_clear() + _ext.init_north_1_0() +
+        _ext.init_sonic_clear() + _ext.init_north_1_0();
+    EXPECT_EQ(PSTATE::P_AVAILABLE, gai.calcPath(d)); 
+}
+
+// --- test below will need to be moved to be kept, ones above can move to imlemntation class.
 
 TEST_F(TestGreedyAi, absDistance) {
     GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
@@ -230,7 +247,6 @@ TEST_F(TestGreedyAi, isValid) {
 
     // move right
     EXPECT_FALSE(gai.isValid(c.get_x() - 1, c.get_y()));
-
 }
 
 TEST_F(TestGreedyAi, calcPenalty) {
@@ -256,10 +272,10 @@ TEST_F(TestGreedyAi, calcPenalty) {
 TEST_F(TestGreedyAi, offset) {
     GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
     _sm.setOrigHeadingFromRadians2(1, 0);
-   
+
     float x = 0, y = 0;
 
-    //facing North
+    // facing North
     _sm.setHeadingFromRadians2(1, 0);
     gai.offset(_sm.getHeading(), &x, &y);
     EXPECT_EQ(0, x);
@@ -267,21 +283,21 @@ TEST_F(TestGreedyAi, offset) {
 
     // facing East
     _sm.setHeadingFromRadians2(0, 1);
-    gai.offset(_sm.getHeading(),&x, &y);
+    gai.offset(_sm.getHeading(), &x, &y);
     EXPECT_EQ(1, x);
     EXPECT_EQ(0, y);
 
     // facing south so foward should be y - 1
     _sm.setHeadingFromRadians2(-1, 0);
-    gai.offset(_sm.getHeading(),&x, &y);
+    gai.offset(_sm.getHeading(), &x, &y);
     EXPECT_EQ(0, x);
     EXPECT_EQ(-1, y);
 
     // facing west
     _sm.setHeadingFromRadians2(0, -1);
-    gai.offset(_sm.getHeading(),&x, &y);
+    gai.offset(_sm.getHeading(), &x, &y);
     EXPECT_EQ(0, x);
-    EXPECT_EQ(-1, y);   
+    EXPECT_EQ(-1, y);
 }
 
 int main(int argc, char** argv) {

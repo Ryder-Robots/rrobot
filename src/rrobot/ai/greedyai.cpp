@@ -10,7 +10,7 @@ PSTATE GreedyAi::calcPath(msp_delta_xy d) {
     msp_delta_xy c = _smg.getCurrentDelta();
     msp_sonar_altitude sonar = requestSonar();
     msp_sensor sensors = requestSensor();
-    float dc = DELTA_DISTANCE(c.get_x(), d.get_x(), c.get_y(), d.get_y());
+    float dc = DELTA_DISTANCE(c.get_x(), c.get_y(), d.get_x(), d.get_y());
 
     // list of possible rotations
     const float dgs[] = {0, 90, 180, -90};
@@ -20,6 +20,7 @@ PSTATE GreedyAi::calcPath(msp_delta_xy d) {
         float x = c.get_x(), y = c.get_y();
 
         // if there are any obstacles exclude the next path
+        sonar = requestSonar();
         if (OBJ_AVOID_DIST - sonar.get_distance() <= OBJ_AVOID_DIST) {
             dlog_ai << dlib::LINFO << "detected object, excluding possible path";
             msp_delta_xy ex;
@@ -30,10 +31,7 @@ PSTATE GreedyAi::calcPath(msp_delta_xy d) {
             _excluded.push_back(ex);
         }
 
-        sonar = requestSonar();
         sensors = requestSensor();
-        dc = DELTA_DISTANCE(c.get_x(), d.get_x(), c.get_y(), d.get_y());
-
         // detect the best path.
         float f = -1, pd = -1;
         for (auto dg : dgs) {
