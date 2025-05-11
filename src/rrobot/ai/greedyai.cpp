@@ -41,7 +41,7 @@ PSTATE GreedyAi::calcPath(msp_delta_xy d) {
             x = c.get_x(), y = c.get_y();
             offset(c.get_heading(), &x, &y);
             if (isValid(x, y)) {
-                if (f == -1 || DELTA_DISTANCE(x, y, d.get_x(), d.get_y()) + computePenalty(c.get_heading()) < pd) {
+                if (f == -1 || DELTA_DISTANCE(x, y, d.get_x(), d.get_y()) < pd) {
                     pd = DELTA_DISTANCE(x, y, d.get_x(), d.get_y());
                     f = dg;
                 }
@@ -158,6 +158,8 @@ bool GreedyAi::isValid(float x, float y) {
     return true;
 }
 
+// not sure about this, it looks like it is cancelling out, and forgot to do something that
+// I needed to do to make this work.
 float GreedyAi::computePenalty(float heading) {
     float x = (abs(heading) + abs(_smg.getHeading())) - abs(_smg.getHeading());
     x = x / 180;

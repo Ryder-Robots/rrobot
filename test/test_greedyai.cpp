@@ -195,6 +195,30 @@ TEST_F(TestGreedyAi, traversePath4) {
     EXPECT_EQ(PSTATE::P_AVAILABLE, gai.calcPath(d)); 
 }
 
+// Two right positive, otherwise all negative
+TEST_F(TestGreedyAi, traversePath5) {
+    _ext._response = _ext.init_sonic_clear() + _ext.init_north_1_0();
+    GreedyAi gai(_sm, _ext, EnviromentProcessor::createEnvironment(_manifest));
+    _sm.setOrigHeadingFromRadians2(0, 0);
+    _sm.setHeadingFromRadians2(0, 0);
+
+    msp_delta_xy d;
+    d.set_x(2);
+    d.set_y(-7);
+
+    // Give ultra sonic clear view ahead
+    _ext._response = _ext.init_sonic_clear() + _ext.init_north_1_0() + _ext.init_sonic_clear() + _ext.init_north_1_0() + 
+        _ext.init_sonic_clear() + _ext.init_north_1_0() + // 1
+        _ext.init_sonic_clear() + _ext.init_north_1_0() + // 2
+        _ext.init_sonic_clear() + _ext.init_north_1_0() + // 3
+        _ext.init_sonic_clear() + _ext.init_north_1_0() + // 4
+        _ext.init_sonic_clear() + _ext.init_north_1_0() + // 5
+        _ext.init_sonic_clear() + _ext.init_north_1_0() + // 6
+        _ext.init_sonic_clear() + _ext.init_north_1_0() + // 7
+        _ext.init_sonic_clear() + _ext.init_north_1_0() + _ext.init_delta(0,-1);
+    EXPECT_EQ(PSTATE::P_AVAILABLE, gai.calcPath(d)); 
+}
+
 // --- test below will need to be moved to be kept, ones above can move to imlemntation class.
 
 TEST_F(TestGreedyAi, absDistance) {
