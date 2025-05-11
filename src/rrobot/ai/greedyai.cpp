@@ -214,7 +214,7 @@ void GreedyAi::offset(const float h, float *x, float *y) {
         yi++;
     } else if (h > 0 && h < 180) {
         xi++;
-    } else if (h < 0 && h < -180) {
+    } else if (h < 0 && h > -180) {
         xi--;
     } else {
         yi--;
