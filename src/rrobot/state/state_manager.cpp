@@ -120,6 +120,11 @@ void StateManager::setOrigDelta(const msp_delta_xy o) {
     _state.setOrigDelta(o);
 }
 
+msp_delta_xy  StateManager::getOrigDelta() {
+    const std::lock_guard<std::mutex> lock(_lock);
+    return _state.getOrigDelta();
+}
+
 
 void StateManager::getHeadingRadians(float* x, float* y) {
     const std::lock_guard<std::mutex> lock(_lock);
@@ -157,7 +162,11 @@ float StateManager::getOHeading() {
 
 void StateManager::setCurrentDelta(msp_delta_xy cdelta) {
     const std::lock_guard<std::mutex> lock(_lock);
-    _state.setCurrentDelta(cdelta);
+    msp_delta_xy point;
+    point.set_heading(cdelta.get_heading());
+    point.set_x(cdelta.get_x());
+    point.set_y(cdelta.get_y());
+    _state.setCurrentDelta(point);
 }
 
 msp_delta_xy StateManager::getCurrentDelta() {

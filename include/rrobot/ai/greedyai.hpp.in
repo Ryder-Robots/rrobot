@@ -1,27 +1,12 @@
 #ifndef GREEDYAI_HPP
 #define GREEDYAI_HPP
 
-#include <queue>
-#include <rrobot/ai/ai.hpp>
-#include <rrobot/com/external.hpp>
-#include <rrobot/events/serializers/serializer.hpp>
-#include <rrobot/protocols/curators/multiwii/rmmsp_sensor_curator.hpp>
-#include <rrobot/protocols/curators/multiwii/rmmsp_sonic_curator.hpp>
-#include <rrobot/protocols/curators/multiwii/rmmsp_orientation_curator.hpp>
-#include <rrobot/protocols/curators/multiwii/rmultiwii.hpp>
+#include <dlib/geometry.h>
 #include <rrobot/state/state_manager.hpp>
+#include <stack>
 #include <vector>
 
 namespace rrobot {
-
-#define DELTA_DISTANCE(X1, Y1, X2, Y2) floor(sqrt(sqr(absDistance(X1, X2)) + sqr(absDistance(Y1, Y2))))
-
-// set this as 50cm for now, may make this adjustable,  but as this is just the initial test case version.
-// it may be ok till code is made more permanent.
-#define OBJ_AVOID_DIST 50
-
-// Motor control constants
-#define SPEED_CRUISE 500
 
 enum PSTATE {
     P_AVAILABLE,
@@ -30,58 +15,23 @@ enum PSTATE {
 
 class GreedyAi {
    public:
-    GreedyAi(StateManager& smg, External& ext, const Environment env) : _smg(smg), _ext(ext) { init(env); }
+    PSTATE transverse(msp_delta_xy);
+    void rotate(dlib::vector<float, 2>);
+    bool detecto();
+    void move(dlib::vector<float, 2>);
+    bool is_valid(dlib::vector<float, 2>);
 
-    ~GreedyAi() { teardown(); }
 
-    float absDistance(float n1, float n2);
-    float sqr(float n);
+    std::vector<dlib::vector<float, 2>> _excl;  // points that have been excluded
+    std::stack<dlib::vector<float, 2>> _trans;  // previously transversed points
 
-    /**
-     * @fn calcPath
-     * @brief find the most viable delta, if one is available.
-     * @param path queue.
-     * @return returns P_AVAILABLE if a path is available, or P_NOT_AVAIL if a path is not available.
-     */
-    PSTATE calcPath(msp_delta_xy d);
-
-    vector<msp_delta_xy> _explored;
-    vector<msp_delta_xy> _excluded;
-
-    bool isExplored(msp_delta_xy x);
-    bool isExcluded(msp_delta_xy x);
-    bool isValid(float x, float y);
-
-    float computePenalty(float heading);
-    RmMultiWii requestFeature(MSPCOMMANDS cmd);
-    void sendCommand(RmMultiWii m);
-    
-    // given the othoginal direction of the drone, and what position it is getting asked to move, compute
-    // if X, or Y should be incremented and return it.
-    void offset(const float heading, float *x, float *y);
-    void offset(const float degrees, float *x, float *y, const float gx, const float gy);
-
-   private:
-    void init(Environment env);
-    void teardown();
-
-    bool isExp(msp_delta_xy x, vector<msp_delta_xy> exp);
-
-    // list of features that can be requested or set.
-    msp_sonar_altitude requestSonar();
-    msp_sensor requestSensor();
-
-    // motor motion controls
-    void moveForward();
-
-    // previously explored deltas
-    StateManager& _smg;
-    External& _ext;
-    Crc32 _crc;
-    RmMspSensorCurator _curatorSensor;
-    RmMspSonicCurator _curatorSonar;
-    RmMspOrientationCurator _curatorOrientation;
-    std::stack<msp_delta_xy> _transvered;
+    // Paths that can be transversed
+    const std::vector<dlib::vector<float, 2>> res = {
+        dlib::vector<float, 2>(0, 1),  // tranverse Y axis first
+        dlib::vector<float, 2>(0, -1),
+        dlib::vector<float, 2>(1, 0),
+        dlib::vector<float, 2>(0, -1),
+    };
 };
 }  // namespace rrobot
 

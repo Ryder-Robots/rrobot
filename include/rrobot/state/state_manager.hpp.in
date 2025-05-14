@@ -163,6 +163,7 @@ class StateManager {
      *          an `msp_delta_xy` object containing x and y coordinates.
      */
     void setOrigDelta(const msp_delta_xy o);
+    msp_delta_xy getOrigDelta();
 
     /**
      * @fn getOHeading
@@ -212,7 +213,7 @@ class StateManager {
      * @fn setCurrentDelta
      * @brief set current robot location.
      */
-    void setCurrentDelta(msp_delta_xy cdelta);
+    void setCurrentDelta(const msp_delta_xy cdelta);
 
     /**
      * @fn getCurrentDelta
