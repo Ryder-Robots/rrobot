@@ -2,11 +2,17 @@
 #define GREEDYAI_HPP
 
 #include <dlib/geometry.h>
+#include <dlib/matrix.h>
+
 #include <rrobot/state/state_manager.hpp>
 #include <stack>
 #include <vector>
 
 namespace rrobot {
+
+#define VECTOR2D  2
+#define VECTOR3d  3
+#define VECTOR_DIM  VECTOR2D
 
 enum PSTATE {
     P_AVAILABLE,
@@ -21,7 +27,6 @@ class GreedyAi {
     void move(dlib::vector<float, 2>);
     bool is_valid(dlib::vector<float, 2>);
 
-
     std::vector<dlib::vector<float, 2>> _excl;  // points that have been excluded
     std::stack<dlib::vector<float, 2>> _trans;  // previously transversed points
 
@@ -29,8 +34,14 @@ class GreedyAi {
     const std::vector<dlib::vector<float, 2>> res = {
         dlib::vector<float, 2>(0, 1),  // tranverse Y axis first
         dlib::vector<float, 2>(0, -1),
+
         dlib::vector<float, 2>(1, 0),
-        dlib::vector<float, 2>(0, -1),
+        dlib::vector<float, 2>(-1, 0),
+
+        dlib::vector<float, 2>(1, 1),
+        dlib::vector<float, 2>(1, -1),
+        dlib::vector<float, 2>(-1, -1),
+        dlib::vector<float, 2>(-1, 1),
     };
 };
 }  // namespace rrobot

@@ -7,17 +7,18 @@ PSTATE GreedyAi::transverse(msp_delta_xy d) {
 
     while (c.length() != 0) {
         bool f = false;
-        dlib::vector<float, 2> n;  // next transversal
-        float l = 0;
+        dlib::vector<float, VECTOR_DIM> n;  // next transversal
+        float l = c.length();
 
         // attempt to get best path first,
         for (auto v : res) {
             // n is a point at this stage
             dlib::vector<float, 2> nd = c - v;
             if (is_valid(nd)) {
-                if (!f || (sqrt(dp.length_squared() + nd.length_squared()) < l)) {
-                    l = sqrt(dp.length_squared() + nd.length_squared());
+                if (!f || nd.length() < l) {
+                    l = nd.length();
                     n = v;
+                    f = true;
                 } 
             }
         }
@@ -35,8 +36,11 @@ PSTATE GreedyAi::transverse(msp_delta_xy d) {
             if (_trans.empty()) {
                 return PSTATE::P_NOT_AVAIL;
             }
-            dlib::vector<float, 2> c = _trans.top() - c;
+            dlib::vector<float, VECTOR_DIM> lp = _trans.top(), n = _trans.top() - c;
             _trans.pop();
+            rotate(n);
+            move(n);
+            c = lp;
         }
     }
 
