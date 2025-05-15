@@ -14,18 +14,16 @@ class GreedyAi {
     void rotate(dlib::vector<float, VECTOR_DIM>);
     bool detecto();
     void move(dlib::vector<float, VECTOR_DIM>);
-    bool is_valid(dlib::vector<float, VECTOR_DIM>);
+    bool is_valid(dlib::vector<float, VECTOR_DIM>,  std::vector<dlib::vector<float, VECTOR_DIM>>);
 
    private:
     std::vector<dlib::vector<float, VECTOR_DIM>> _excl;  // points that have been excluded
-    std::stack<dlib::vector<float, VECTOR_DIM>> _trans;  // previously transversed points
 
     // Paths that can be transversed
     const std::vector<dlib::vector<float, VECTOR_DIM>> res = {
-        dlib::vector<float, VECTOR_DIM>(0, 1, 0),  // tranverse Y axis first
-        dlib::vector<float, VECTOR_DIM>(0, -1, 0),
+        dlib::vector<float, VECTOR_DIM>(0, 1, 0),  dlib::vector<float, VECTOR_DIM>(0, -1, 0),  // tranverse Y axis first
 
-        dlib::vector<float, VECTOR_DIM>(1, 0, 0),   dlib::vector<float, VECTOR_DIM>(-1, 0, 0),
+        dlib::vector<float, VECTOR_DIM>(1, 0, 0),   dlib::vector<float, VECTOR_DIM>(-1, 0, 0), // transves X Axis
 
         dlib::vector<float, VECTOR_DIM>(1, 1, 0),   dlib::vector<float, VECTOR_DIM>(1, -1, 0),
         dlib::vector<float, VECTOR_DIM>(-1, -1, 0), dlib::vector<float, VECTOR_DIM>(-1, 1, 0),

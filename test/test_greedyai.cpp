@@ -11,7 +11,8 @@ namespace fs = std::filesystem;
 class TestGreedyAi : public ::testing::Test {
    protected:
     void SetUp() override {
-        // Setup code
+        // reset current point back to <0,0,0>
+        _sm.setCp(dlib::vector<float, VECTOR_DIM>(0, 0, 0));
     }
 
     void TearDown() override {
@@ -40,6 +41,25 @@ TEST_F(TestGreedyAi, simpleTransversalNorthWest) {
 TEST_F(TestGreedyAi, simpleTransversalNeg) {
     GreedyAi gai(_sm);
     EXPECT_EQ(PSTATE::P_AVAILABLE, gai.transverse(dlib::vector<float, VECTOR_DIM>(-2, -3, 0)));
+}
+
+TEST_F(TestGreedyAi, simpleTransversalPos1_1) {
+    _sm.setCp(dlib::vector<float, VECTOR_DIM>(-6, -5, 0));
+    GreedyAi gai(_sm);
+    EXPECT_EQ(PSTATE::P_AVAILABLE, gai.transverse(dlib::vector<float, VECTOR_DIM>(-2, -3, 0)));
+}
+
+
+TEST_F(TestGreedyAi, simpleTransversalMulti1) {
+    GreedyAi gai(_sm);
+    EXPECT_EQ(PSTATE::P_AVAILABLE, gai.transverse(dlib::vector<float, VECTOR_DIM>(0, 4, 0)));
+    EXPECT_EQ(PSTATE::P_AVAILABLE, gai.transverse(dlib::vector<float, VECTOR_DIM>(0, 0, 0)));
+}
+
+TEST_F(TestGreedyAi, simpleTransversalMulti2) {
+    GreedyAi gai(_sm);
+    _sm.setCp(dlib::vector<float, VECTOR_DIM>(0, 4, 0));
+    EXPECT_EQ(PSTATE::P_AVAILABLE, gai.transverse(dlib::vector<float, VECTOR_DIM>(0, 0, 0)));
 }
 
 int main(int argc, char** argv) {
