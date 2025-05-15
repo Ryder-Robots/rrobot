@@ -16,7 +16,8 @@ using namespace rrobot;
  * n = vector of travel, including heading.
  */
 PSTATE GreedyAi::transverse(const dlib::vector<float, VECTOR_DIM> dp) {
-    dlib::vector<float, VECTOR_DIM> c = dp - _sm.getCp();
+    const dlib::vector<float, VECTOR_DIM> sp = _sm.getCp();
+    dlib::vector<float, VECTOR_DIM> c = dp - sp;
     // previously transversed points
     std::stack<dlib::vector<float, VECTOR_DIM>> _trans;
     // local exclusions,  these include all paths that have been transversed. 
@@ -31,7 +32,7 @@ PSTATE GreedyAi::transverse(const dlib::vector<float, VECTOR_DIM> dp) {
         for (auto v : res) {
             // n is a point at this stage
             dlib::vector<float, VECTOR_DIM> nd = c - v;
-            if (is_valid((dp + nd) + _sm.getCp(), excl)) {
+            if (is_valid((dp + nd) + sp, excl)) {
                 if (!f || nd.length() < l) {
                     l = nd.length();
                     n = v;
@@ -41,7 +42,7 @@ PSTATE GreedyAi::transverse(const dlib::vector<float, VECTOR_DIM> dp) {
         }
 
         if (f) {
-            excl.push_back((dp - c) + _sm.getCp());
+            excl.push_back((dp - c) + sp);
             rotate(n);
 
             if (!detecto()) {
