@@ -1,9 +1,8 @@
 #ifndef STATE_HPP
 #define STATE_HPP
 
-#include <rrobot/ai/aifeatures.hpp>
+#include <rrobot/ai/ai.hpp>
 #include <rrobot/events/cmodes.hpp>
-#include <rrobot/events/msp_delta_xy.hpp>
 
 namespace rrobot {
 /**
@@ -105,35 +104,7 @@ class State {
     AiFeatures getFeatures() { return _features; }
 
 
-    /**
-     * @fn setCurrentDelta
-     * @brief set the delta for x/y for the current location of the robot, relative to the original orientation of the robot. 
-     */
-    void setCurrentDelta(msp_delta_xy cdelta) {
-        _cdelta = cdelta;
-    }
 
-    void setOrigDelta(msp_delta_xy odelta) {
-        _odelta = odelta;
-    }
-
-    /**
-     * @fn getCurrentDelta
-     * @brief return current location of robot. X, and Y start at 0,0 and transverse in for each delta with X and Y in relation to
-     * the original orientation of the robot.
-     */
-    msp_delta_xy getCurrentDelta() {
-        return _cdelta;
-    }
-
-        /**
-     * @fn getOrigDelta
-     * @brief return original location of robot. X, and Y start at 0,0 and transverse in for each delta with X and Y in relation to
-     * the original orientation of the robot.
-     */
-    msp_delta_xy getOrigDelta() {
-        return _odelta;
-    }
 
    private:
     bool _is_running = true;
@@ -142,8 +113,7 @@ class State {
     uint16_t _cycleTime = 0;
     uint32_t _flags = CMODE_NOT_SET;
     AiFeatures _features;
-    msp_delta_xy _cdelta;  // current delta
-    msp_delta_xy _odelta;  // original delta, all other deltas are relative to this.
+    dlib::vector<float, VECTOR_DIM> _cp;  // current point
 };
 }  // namespace rrobot
 

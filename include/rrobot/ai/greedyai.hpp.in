@@ -1,48 +1,37 @@
 #ifndef GREEDYAI_HPP
 #define GREEDYAI_HPP
 
-#include <dlib/geometry.h>
-#include <dlib/matrix.h>
-
+#include <rrobot/ai/ai.hpp>
 #include <rrobot/state/state_manager.hpp>
-#include <stack>
-#include <vector>
 
 namespace rrobot {
-
-#define VECTOR2D  2
-#define VECTOR3d  3
-#define VECTOR_DIM  VECTOR2D
-
-enum PSTATE {
-    P_AVAILABLE,
-    P_NOT_AVAIL,
-};
-
 class GreedyAi {
    public:
-    PSTATE transverse(msp_delta_xy);
-    void rotate(dlib::vector<float, 2>);
-    bool detecto();
-    void move(dlib::vector<float, 2>);
-    bool is_valid(dlib::vector<float, 2>);
+    GreedyAi(StateManager& sm): _sm(sm){}
+    ~GreedyAi() = default;
 
-    std::vector<dlib::vector<float, 2>> _excl;  // points that have been excluded
-    std::stack<dlib::vector<float, 2>> _trans;  // previously transversed points
+    PSTATE transverse(const dlib::vector<float, VECTOR_DIM>);
+    void rotate(dlib::vector<float, VECTOR_DIM>);
+    bool detecto();
+    void move(dlib::vector<float, VECTOR_DIM>);
+    bool is_valid(dlib::vector<float, VECTOR_DIM>);
+
+   private:
+    std::vector<dlib::vector<float, VECTOR_DIM>> _excl;  // points that have been excluded
+    std::stack<dlib::vector<float, VECTOR_DIM>> _trans;  // previously transversed points
 
     // Paths that can be transversed
-    const std::vector<dlib::vector<float, 2>> res = {
-        dlib::vector<float, 2>(0, 1),  // tranverse Y axis first
-        dlib::vector<float, 2>(0, -1),
+    const std::vector<dlib::vector<float, VECTOR_DIM>> res = {
+        dlib::vector<float, VECTOR_DIM>(0, 1, 0),  // tranverse Y axis first
+        dlib::vector<float, VECTOR_DIM>(0, -1, 0),
 
-        dlib::vector<float, 2>(1, 0),
-        dlib::vector<float, 2>(-1, 0),
+        dlib::vector<float, VECTOR_DIM>(1, 0, 0),   dlib::vector<float, VECTOR_DIM>(-1, 0, 0),
 
-        dlib::vector<float, 2>(1, 1),
-        dlib::vector<float, 2>(1, -1),
-        dlib::vector<float, 2>(-1, -1),
-        dlib::vector<float, 2>(-1, 1),
+        dlib::vector<float, VECTOR_DIM>(1, 1, 0),   dlib::vector<float, VECTOR_DIM>(1, -1, 0),
+        dlib::vector<float, VECTOR_DIM>(-1, -1, 0), dlib::vector<float, VECTOR_DIM>(-1, 1, 0),
     };
+
+    StateManager& _sm;
 };
 }  // namespace rrobot
 

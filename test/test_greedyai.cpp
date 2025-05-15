@@ -8,47 +8,38 @@
 using namespace rrobot;
 namespace fs = std::filesystem;
 
-class TestEncoder : public ::testing::Test {
-    protected:
-     void SetUp() override {
-         // Setup code
-     }
- 
-     void TearDown() override {
-         // Teardown code
-     }
+class TestGreedyAi : public ::testing::Test {
+   protected:
+    void SetUp() override {
+        // Setup code
+    }
+
+    void TearDown() override {
+        // Teardown code
+    }
+
+    StateManager _sm;
 };
 
-TEST_F(TestEncoder, simpleTransversal) {
-    GreedyAi gai;
-    msp_delta_xy d;
-    d.set_x(0);
-    d.set_y(4);
-    EXPECT_EQ(PSTATE::P_AVAILABLE, gai.transverse(d));
+// Following tests check for 2D space only.
+TEST_F(TestGreedyAi, simpleTransversal) {
+    GreedyAi gai(_sm);
+    EXPECT_EQ(PSTATE::P_AVAILABLE, gai.transverse(dlib::vector<float, VECTOR_DIM>(0, 4, 0)));
 }
 
-TEST_F(TestEncoder, simpleTransversalNorthEast) {
-    GreedyAi gai;
-    msp_delta_xy d;
-    d.set_x(3);
-    d.set_y(3);
-    EXPECT_EQ(PSTATE::P_AVAILABLE, gai.transverse(d));
+TEST_F(TestGreedyAi, simpleTransversalNorthEast) {
+    GreedyAi gai(_sm);
+    EXPECT_EQ(PSTATE::P_AVAILABLE, gai.transverse(dlib::vector<float, VECTOR_DIM>(3, 3, 0)));
 }
 
-TEST_F(TestEncoder, simpleTransversalNorthWest) {
-    GreedyAi gai;
-    msp_delta_xy d;
-    d.set_x(-2);
-    d.set_y(5);
-    EXPECT_EQ(PSTATE::P_AVAILABLE, gai.transverse(d));
+TEST_F(TestGreedyAi, simpleTransversalNorthWest) {
+    GreedyAi gai(_sm);
+    EXPECT_EQ(PSTATE::P_AVAILABLE, gai.transverse(dlib::vector<float, VECTOR_DIM>(-2, 5, 0)));
 }
 
-TEST_F(TestEncoder, simpleTransversalNeg) {
-    GreedyAi gai;
-    msp_delta_xy d;
-    d.set_x(-2);
-    d.set_y(-3);
-    EXPECT_EQ(PSTATE::P_AVAILABLE, gai.transverse(d));
+TEST_F(TestGreedyAi, simpleTransversalNeg) {
+    GreedyAi gai(_sm);
+    EXPECT_EQ(PSTATE::P_AVAILABLE, gai.transverse(dlib::vector<float, VECTOR_DIM>(-2, -3, 0)));
 }
 
 int main(int argc, char** argv) {

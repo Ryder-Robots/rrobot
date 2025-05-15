@@ -2,8 +2,28 @@
 
 using namespace rrobot;
 
-PSTATE GreedyAi::transverse(msp_delta_xy d) {
-    dlib::vector<float, 2> dp(d.get_x(), d.get_y()), c = dp;
+/**
+ * TODO:
+ * - Transient points are not being calculated correctly at this state, currently the 
+ * vector is just getting added to stack, this will need to be something like
+ * 
+ * (dp - c) + sp
+ * 
+ * - sp needs to reset to dp when destination is achieved, or P_NOT_AVAIL
+ * - currently sp is assumed to be <0,0,0> this wont be true. it will be first the very first
+ * request, so is a sensible default, but after subsequent requests it will change to whatever the last
+ * dp was.
+ * - some logging is desperately needed.
+ */
+
+/*
+ * sp = starting point
+ * c = current vector
+ * dp = detination point
+ * n = vector of travel, including heading.
+ */
+PSTATE GreedyAi::transverse(const dlib::vector<float, VECTOR_DIM> dp) {
+    dlib::vector<float, VECTOR_DIM> c = dp;
 
     while (c.length() != 0) {
         bool f = false;
@@ -13,7 +33,7 @@ PSTATE GreedyAi::transverse(msp_delta_xy d) {
         // attempt to get best path first,
         for (auto v : res) {
             // n is a point at this stage
-            dlib::vector<float, 2> nd = c - v;
+            dlib::vector<float, VECTOR_DIM> nd = c - v;
             if (is_valid(nd)) {
                 if (!f || nd.length() < l) {
                     l = nd.length();
@@ -48,15 +68,15 @@ PSTATE GreedyAi::transverse(msp_delta_xy d) {
 }
 
 // TODO: needs completing
-void GreedyAi::rotate(dlib::vector<float, 2>) {}
+void GreedyAi::rotate(dlib::vector<float, VECTOR_DIM>) {}
 
 // TODO: needs completing
 bool GreedyAi::detecto() { return false; }
 
 // TODO: needs completing
-void GreedyAi::move(dlib::vector<float, 2>) {}
+void GreedyAi::move(dlib::vector<float, VECTOR_DIM>) {}
 
-bool GreedyAi::is_valid(dlib::vector<float, 2> p) {
+bool GreedyAi::is_valid(dlib::vector<float, VECTOR_DIM> p) {
     for (auto r : _excl) {
         if (r.x() == p.x() && r.y() == p.y()) {
             return false;

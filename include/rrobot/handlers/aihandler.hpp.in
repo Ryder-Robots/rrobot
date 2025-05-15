@@ -14,10 +14,9 @@ namespace rrobot  {
     class AiHandler : public EventHandler {
         public:
 
-        AiHandler(Ai& ai, 
+        AiHandler(
             External& external, 
             Serializer<RmMultiWii, Event*>& serializer):
-            _ai(ai),
             _external(external),
             _serializer(serializer) {}
 
@@ -34,7 +33,6 @@ namespace rrobot  {
         private:
         bool _available = false;
 
-        Ai& _ai;
         External& _external;
         Serializer<RmMultiWii, Event*>& _serializer;
         Crc32 _crc;
