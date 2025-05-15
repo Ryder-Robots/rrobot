@@ -18,9 +18,12 @@ namespace rrobot {
 class StateManager {
    public:
     StateManager() {
+        setUp();
     }
 
-    ~StateManager() {}
+    ~StateManager() {
+        tearDown();
+    }
 
     /**
      * @fn getFlags
@@ -141,8 +144,23 @@ class StateManager {
      */
     AiFeatures getFeatures();
 
+    /**
+     * @fn setCp
+     * @brief set current point (vector point)
+     */
+    void setCp(dlib::vector<float, VECTOR_DIM>);
+
+    /**
+     * @fn getCp
+     * @brief returns current point.
+     */
+    dlib::vector<float, VECTOR_DIM> getCp();
+
 
    private:
+    void setUp();
+    void tearDown();
+
     State _state;
     std::mutex _lock;
     const int32_t DRONE_ARMED = 0 | INITILIZING | ERROR | RELOADING | SHUTTING_DOWN | TERMINATED;

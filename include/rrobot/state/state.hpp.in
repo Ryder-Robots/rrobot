@@ -103,8 +103,9 @@ class State {
      */
     AiFeatures getFeatures() { return _features; }
 
+    void setCp(dlib::vector<float, VECTOR_DIM> cp) { _cp = cp; }
 
-
+    dlib::vector<float, VECTOR_DIM> getCp() { return _cp; }
 
    private:
     bool _is_running = true;

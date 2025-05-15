@@ -95,3 +95,22 @@ AiFeatures StateManager::getFeatures() {
     const std::lock_guard<std::mutex> lock(_lock);
     return _state.getFeatures();
 }
+
+void StateManager::setCp(dlib::vector<float, VECTOR_DIM> cp) {
+    const std::lock_guard<std::mutex> lock(_lock);
+    _state.setCp(cp);
+}
+
+dlib::vector<float, VECTOR_DIM> StateManager::getCp() {
+    const std::lock_guard<std::mutex> lock(_lock);
+    return _state.getCp();
+}
+
+void StateManager::setUp() {
+    dlib::vector<float, VECTOR_DIM> cp(0,0,0);
+    setCp(cp);
+}
+
+void StateManager::tearDown() {
+
+}
