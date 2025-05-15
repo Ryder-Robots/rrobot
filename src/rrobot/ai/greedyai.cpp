@@ -5,8 +5,8 @@ using namespace rrobot;
 /**
  * TODO:
  * 
- * - points are not getting contained properly
  * - some logging is desperately needed.
+ * - push current heading to state manager, so that drones heading is known.
  */
 
 /*
@@ -78,7 +78,6 @@ bool GreedyAi::detecto() { return false; }
 void GreedyAi::move(dlib::vector<float, VECTOR_DIM>) {}
 
 bool GreedyAi::is_valid(dlib::vector<float, VECTOR_DIM> p, std::vector<dlib::vector<float, VECTOR_DIM>> excl) {
-    return true;
     for (auto r : excl) {
         if (r.x() == p.x() && r.y() == p.y() && r.z() == p.z()) {
             return false;
