@@ -5,32 +5,32 @@ using namespace rrobot;
 PSTATE GreedyAi::transverse(msp_delta_xy d) {
     dlib::vector<float, 2> dp(d.get_x(), d.get_y()), c = dp;
 
-    while (c.x() + c.y() != 0) {
+    while (c.length() != 0) {
         bool f = false;
         dlib::vector<float, 2> n;  // next transversal
-        float least = -1;
+        float l = 0;
+
+        // attempt to get best path first,
         for (auto v : res) {
             // n is a point at this stage
-            n = c - v;
-            if (is_valid(n)) {
-                n = v;
-                f = true;
-                break;
+            dlib::vector<float, 2> nd = c - v;
+            if (is_valid(nd)) {
+                if (!f || (sqrt(dp.length_squared() + nd.length_squared()) < l)) {
+                    l = sqrt(dp.length_squared() + nd.length_squared());
+                    n = v;
+                } 
             }
         }
-        
+
         if (f) {
-            c = c - n;
-            _excl.push_back(c);
-            std::sort(_excl.begin(), _excl.end(), std::less<dlib::vector<float, 2>>());
-            rotate(c - n);
+            _excl.push_back(c - n);
+            rotate(n);
 
             if (!detecto()) {
                 move(n);
+                c = c - n;
                 _trans.push(c);
-            } else {
-                c = c + n;
-            }
+            } 
         } else {
             if (_trans.empty()) {
                 return PSTATE::P_NOT_AVAIL;
@@ -43,23 +43,16 @@ PSTATE GreedyAi::transverse(msp_delta_xy d) {
     return PSTATE::P_AVAILABLE;
 }
 
-
-//TODO: needs completing
-void GreedyAi::rotate(dlib::vector<float, 2>) {
-
-}
-
-//TODO: needs completing
-bool GreedyAi::detecto() {
-    return false;
-}
+// TODO: needs completing
+void GreedyAi::rotate(dlib::vector<float, 2>) {}
 
 // TODO: needs completing
-void GreedyAi::move(dlib::vector<float, 2>) {
+bool GreedyAi::detecto() { return false; }
 
-}
+// TODO: needs completing
+void GreedyAi::move(dlib::vector<float, 2>) {}
 
-bool  GreedyAi::is_valid(dlib::vector<float, 2> p) {
+bool GreedyAi::is_valid(dlib::vector<float, 2> p) {
     for (auto r : _excl) {
         if (r.x() == p.x() && r.y() == p.y()) {
             return false;
