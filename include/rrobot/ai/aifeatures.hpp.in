@@ -39,18 +39,26 @@ class AiFeatures {
      *
      * @param sensors The sensor data to set.
      */
-    void setSensors(msp_sensor sensors) { _sensors = sensors; }
+    void set_sensor_mag(msp_sensor_mag sensor) { _mag = sensor; }
 
     /**
      * @brief Retrieves the sensor data.
      *
      * @return The current sensor data.
      */
-    msp_sensor getSensors() { return _sensors; }
+    msp_sensor_mag get_sensor_mag() { return _mag; }
+
+    void set_sensor_acc(msp_sensor_acc sensor) { _acc = sensor; }
+    msp_sensor_acc get_sensor_acc() { return _acc; }
+
+    void set_sensor_gyro(msp_sensor_gyro sensor) { _gyro = sensor; }
+    msp_sensor_gyro get_sensor_gyro() { return _gyro; }
 
    private:
-    msp_sensor _sensors;        ///< Stores the sensor data.
+    msp_sensor_mag _mag;  ///< Stores the sensor data.
+    msp_sensor_acc _acc;
     msp_sonar_altitude _sonar;  ///< Stores the sonar altitude data.
+    msp_sensor_gyro _gyro;
 };
 }  // namespace rrobot
 

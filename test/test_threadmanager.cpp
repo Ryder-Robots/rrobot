@@ -83,7 +83,7 @@ TEST_F(TestThreadManager, DISABLED_shouldRun) {
     EXPECT_CALL(*mapper, mapQueue(_)).WillRepeatedly(Return(RRP_QUEUES::AI_ENGINE));
 
     ThreadManager *tmg = new ThreadManager(mapper, _sm, "manifests/virtual.json");
-    Event* e = new Event(MSPCOMMANDS::MSP_MOTOR, MSPDIRECTION::EXTERNAL_OUT);
+    Event* e = new Event(MSPCOMMANDS::MSP_MOVE, MSPDIRECTION::EXTERNAL_OUT);
     mapper->_qmg->enqueue(RRP_QUEUES::CATEGORIZER, e);
 
     std::thread t(runThreadRunner, tmg);

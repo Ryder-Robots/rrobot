@@ -78,9 +78,8 @@ set(rrobot_INCLUDE
     rrobot/protocols/curators/rrp/rrpcuratorabstract.hpp
     rrobot/protocols/curators/multiwii/crc.hpp
     rrobot/protocols/curators/multiwii/rmultiwii_curator.hpp
-    rrobot/protocols/curators/multiwii/rmmsp_sensor_curator.hpp
     rrobot/protocols/curators/multiwii/rmmsp_sonic_curator.hpp
-    rrobot/protocols/curators/multiwii/rmmsp_orientation_curator.hpp
+    rrobot/protocols/curators/multiwii/rmmsp_sensor_mag_curator.hpp
     rrobot/protocols/curators/encoder.hpp
     rrobot/com/external.hpp
     rrobot/com/server.hpp
@@ -147,16 +146,15 @@ set(MSPCOMMANDS
   "MSP_MODE 1 EXTERNAL_IN 0 0 0 RR_CMODES mode"
   "MSP_ERROR 2 EXTERNAL_OUT 1 1 1 string message"
   "MSP_AUTHKEY 7 EXTERNAL_IN 1 1 0 string key"
-  "MSP_SONAR_ALTITUDE 58 EXTERNAL_OUT 1 1 1 uint32_t distance uint32_t temperature" 
   "MSP_IDENT 100 EXTERNAL_OUT 0 0 0 std::string version MULTITYPE_T multitype MSP_VERSION msp_version uint32_t capability"
   "MSP_STATUS 101 EXTERNAL_OUT 1 1 1 uint16_t cycletime uint16_t i2c_errors_count uint16_t sensor uint32_t flag uint8_t current_set"
-  "MSP_MOTOR 104 EXTERNAL_OUT 1 1 1 int8_t roll int8_t pitch int8_t yaw uint16_t throttle int8_t aux1 int8_t aux2 int8_t aux3 int8_t aux4"
-  "MSP_SET_MOTOR_HBRIDGE 215 EXTERNAL_IN 1 1 0 uint16_t motor1 uint16_t motor2 uint16_t motor3 uint16_t motor4 uint8_t in"
-  "MSP_SENSOR 216 EXTERNAL_IN 1 1 1 uint32_t acc_avail float acc_x float acc_y float acc_z uint32_t gyro_avail float gyro_x float gyro_y float gyro_z uint32_t mag_avail float mag_x float mag_y float mag_z"
-  "MSP_DELTA_XY 217 EXTERNAL_OUT 1 1 0 float x float y float heading"
-  "MSP_ORIENTATION 218 EXTERNAL_OUT 1 1 1 float x float y"
-  "MSP_MOVE_FORWARD 219 EXTERNAL_OUT 1 1 1"
-  "MSP_STOP 220 EXTERNAL_OUT 1 1 1")
+  "MSP_SONAR_ALTITUDE 58 EXTERNAL_OUT 1 1 1 uint32_t distance uint32_t temperature" 
+  "MSP_SENSOR_ACC 216 EXTERNAL_OUT 0 0 1 uint32_t available dlib::vector<float,3> data"
+  "MSP_SENSOR_GYRO 217 EXTERNAL_OUT 0 0 1 uint32_t available dlib::vector<float,3> data"
+  "MSP_SENSOR_MAG 218 EXTERNAL_OUT 0 0 1 uint32_t available dlib::vector<float,3> data"
+  "MSP_STOP 220 EXTERNAL_OUT 1 1 1"
+  "MSP_MOVE 221 EXTERNAL_OUT 1 1 1"
+  "MSP_VECTOR 222 EXTERNAL_IN 1 1 1 float x float y float z")
 
 set(LOOP_CONTENT "")
 set(VALID_MSPCOMMANDS "")

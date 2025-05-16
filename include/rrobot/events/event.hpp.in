@@ -1,6 +1,7 @@
 #ifndef EVENT_HPP
 #define EVENT_HPP
 
+#include <dlib/geometry.h>
 #include <stdlib.h>
 #include <rrobot/events/cmodes.hpp>
 #include <rrobot/events/mspdirection.hpp>

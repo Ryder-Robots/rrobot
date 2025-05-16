@@ -1,0 +1,46 @@
+#ifndef RMMSP_SENSOR_MAG_CURATOR_HPP
+#define RMMSP_SENSOR_MAG_CURATOR_HPP
+
+#include <rrobot/protocols/curators/multiwii/rmultiwii_curator.hpp>
+
+namespace rrobot {
+/**
+ * @class RmMspSensorMagCurator
+ * @brief Curator class for handling serialization and deserialization of magnetometer sensor data
+ *        in the MultiWii protocol.
+ *
+ * Inherits from AbstractRmultiiCurator.
+ */
+class RmMspSensorMagCurator : public AbstractRmultiiCurator {
+   public:
+    /**
+     * @brief Serializes the given Event object into a string payload for transmission.
+     * @param in Pointer to the Event to serialize.
+     * @return Serialized payload as a std::string.
+     */
+    std::string serializePayload(Event* in) override;
+
+    /**
+     * @brief Deserializes the payload from the given RmMultiWii object into an Event object.
+     * @param in Reference to the RmMultiWii object containing the payload.
+     * @return Pointer to the deserialized Event.
+     */
+    Event* deserializePayload(RmMultiWii& in) override;
+
+    /**
+     * @brief Deserializes magnetometer sensor data from the given RmMultiWii object.
+     * @param in Reference to the RmMultiWii object containing the sensor data.
+     * @return Deserialized msp_sensor_mag structure.
+     */
+    msp_sensor_mag deserializem(RmMultiWii& in);
+
+    /**
+     * @brief Serializes the given msp_sensor_mag structure into a string.
+     * @param in The msp_sensor_mag structure to serialize.
+     * @return Serialized data as a std::string.
+     */
+    std::string serializem(const msp_sensor_mag in);
+};
+}  // namespace rrobot
+
+#endif // RMMSP_SENSOR_MAG_CURATOR_HPP

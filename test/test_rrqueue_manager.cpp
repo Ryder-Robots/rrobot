@@ -51,7 +51,7 @@ TEST_F(TestRrQueueManager, shouldAddEvent) {
         std::chrono::milliseconds(env.getQueues().getThreadProcessTime()));
 
     qmng.addQueue(RRP_QUEUES::MICROCONTROLLER);
-    Event* e = new Event(MSPCOMMANDS::MSP_SENSOR, MSPDIRECTION::EXTERNAL_OUT);
+    Event* e = new Event(MSPCOMMANDS::MSP_SENSOR_MAG, MSPDIRECTION::EXTERNAL_OUT);
     qmng.enqueue(RRP_QUEUES::MICROCONTROLLER, e);
     EXPECT_EQ(false, qmng.isEmpty(RRP_QUEUES::MICROCONTROLLER));
     EXPECT_EQ(1, qmng.size(RRP_QUEUES::MICROCONTROLLER));

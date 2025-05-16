@@ -1,6 +1,7 @@
 #ifndef @EVENT_HEADING@
 #define @EVENT_HEADING@
 
+#include <dlib/geometry.h>
 #include <stdint.h>
 #include <string>
 #include <rrobot/environment/multitype.hpp>

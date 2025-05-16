@@ -42,34 +42,22 @@ class TestUiHandler : public ::testing::Test {
 class MockExternal : public External {
     public:
     MockExternal() {
+        // set destination point <0,10,0>
         json inbound;
-        inbound["command"] = "MSP_SET_MOTOR_HBRIDGE";
+        inbound["command"] = "MSP_VECTOR";
         json payload;
-        payload["motor1"] = 500;
-        payload["motor2"] = 600;
+        payload["x"] = 0;
+        payload["y"] = 100;
+        payload["z"] = 0;
 
-        payload["motor3"] = 500;
-        payload["motor4"] = 600;
-
-        // set polarity of motors
-        payload["in"] = 0b01010101;
-
-        inbound["payload"] = payload;
 
         // second message
         json inbound2;
-        inbound2["command"] = "MSP_SET_MOTOR_HBRIDGE";
+        inbound["command"] = "MSP_VECTOR";
         json payload2;
-        payload2["motor1"] = 500;
-        payload2["motor2"] = 600;
-
-        payload2["motor3"] = 500;
-        payload2["motor4"] = 600;
-
-        // set polarity of motors
-        payload2["in"] = 0b01010101;
-
-        inbound2["payload"] = payload;
+        payload2["x"] = 200;
+        payload2["y"] = 100;
+        payload2["z"] = 0;
 
         // test an ident request.
         json msp_ident;
@@ -127,12 +115,10 @@ TEST_F(TestUiHandler, TestInBoundEvents1) {
     EXPECT_EQ(true, ui.available());
     Event* e = ui.produce(smg);
     EXPECT_TRUE(e->hasPayload());
-    msp_set_motor_hbridge payload1 = e->getPayload<msp_set_motor_hbridge>();
-    EXPECT_EQ(500, payload1.get_motor1());
-    EXPECT_EQ(600, payload1.get_motor2());
-    EXPECT_EQ(500, payload1.get_motor3());
-    EXPECT_EQ(600, payload1.get_motor4());
-    EXPECT_EQ(0b01010101, payload1.get_in());
+    msp_vector payload1 = e->getPayload<msp_vector>();
+    EXPECT_EQ(0, payload1.get_x());
+    EXPECT_EQ(100, payload1.get_y());
+    EXPECT_EQ(0, payload1.get_z());
 
     delete(e);
 }
@@ -144,13 +130,10 @@ TEST_F(TestUiHandler, TestInBoundEvents2) {
     EXPECT_EQ(true, ui.available());
     Event* e = ui.produce(smg);
     EXPECT_TRUE(e->hasPayload());
-    msp_set_motor_hbridge payload = e->getPayload<msp_set_motor_hbridge>();
-    EXPECT_EQ(500, payload.get_motor1());
-    EXPECT_EQ(600, payload.get_motor2());
-    EXPECT_EQ(500, payload.get_motor3());
-    EXPECT_EQ(600, payload.get_motor4());
-    EXPECT_EQ(true, e->hasPayload());
-    EXPECT_EQ(0b01010101, payload.get_in());
+    msp_vector payload1 = e->getPayload<msp_vector>();
+    EXPECT_EQ(0, payload1.get_x());
+    EXPECT_EQ(100, payload1.get_y());
+    EXPECT_EQ(0, payload1.get_z());
 
     delete(e);
 }
@@ -165,24 +148,21 @@ TEST_F(TestUiHandler, TestInBoundEvents3) {
 }
 
 TEST_F(TestUiHandler, TestOutBoundEvents) {
-    msp_set_motor_hbridge* payload = new  msp_set_motor_hbridge();
-    payload->set_motor1(500);
-    payload->set_motor2(600);
-    payload->set_motor3(700);
-    payload->set_motor4(800);
-    payload->set_in(0b10101010);
-    Event* event = new Event(MSPCOMMANDS::MSP_SET_MOTOR_HBRIDGE, MSPDIRECTION::EXTERNAL_IN , payload);
+    msp_vector* payload = new  msp_vector();
+    payload->set_x(500);
+    payload->set_y(600);
+    payload->set_z(0);
+
+    Event* event = new Event(MSPCOMMANDS::MSP_VECTOR, MSPDIRECTION::EXTERNAL_IN , payload);
     MockExternal external;
 
     UiHandler ui(external, serializer, smg, env);
     ui.consume(smg, event);
     json j = json::parse(external._outbound.substr(0, external._outbound.length() - 1));
-    EXPECT_EQ(500, j["payload"]["motor1"]);
-    EXPECT_EQ(600, j["payload"]["motor2"]);
-    EXPECT_EQ(700, j["payload"]["motor3"]);
-    EXPECT_EQ(800, j["payload"]["motor4"]);
-    EXPECT_EQ(0b10101010, j["payload"]["in"]);
-    EXPECT_EQ("MSP_SET_MOTOR_HBRIDGE", j["command"]);
+    EXPECT_EQ(500, j["payload"]["x"]);
+    EXPECT_EQ(600, j["payload"]["y"]);
+    EXPECT_EQ(0, j["payload"]["z"]);
+    EXPECT_EQ("MSP_VECTOR", j["command"]);
     delete(event);
 }
 

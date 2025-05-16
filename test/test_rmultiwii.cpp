@@ -42,12 +42,12 @@ class TestMultiWii : public ::testing::Test {
     Crc32 crc = Crc32();
     std::string data = "";
 
-    RmMultiWii multiWii = RmMultiWii::createInstance(data, MSPCOMMANDS::MSP_SENSOR);
-    ASSERT_EQ(MSPCOMMANDS::MSP_SENSOR, multiWii.getCommand());
+    RmMultiWii multiWii = RmMultiWii::createInstance(data, MSPCOMMANDS::MSP_SENSOR_MAG);
+    ASSERT_EQ(MSPCOMMANDS::MSP_SENSOR_MAG, multiWii.getCommand());
     ASSERT_EQ(0, multiWii.getSize());
 
     const uint8_t* data2 = reinterpret_cast<const uint8_t*>(multiWii.encode(crc).c_str());
-    ASSERT_EQ(MSPCOMMANDS::MSP_SENSOR, data2[0]);
+    ASSERT_EQ(MSPCOMMANDS::MSP_SENSOR_MAG, data2[0]);
     ASSERT_EQ(0x00, data2[1]);
     ASSERT_EQ(0x00, data2[2]);
     ASSERT_EQ(0x00, data2[3]);
