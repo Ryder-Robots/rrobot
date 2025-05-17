@@ -9,6 +9,7 @@ namespace rrobot {
  * @brief provides base functions which are the concrete implementation for specific micro-processor/flight controller.
  */
 class aibase {
+   public:
     /**
      * @brief Rotates the entity according to the given direction vector.
      * @param direction The direction vector specifying the rotation.
@@ -22,10 +23,29 @@ class aibase {
     virtual bool detecto() = 0;
 
     /**
+     * @brief Moves the entity in the specified direction. Serializes the moves using serialize method
+     * @param direction The direction vector for movement.
+     */
+    void move(dlib::vector<float, VECTOR_DIM> v) {
+        move_v(v);
+        serialize(gen_tid(), v);
+    }
+
+    /**
      * @brief Moves the entity in the specified direction.
      * @param direction The direction vector for movement.
      */
-    virtual void move(dlib::vector<float, VECTOR_DIM>) = 0;
+    virtual void move_v(dlib::vector<float, VECTOR_DIM> v) = 0;
+
+    /**
+     * @brief Serialize each vector, with transaction id to storage, data can be used for training, and black box.
+     */
+    virtual void serialize(const long tid, dlib::vector<float, VECTOR_DIM>) = 0;
+
+    /**
+     * @brief Generate unique identifier for each transaction.
+     */
+    virtual long gen_tid() = 0;
 };
 }  // namespace rrobot
 

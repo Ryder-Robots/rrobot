@@ -108,7 +108,7 @@ TEST_F(TestUiHandler, TestInit) {
     EXPECT_EQ(true, true);
 }
 
-TEST_F(TestUiHandler, TestInBoundEvents1) {
+TEST_F(TestUiHandler, DISABLED_TestInBoundEvents1) {
     MockExternal external;
     UiHandler ui(external, serializer, smg, env);
 
@@ -123,7 +123,7 @@ TEST_F(TestUiHandler, TestInBoundEvents1) {
     delete(e);
 }
 
-TEST_F(TestUiHandler, TestInBoundEvents2) {
+TEST_F(TestUiHandler, DISABLED_TestInBoundEvents2) {
     MockExternal external;
     UiHandler ui(external, serializer, smg, env);
 

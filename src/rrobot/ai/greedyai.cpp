@@ -6,7 +6,6 @@ using namespace rrobot;
  * TODO:
  * 
  * - some logging is desperately needed.
- * - push current heading to state manager, so that drones heading is known.
  */
 
 /*
@@ -68,15 +67,30 @@ PSTATE GreedyAi::transverse(const dlib::vector<float, VECTOR_DIM> dp) {
     return PSTATE::P_AVAILABLE;
 }
 
-// TODO: needs completing
-void GreedyAi::rotate(dlib::vector<float, VECTOR_DIM>) {}
+/*
+ * use base algorithm rotate the robot. 
+ */
+void GreedyAi::rotate(dlib::vector<float, VECTOR_DIM> v) {
+    _base.rotate(v);
+}
 
-// TODO: needs completing
-bool GreedyAi::detecto() { return false; }
+/*
+ * use base algorithm to detect object.
+ */
+bool GreedyAi::detecto() { 
+    return _base.detecto(); 
+}
 
-// TODO: needs completing
-void GreedyAi::move(dlib::vector<float, VECTOR_DIM>) {}
+/*
+ * use base algorithm to move
+ */
+void GreedyAi::move(dlib::vector<float, VECTOR_DIM> v) {
+    _base.move(v);
+}
 
+/*
+ * compare attributes within all excluded points, to ensure that point has not been discovered before.
+ */
 bool GreedyAi::is_valid(dlib::vector<float, VECTOR_DIM> p, std::vector<dlib::vector<float, VECTOR_DIM>> excl) {
     for (auto r : excl) {
         if (r.x() == p.x() && r.y() == p.y() && r.z() == p.z()) {

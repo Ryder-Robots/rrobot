@@ -13,7 +13,9 @@ class TestBase : public aibase {
 public:
 MOCK_METHOD(void, rotate, ((dlib::vector<float, VECTOR_DIM>)), (override));
 MOCK_METHOD(bool, detecto, (), (override));
-MOCK_METHOD(void, move, ((dlib::vector<float, VECTOR_DIM>)), (override));
+MOCK_METHOD(void, move_v, ((dlib::vector<float, VECTOR_DIM>)), (override));
+MOCK_METHOD(void, serialize, (const long tid, (dlib::vector<float, VECTOR_DIM>)), (override));
+MOCK_METHOD(long, gen_tid, (), (override));
 };
 
 class TestGreedyAi : public ::testing::Test {
