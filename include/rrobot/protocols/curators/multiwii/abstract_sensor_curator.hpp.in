@@ -1,0 +1,70 @@
+#ifndef ABSTRACT_SENSOR_CURATOR_HPP
+#define ABSTRACT_SENSOR_CURATOR_HPP
+
+#include <rrobot/protocols/curators/multiwii/rmultiwii_curator.hpp>
+
+namespace rrobot {
+/**
+ * @brief abstract sensor curator.
+ */
+template <typename T>
+class AbstractSensorCurator : public AbstractRmultiiCurator {
+    /**
+     * @brief serialize payload to an event.
+     */
+    std::string serializePayload(Event* in) override {
+        string enc = "";
+        if (in->hasPayload()) {
+            T payload = in->getPayload<T>();
+            enc = serializem(payload);
+        }
+        return enc;
+    }
+
+    /**
+     * @brief deserialize payload
+     */
+    Event* deserializePayload(RmMultiWii& in) override {
+        Event* e = nullptr;
+        if (in.getSize()) {
+            T payload = deserializem(in);
+            void* p = static_cast<void*>(malloc(sizeof(payload)));
+            memcpy(p, &payload, sizeof(payload));
+            e = new Event(in.getCommand(), MSPDIRECTION::EXTERNAL_IN, p);
+        } else
+            e = new Event(in.getCommand(), MSPDIRECTION::EXTERNAL_IN);
+        return e;
+    }
+
+    /**
+     * @brief deserialize payload from multiwii event
+     */
+    T deserializem(RmMultiWii& in) {
+        T payload;
+        std::vector<std::string> tokens = decodeTokens(in.getPayload());
+
+        if (in.getSize() > 0) {
+            payload.set_available(Encoder::decodeInt32(tokens.at(0)));
+            dlib::vector<float, 3> data(Encoder::decodeFloat(tokens.at(1)), Encoder::decodeFloat(tokens.at(2)),
+                                        Encoder::decodeFloat(tokens.at(3)));
+            payload.set_data(data);
+        }
+        return payload;
+    }
+
+    /**
+     * @brief serialize payload from multiwii event
+     */
+    std::string serializem(T in) {
+        std::vector<std::string> tokens = {
+            Encoder::encodeUint32(in.get_available()),
+            Encoder::encodeFloat(in.get_data().x()),
+            Encoder::encodeFloat(in.get_data().y()),
+            Encoder::encodeFloat(in.get_data().z()),
+        };
+        return encodeTokens(tokens);
+    }
+};
+}  // namespace rrobot
+
+#endif  // ABSTRACT_SENSOR_CURATOR_HPP

@@ -80,6 +80,7 @@ set(rrobot_INCLUDE
     rrobot/protocols/curators/multiwii/rmultiwii_curator.hpp
     rrobot/protocols/curators/multiwii/rmmsp_sonic_curator.hpp
     rrobot/protocols/curators/multiwii/rmmsp_sensor_mag_curator.hpp
+    rrobot/protocols/curators/multiwii/abstract_sensor_curator.hpp
     rrobot/protocols/curators/encoder.hpp
     rrobot/com/external.hpp
     rrobot/com/server.hpp
