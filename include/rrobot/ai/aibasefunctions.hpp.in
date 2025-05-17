@@ -1,0 +1,32 @@
+#ifndef AIBASEFUNCTION_HPP
+#define AIBASEFUNCTION_HPP
+
+#include <rrobot/ai/ai.hpp>
+
+namespace rrobot {
+
+/**
+ * @brief provides base functions which are the concrete implementation for specific micro-processor/flight controller.
+ */
+class aibase {
+    /**
+     * @brief Rotates the entity according to the given direction vector.
+     * @param direction The direction vector specifying the rotation.
+     */
+    virtual void rotate(dlib::vector<float, VECTOR_DIM>) = 0;
+
+    /**
+     * @brief Detects the presence of an object or condition.
+     * @return True if detection is successful, false otherwise.
+     */
+    virtual bool detecto() = 0;
+
+    /**
+     * @brief Moves the entity in the specified direction.
+     * @param direction The direction vector for movement.
+     */
+    virtual void move(dlib::vector<float, VECTOR_DIM>) = 0;
+};
+}  // namespace rrobot
+
+#endif  // AIBASEFUNCTION_HPP
