@@ -1,32 +1,84 @@
 #ifndef GREEDYAI_HPP
 #define GREEDYAI_HPP
 
-#include <rrobot/ai/ai.hpp>
-#include <rrobot/state/state_manager.hpp>
+#include <rrobot/ai/aiiface.hpp>
 
 namespace rrobot {
-class GreedyAi {
+
+/**
+ * @class GreedyAi
+ * @brief Implements a greedy algorithm-based AI for robot pathfinding and movement.
+ *
+ * This class derives from the aiiface interface and provides concrete implementations
+ * for AI behaviors such as traversing, rotating, detecting obstacles, moving, and validating
+ * positions. The GreedyAi maintains a list of excluded points and possible movement directions,
+ * and interacts with a StateManager to manage robot state.
+ *
+ * @note The greedy approach prioritizes immediate gains in path selection, which may not always
+ *       result in the globally optimal path.
+ */
+
+class GreedyAi : public aiiface {
    public:
-    GreedyAi(StateManager& sm): _sm(sm){}
+    /**
+     * @brief Constructs a GreedyAi object with a reference to a StateManager.
+     * @param sm Reference to the StateManager used for managing robot state.
+     */
+    GreedyAi(StateManager& sm) : _sm(sm) {}
+
+    /**
+     * @brief Destructor for GreedyAi.
+     */
     ~GreedyAi() = default;
 
-    PSTATE transverse(const dlib::vector<float, VECTOR_DIM>);
-    void rotate(dlib::vector<float, VECTOR_DIM>);
-    bool detecto();
-    void move(dlib::vector<float, VECTOR_DIM>);
-    bool is_valid(dlib::vector<float, VECTOR_DIM>,  std::vector<dlib::vector<float, VECTOR_DIM>>);
+    /**
+     * @brief Attempts to traverse to a new position using a greedy algorithm.
+     * @param target The target position as a dlib vector.
+     * @return The resulting state after attempting traversal (PSTATE).
+     */
+    PSTATE transverse(const dlib::vector<float, VECTOR_DIM>) override;
+
+    /**
+     * @brief Rotates the robot towards the specified direction.
+     * @param direction The direction vector to rotate towards.
+     */
+    void rotate(dlib::vector<float, VECTOR_DIM>) override;
+
+    /**
+     * @brief Detects obstacles in the robot's environment.
+     * @return True if an obstacle is detected, false otherwise.
+     */
+    bool detecto() override;
+
+    /**
+     * @brief Moves the robot in the specified direction.
+     * @param direction The direction vector to move towards.
+     */
+    void move(dlib::vector<float, VECTOR_DIM>) override;
+
+    /**
+     * @brief Checks if a given position is valid and not in the list of excluded points.
+     * @param pos The position to validate.
+     * @param excl The list of excluded positions.
+     * @return True if the position is valid, false otherwise.
+     */
+    bool is_valid(dlib::vector<float, VECTOR_DIM>, std::vector<dlib::vector<float, VECTOR_DIM>>) override;
 
    private:
     std::vector<dlib::vector<float, VECTOR_DIM>> _excl;  // points that have been excluded
 
     // Paths that can be transversed
     const std::vector<dlib::vector<float, VECTOR_DIM>> res = {
-        dlib::vector<float, VECTOR_DIM>(0, 1, 0),  dlib::vector<float, VECTOR_DIM>(0, -1, 0),  // tranverse Y axis first
+        dlib::vector<float, VECTOR_DIM>(0, 1, 0),
+        dlib::vector<float, VECTOR_DIM>(0, -1, 0),  // tranverse Y axis first
 
-        dlib::vector<float, VECTOR_DIM>(1, 0, 0),   dlib::vector<float, VECTOR_DIM>(-1, 0, 0), // transves X Axis
+        dlib::vector<float, VECTOR_DIM>(1, 0, 0),
+        dlib::vector<float, VECTOR_DIM>(-1, 0, 0),  // transves X Axis
 
-        dlib::vector<float, VECTOR_DIM>(1, 1, 0),   dlib::vector<float, VECTOR_DIM>(1, -1, 0),
-        dlib::vector<float, VECTOR_DIM>(-1, -1, 0), dlib::vector<float, VECTOR_DIM>(-1, 1, 0),
+        dlib::vector<float, VECTOR_DIM>(1, 1, 0),
+        dlib::vector<float, VECTOR_DIM>(1, -1, 0),
+        dlib::vector<float, VECTOR_DIM>(-1, -1, 0),
+        dlib::vector<float, VECTOR_DIM>(-1, 1, 0),
     };
 
     StateManager& _sm;

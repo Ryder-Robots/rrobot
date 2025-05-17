@@ -1,0 +1,14 @@
+#ifndef RMMSP_SENSOR_ACC_CURATOR_HPP
+#define RMMSP_SENSOR_ACC_CURATOR_HPP
+
+#include <rrobot/protocols/curators/multiwii/abstract_sensor_curator.hpp>
+
+namespace rrobot {
+/**
+ * @class RmMspSensorMagCurator
+ * @brief contains vector for accelometer.
+ */
+class RmMspSensorMagCurator : public AbstractSensorCurator<msp_sensor_acc> {};
+}  // namespace rrobot
+
+#endif

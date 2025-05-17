@@ -1,0 +1,16 @@
+#ifndef RMMSP_SENSOR_GYRO_CURATOR_HPP
+#define RMMSP_SENSOR_GYRO_CURATOR_HPP
+
+#include <rrobot/protocols/curators/multiwii/abstract_sensor_curator.hpp>
+
+namespace rrobot {
+
+/**
+ * @class RmMspSensorGyroCurator
+ * @brief MultiWii curator for Gyroscope
+ *
+ */
+class RmMspSensorGyroCurator : public AbstractSensorCurator<msp_sensor_gyro> {};
+}  // namespace rrobot
+
+#endif  // RMMSP_SENSOR_GYRO_CURATOR_HPP

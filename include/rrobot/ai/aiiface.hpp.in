@@ -1,0 +1,55 @@
+#ifndef AIIFACE_HPP
+#define AIIFACE_HPP
+
+#include <rrobot/ai/ai.hpp>
+#include <rrobot/state/state_manager.hpp>
+
+namespace rrobot {
+
+/**
+ * @brief Interface for AI control in the robot system.
+ *
+ * This abstract class defines the essential methods required for AI-based
+ * navigation and control. Implementations of this interface should provide
+ * logic for traversing, rotating, detecting obstacles, moving, and validating
+ * movement vectors within the robot's environment.
+ */
+class aiiface {
+    public:
+    /**
+     * @brief Computes the next state by traversing in the given direction vector.
+     * @param direction The direction vector for traversal.
+     * @return The resulting state after traversal.
+     */
+
+    virtual PSTATE transverse(const dlib::vector<float, VECTOR_DIM>) = 0;
+
+    /**
+     * @brief Rotates the entity according to the given direction vector.
+     * @param direction The direction vector specifying the rotation.
+     */
+    virtual void rotate(dlib::vector<float, VECTOR_DIM>) = 0;
+
+    /**
+     * @brief Detects the presence of an object or condition.
+     * @return True if detection is successful, false otherwise.
+     */
+    virtual bool detecto() = 0;
+
+    /**
+     * @brief Moves the entity in the specified direction.
+     * @param direction The direction vector for movement.
+     */
+    virtual void move(dlib::vector<float, VECTOR_DIM>) = 0;
+
+    /**
+     * @brief Checks if the given direction is valid with respect to a set of vectors.
+     * @param direction The direction vector to validate.
+     * @param vectors The set of vectors to validate against.
+     * @return True if the direction is valid, false otherwise.
+     */
+    virtual bool is_valid(dlib::vector<float, VECTOR_DIM>, std::vector<dlib::vector<float, VECTOR_DIM>>) = 0;
+};
+}  // namespace rrobot
+
+#endif

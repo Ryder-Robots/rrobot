@@ -79,8 +79,10 @@ set(rrobot_INCLUDE
     rrobot/protocols/curators/multiwii/crc.hpp
     rrobot/protocols/curators/multiwii/rmultiwii_curator.hpp
     rrobot/protocols/curators/multiwii/rmmsp_sonic_curator.hpp
-    rrobot/protocols/curators/multiwii/rmmsp_sensor_mag_curator.hpp
     rrobot/protocols/curators/multiwii/abstract_sensor_curator.hpp
+    rrobot/protocols/curators/multiwii/rmmsp_sensor_mag_curator.hpp
+    rrobot/protocols/curators/multiwii/rmmsp_sensor_acc_curator.hpp
+    rrobot/protocols/curators/multiwii/rmmsp_sensor_gyro_curator.hpp
     rrobot/protocols/curators/encoder.hpp
     rrobot/com/external.hpp
     rrobot/com/server.hpp
@@ -95,6 +97,7 @@ set(rrobot_INCLUDE
     rrobot/ai/aifeatures.hpp
     rrobot/ai/ai.hpp
     rrobot/ai/greedyai.hpp
+    rrobot/ai/aiiface.hpp
 )   
 
 foreach(item ${rrobot_INCLUDE})
