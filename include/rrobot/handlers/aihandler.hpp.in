@@ -1,24 +1,15 @@
 #ifndef AIAIHANDLER_HPP
 #define AIAIHANDLER_HPP
 
-#include <stack>
 #include <dlib/logger.h>
 #include <rrobot/events/eventhandler.hpp>
-#include <rrobot/ai/aifeatures.hpp>
-#include <rrobot/ai/ai.hpp>
-#include <rrobot/com/external.hpp>
-#include <rrobot/events/serializers/serializer.hpp>
-#include <rrobot/protocols/curators/multiwii/rmultiwii.hpp>
+#include <rrobot/ai/aiiface.hpp>
 
 namespace rrobot  {
     class AiHandler : public EventHandler {
         public:
 
-        AiHandler(
-            External& external, 
-            Serializer<RmMultiWii, Event*>& serializer):
-            _external(external),
-            _serializer(serializer) {}
+        AiHandler(aiiface& ai): _ai(ai) {};
 
         ~AiHandler() = default;
         
@@ -32,12 +23,7 @@ namespace rrobot  {
 
         private:
         bool _available = false;
-
-        External& _external;
-        Serializer<RmMultiWii, Event*>& _serializer;
-        Crc32 _crc;
-
-        AiFeatures createFeatures(StateManager& smg, Event *);
+        aiiface& _ai;
     };
 }
 

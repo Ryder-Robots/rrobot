@@ -99,6 +99,7 @@ set(rrobot_INCLUDE
     rrobot/ai/greedyai.hpp
     rrobot/ai/aiiface.hpp
     rrobot/ai/aibasefunctions.hpp
+    rrobot/ai/ble33iface.hpp
 )   
 
 foreach(item ${rrobot_INCLUDE})

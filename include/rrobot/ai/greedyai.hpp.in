@@ -58,6 +58,11 @@ class GreedyAi : public aiiface {
     void move(dlib::vector<float, VECTOR_DIM>) override;
 
     /**
+     * @brief Stop robot.
+     */
+    void stop() override;
+
+    /**
      * @brief Checks if a given position is valid and not in the list of excluded points.
      * @param pos The position to validate.
      * @param excl The list of excluded positions.

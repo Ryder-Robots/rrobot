@@ -46,6 +46,11 @@ class aibase {
      * @brief Generate unique identifier for each transaction.
      */
     virtual long gen_tid() = 0;
+
+    /**
+     * @brief Stop robot.
+     */
+    virtual void stop() = 0;
 };
 }  // namespace rrobot
 

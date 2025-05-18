@@ -16,6 +16,7 @@ MOCK_METHOD(bool, detecto, (), (override));
 MOCK_METHOD(void, move_v, ((dlib::vector<float, VECTOR_DIM>)), (override));
 MOCK_METHOD(void, serialize, (const long tid, (dlib::vector<float, VECTOR_DIM>)), (override));
 MOCK_METHOD(long, gen_tid, (), (override));
+MOCK_METHOD(void, stop, (), (override));
 };
 
 class TestGreedyAi : public ::testing::Test {

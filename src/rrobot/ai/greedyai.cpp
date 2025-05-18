@@ -4,7 +4,7 @@ using namespace rrobot;
 
 /**
  * TODO:
- * 
+ * - add stop command.
  * - some logging is desperately needed.
  */
 
@@ -54,6 +54,7 @@ PSTATE GreedyAi::transverse(const dlib::vector<float, VECTOR_DIM> dp) {
             }
         } else {
             if (_trans.empty()) {
+                stop();
                 return PSTATE::P_NOT_AVAIL;
             }
             dlib::vector<float, VECTOR_DIM> lp = _trans.top(), n = _trans.top() - c;
@@ -63,7 +64,7 @@ PSTATE GreedyAi::transverse(const dlib::vector<float, VECTOR_DIM> dp) {
             c = lp;
         }
     }
-
+    stop();
     return PSTATE::P_AVAILABLE;
 }
 
@@ -86,6 +87,10 @@ bool GreedyAi::detecto() {
  */
 void GreedyAi::move(dlib::vector<float, VECTOR_DIM> v) {
     _base.move(v);
+}
+
+void GreedyAi::stop() {
+    _base.stop();
 }
 
 /*

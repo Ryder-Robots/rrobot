@@ -43,6 +43,11 @@ class aiiface {
     virtual void move(dlib::vector<float, VECTOR_DIM>) = 0;
 
     /**
+     * @brief Stop robot.
+     */
+    virtual void stop() = 0;
+
+    /**
      * @brief Checks if the given direction is valid with respect to a set of vectors.
      * @param direction The direction vector to validate.
      * @param vectors The set of vectors to validate against.

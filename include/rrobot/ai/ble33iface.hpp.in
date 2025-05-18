@@ -1,0 +1,17 @@
+#ifndef BLE33IFACE_HPP
+#define BLE33IFACE_HPP
+
+#include <rrobot/ai/aibasefunctions.hpp>
+
+namespace rrobot {
+class ble33iface : public aibase {
+    void rotate(dlib::vector<float, VECTOR_DIM>) override;
+    bool detecto() override;
+    void move_v(dlib::vector<float, VECTOR_DIM> v) override;
+    void serialize(const long tid, dlib::vector<float, VECTOR_DIM>) override;
+    long gen_tid();
+    void stop();
+};
+}  // namespace rrobot
+
+#endif
