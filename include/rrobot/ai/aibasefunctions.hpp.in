@@ -51,6 +51,30 @@ class aibase {
      * @brief Stop robot.
      */
     virtual void stop() = 0;
+
+    // Operations beneath are sensor operations.
+
+    /**
+     * @brief returns altra-sonic, and barometer data, Note this assumes that barometer, and altra sonic
+     * are bundled in the same sensor, this is not always the case, but the implementation may make multiple
+     * calls to the controller if this is the case.
+     */
+    virtual msp_sonar_altitude sen_sonar() = 0;
+
+    /**
+     * @brief returns availability, and acc vector.
+     */
+    virtual msp_sensor_acc sen_acc() = 0;
+
+    /**
+     * @brief Gyroscope sensor.
+     */
+    virtual msp_sensor_gyro sen_gyro() = 0;
+
+    /**
+     * @brief Magnometer sensor.
+     */
+    virtual msp_sensor_mag sen_mag() = 0;
 };
 }  // namespace rrobot
 

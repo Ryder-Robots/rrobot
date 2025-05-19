@@ -2,15 +2,82 @@
 #define BLE33IFACE_HPP
 
 #include <rrobot/ai/aibasefunctions.hpp>
+#include <rrobot/com/external.hpp>
 
 namespace rrobot {
+
+/**
+ * @class ble33iface
+ * @brief Interface class for BLE33-based AI robot control.
+ *
+ * This class provides an interface for controlling a robot using BLE33 hardware.
+ * It inherits from the base class `aibase` and implements methods for movement,
+ * rotation, detection, serialization, and task management.
+ *
+ * @note All vector parameters use dlib::vector<float, VECTOR_DIM>.
+ */
 class ble33iface : public aibase {
+   public:
+    /**
+     * @brief will align BLE IMU to vector matching input,  this can be affected by near by
+     * magnets,  but is expected to use planatery magnetic force.
+     */
     void rotate(dlib::vector<float, VECTOR_DIM>) override;
+
+    /**
+     * @brief uses onboard sensors,  connected to BLE33,  namely ultra-sonic to detect
+     * objects.  Implementation is speicific to qualifies as "too close".
+     */
     bool detecto() override;
+
+    /**
+     * @brief move vector of robot, using HBRIDGE connected to BLE, for a vector movement.
+     * Vector movement is a one second delta, at 5 volts, BLE may using an algorithm such as
+     * PID to determine the exact delta. If more precise calculations can be performed by using
+     * wheel encoders, than it is up to the BLE33 to decide what to do.
+     */
     void move_v(dlib::vector<float, VECTOR_DIM> v) override;
+
+    /**
+     * @brief serialize vector that will be sent to move_v to file, this assumes that the
+     * AI/DP algorithm uses move() and not move_v() for movement.  This is the expected
+     * approach.
+     */
     void serialize(const long tid, dlib::vector<float, VECTOR_DIM>) override;
-    long gen_tid();
-    void stop();
+
+    /**
+     * @brief generate a unique (not globally unique) ID for all values in the
+     * current path transversal.
+     */
+    long gen_tid() override;
+
+    /**
+     * @brief instructs robot to stop, note that if this command is not issued, HBRIDGE will
+     * continue on path in last move command.
+     */
+    void stop() override;
+
+    // beneath are sensor operations.
+    msp_sonar_altitude sen_sonar() override;
+
+    /**
+     * @brief returns availability, and acc vector.
+     */
+    msp_sensor_acc sen_acc() override;
+
+    /**
+     * @brief Gyroscope sensor.
+     */
+    msp_sensor_gyro sen_gyro() override;
+
+    /**
+     * @brief Magnometer sensor.
+     */
+    msp_sensor_mag sen_mag() override;
+
+   private:
+    External& _ext;  // USB connection (or otherwise) to BLE33
+
 };
 }  // namespace rrobot
 

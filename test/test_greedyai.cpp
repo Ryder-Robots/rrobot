@@ -17,6 +17,10 @@ MOCK_METHOD(void, move_v, ((dlib::vector<float, VECTOR_DIM>)), (override));
 MOCK_METHOD(void, serialize, (const long tid, (dlib::vector<float, VECTOR_DIM>)), (override));
 MOCK_METHOD(long, gen_tid, (), (override));
 MOCK_METHOD(void, stop, (), (override));
+MOCK_METHOD(msp_sonar_altitude, sen_sonar, (), (override));
+MOCK_METHOD(msp_sensor_acc, sen_acc, (), (override));
+MOCK_METHOD(msp_sensor_gyro, sen_gyro, (), (override));
+MOCK_METHOD(msp_sensor_mag, sen_mag, (), (override));
 };
 
 class TestGreedyAi : public ::testing::Test {
