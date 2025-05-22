@@ -31,6 +31,7 @@ class TestBle33Iface : public ::testing::Test {
     RmMspSonicCurator _curator_sonic;
     RmMspSensorGyroCurator _curator_gyro;
     RmMspSensorAccCurator _curator_acc;
+    RmMspSensorMagCurator _curator_mag;
     Crc32 _crc;
     StateManager _sm;
 };
@@ -105,6 +106,32 @@ TEST_F(TestBle33Iface, TestAcc) {
     EXPECT_EQ(12, _sm.getFeatures().get_sensor_acc().get_data().x());
     EXPECT_EQ(22, _sm.getFeatures().get_sensor_acc().get_data().y());
     EXPECT_EQ(0, _sm.getFeatures().get_sensor_acc().get_data().z());
+}
+
+
+TEST_F(TestBle33Iface, TestMag) {
+    msp_sensor_mag in;
+    in.set_available(1);
+    in.set_data(dlib::vector<float, 3L>(12, 25, 0));
+
+    std::string result = _curator_mag.serializem(in),
+                m = RmMultiWii::createInstance(result, MSPCOMMANDS::MSP_SENSOR_MAG).encode(_crc);
+
+    EXPECT_CALL(_ext, available()).WillOnce(::testing::Return(result.size()));
+    EXPECT_CALL(_ext, send_rr(RmMultiWii::createInstance("", MSPCOMMANDS::MSP_SENSOR_MAG).encode(_crc)))
+        .WillOnce(::testing::Return(result.size()));
+    EXPECT_CALL(_ext, get(RmMultiWii::_TERMINATION_CHAR, LLONG_MAX)).WillOnce(::testing::Return(m));
+
+    ble33iface _iface(_ext, _sm);
+    msp_sensor_mag sensor = _iface.sen_mag();
+
+    EXPECT_EQ(12, sensor.get_data().x());
+    EXPECT_EQ(25, sensor.get_data().y());
+    EXPECT_EQ(0, sensor.get_data().z());
+
+    EXPECT_EQ(12, _sm.getFeatures().get_sensor_mag().get_data().x());
+    EXPECT_EQ(25, _sm.getFeatures().get_sensor_mag().get_data().y());
+    EXPECT_EQ(0, _sm.getFeatures().get_sensor_mag().get_data().z());
 }
 
 int main(int argc, char** argv) {
