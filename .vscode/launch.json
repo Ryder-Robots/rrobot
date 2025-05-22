@@ -128,7 +128,7 @@
             "name": "(gdb) test_rmmsp_sensor_curator",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/build/test/test_rmmsp_sensor_curator",
+            "program": "${workspaceFolder}/build/test/test_rmmsp_sensor_mag_curator",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}/test/resources",

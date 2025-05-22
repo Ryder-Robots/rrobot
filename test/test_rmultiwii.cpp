@@ -36,7 +36,7 @@ TEST_F(TestMultiWii, shouldEncodeStatus) {
     boost::split(tokens, data2, boost::is_any_of(";"));
     ASSERT_EQ(std::to_string(MSPCOMMANDS::MSP_STATUS), tokens.at(0));
     ASSERT_EQ(std::to_string(0), tokens.at(1));
-    ASSERT_EQ(std::to_string(0), tokens.at(2));
+    ASSERT_EQ("", tokens.at(2));
 }
 
 TEST_F(TestMultiWii, shouldEncodeRequest) {

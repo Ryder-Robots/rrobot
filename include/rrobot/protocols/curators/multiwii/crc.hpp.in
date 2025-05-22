@@ -2,8 +2,12 @@
 #define CRC_HPP
 
 #include <stdint.h>
-#include <cstddef>
+
 #include <boost/crc.hpp>
+#include <cstddef>
+#include <iostream>
+#include <sstream>
+#include <iomanip>
 
 namespace rrobot {
 
@@ -14,15 +18,20 @@ namespace rrobot {
  */
 class Crc32 {
    private:
-    boost::crc_32_type _crc; 
+    boost::crc_32_type _crc;
+
    public:
     Crc32() {}
 
-    uint32_t calculate(std::string data) {
+    std::string calculate(std::string data) {
         _crc.process_bytes(data.data(), data.length());
         uint32_t checksum = _crc.checksum();
         _crc.reset();
-        return checksum;
+
+        std::stringstream ss;
+        ss << std::hex << std::setw(8) << std::setfill('0') << checksum;
+
+        return ss.str();
     }
 };
 }  // namespace rrobot

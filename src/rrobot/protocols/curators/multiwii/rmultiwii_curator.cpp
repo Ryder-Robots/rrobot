@@ -9,6 +9,8 @@ Event* AbstractRmultiiCurator::deserialize(std::string in) {
 
 
 std::string AbstractRmultiiCurator::serialize(Event* in) {
+
+    serializePayload(in);
     return (RmMultiWii::createInstance(serializePayload(in), in->getCommand())).encode(_crc);    
 }
 

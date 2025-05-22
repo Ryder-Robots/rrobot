@@ -7,7 +7,7 @@ RmMultiWii RmMultiWii::createInstance(std::string data, Crc32 crc) {
     boost::split(tokens, data, boost::is_any_of(_DELIMETER));
     MSPCOMMANDS cmd = getSupportCommand(std::stoi(tokens.at(0)));
     int16_t sz = Encoder::dncodeUint16(tokens.at(1));
-    int32_t crc32 = Encoder::decodeInt32(tokens.at(2));
+    std::string crc32 = tokens.at(2);
     RmMultiWii result = RmMultiWii(cmd, sz);
 
     if (sz > 0) {
@@ -33,11 +33,11 @@ std::string RmMultiWii::encode(Crc32 crc) {
     std::vector<string> tokens;
     tokens.push_back(std::to_string(_cmd));
     tokens.push_back(Encoder::encodeUint16(_sz));
-    uint32_t crc32 = 0;
+    std::string crc32 = "";
     if (_sz != 0) {
         crc32 = crc.calculate(getPayload());
     }
-    tokens.push_back(Encoder::encodeUint32(crc32));
+    tokens.push_back(crc32);
 
     std::string encoded = boost::join(tokens, _DELIMETER);
     if (getSize() > 0) {
