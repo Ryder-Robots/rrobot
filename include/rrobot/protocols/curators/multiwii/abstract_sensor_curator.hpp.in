@@ -9,6 +9,7 @@ namespace rrobot {
  */
 template <typename T>
 class AbstractSensorCurator : public AbstractRmultiiCurator {
+   protected:
     /**
      * @brief serialize payload to an event.
      */

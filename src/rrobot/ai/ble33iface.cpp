@@ -15,6 +15,12 @@ long ble33iface::gen_tid() { return 0; }
 void ble33iface::stop() {}
 
 msp_sonar_altitude ble33iface::sen_sonar() {
+    if (_ext.available() &&
+        _ext.send_rr(RmMultiWii::createInstance("", MSPCOMMANDS::MSP_SONAR_ALTITUDE).encode(_crc)) > 0) {
+        std::string data = _ext.get(RmMultiWii::_TERMINATION_CHAR, LONG_MAX);
+        RmMultiWii m = RmMultiWii::createInstance(data, MSPCOMMANDS::MSP_SONAR_ALTITUDE);
+        return curator_sonic.deserializem(m);
+    }
     msp_sonar_altitude s;
     return s;
 }

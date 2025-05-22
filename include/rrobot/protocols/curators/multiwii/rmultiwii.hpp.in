@@ -1,16 +1,20 @@
 #ifndef RMMULTIWII_HPP
 #define RMMULTIWII_HPP
 
-#include <stdint.h>
 #include <dlib/logger.h>
+#include <stdint.h>
 
-#include <rrobot/events/mspcommands.hpp>
-#include <rrobot/protocols/curators/multiwii/crc.hpp>
+#include <boost/algorithm/string.hpp>
 #include <rrobot/environment/environment.hpp>
+#include <rrobot/events/mspcommands.hpp>
 #include <rrobot/exceptions/exceptions.hpp>
 #include <rrobot/protocols/curators/encoder.hpp>
+#include <rrobot/protocols/curators/multiwii/crc.hpp>
 
 namespace rrobot {
+
+#define _DELIMETER ";"
+#define _DELIMETER_C ';'
 
 /**
  * @class RmMultiWii
@@ -82,8 +86,7 @@ class RmMultiWii {
     static MSPCOMMANDS getSupportCommand(uint8_t c) {
         MSPCOMMANDS rv = MSPCOMMANDS::MSP_ERROR;
         uint8_t _mspCommands[@MULTWII_I@];
-@MULTIWII_COMMANDS@
-        for (int i = 0; i < @MULTWII_I@; i++) {
+        @MULTIWII_COMMANDS@ for (int i = 0; i < @MULTWII_I@; i++) {
             if (_mspCommands[i] == c) {
                 rv = static_cast<MSPCOMMANDS>(_mspCommands[i]);
                 break;

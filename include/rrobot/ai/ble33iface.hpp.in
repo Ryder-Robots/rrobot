@@ -1,8 +1,11 @@
 #ifndef BLE33IFACE_HPP
 #define BLE33IFACE_HPP
 
+#include <climits>
 #include <rrobot/ai/aibasefunctions.hpp>
 #include <rrobot/com/external.hpp>
+#include <rrobot/protocols/curators/multiwii/rmmsp_sonic_curator.hpp>
+#include <rrobot/protocols/curators/multiwii/rmultiwii.hpp>
 
 namespace rrobot {
 
@@ -18,6 +21,9 @@ namespace rrobot {
  */
 class ble33iface : public aibase {
    public:
+    ble33iface(External& ext) : _ext(ext) {}
+    ~ble33iface() = default;
+
     /**
      * @brief will align BLE IMU to vector matching input,  this can be affected by near by
      * magnets,  but is expected to use planatery magnetic force.
@@ -76,7 +82,10 @@ class ble33iface : public aibase {
     msp_sensor_mag sen_mag() override;
 
    private:
+    Crc32 _crc;
     External& _ext;  // USB connection (or otherwise) to BLE33
+
+    RmMspSonicCurator curator_sonic;
 
 };
 }  // namespace rrobot

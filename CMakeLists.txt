@@ -168,3 +168,8 @@ add_executable(test_greedyai test/test_greedyai.cpp)
 set_target_properties(test_greedyai PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
 target_link_libraries(test_greedyai GTest::gtest_main rrobot dlib gmock)
 gtest_discover_tests(test_greedyai  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")
+
+add_executable(test_ble33iface test/test_ble33iface.cpp)
+set_target_properties(test_ble33iface PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
+target_link_libraries(test_ble33iface GTest::gtest_main rrobot dlib gmock)
+gtest_discover_tests(test_ble33iface  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")

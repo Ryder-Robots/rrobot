@@ -2,30 +2,20 @@
 
 using namespace rrobot;
 
-/*
-Memory checking results:
-Mismatched deallocation - 1
-Memory Leak - 1
- */
 RmMultiWii RmMultiWii::createInstance(std::string data, Crc32 crc) {
-    MSPCOMMANDS cmd = getSupportCommand(data[0]);
-
-    int16_t sz = Encoder::dncodeUint16Msb(data.substr(1,2));
-    int32_t crc32 = Encoder::decodeInt32Msb(data.substr(3, 4));
+    std::vector<string> tokens;
+    boost::split(tokens, data, boost::is_any_of(_DELIMETER));
+    MSPCOMMANDS cmd = getSupportCommand(std::stoi(tokens.at(0)));
+    int16_t sz = Encoder::dncodeUint16(tokens.at(1));
+    int32_t crc32 = Encoder::decodeInt32(tokens.at(2));
     RmMultiWii result = RmMultiWii(cmd, sz);
 
-    for (int i = 0; i < sz; i++) {
-        result._payload += static_cast<char>(data[i + 7]);
-
-        if (data[i + 7] == static_cast<char>(_TERMINATION_CHAR)) {
-            throw RrIOException("unexpected character in sequence");
-        }
-    }
-
     if (sz > 0) {
-        if (crc32 != crc.calculate(result.getPayload())) {
-            throw RrIOException("failed CRC check");
+        std::vector<string> payload;
+        for (int i = 3; i < tokens.size() - 1; i++) {
+            payload.push_back(tokens[i]);
         }
+        result._payload = boost::join(payload, _DELIMETER);
     }
     return result;
 }
@@ -37,32 +27,27 @@ RmMultiWii RmMultiWii::createInstance(std::string data, MSPCOMMANDS cmd) {
     return result;
 }
 
-string RmMultiWii::getPayload() {
-    return _payload;
-}
+string RmMultiWii::getPayload() { return _payload; }
 
 std::string RmMultiWii::encode(Crc32 crc) {
-    std::string data;
-    data = static_cast<char>(_cmd);
-    
-    // size
-    data += Encoder::encodeUint16Msb(_sz);
-
-    // calculate CRC
+    std::vector<string> tokens;
+    tokens.push_back(std::to_string(_cmd));
+    tokens.push_back(Encoder::encodeUint16(_sz));
     uint32_t crc32 = 0;
-
     if (_sz != 0) {
         crc32 = crc.calculate(getPayload());
     }
-    data += Encoder::encodeUint32Msb(crc32);
+    tokens.push_back(Encoder::encodeUint32(crc32));
 
-    if (_sz != 0) {
-        for (int i = 0;i < _sz; i++) 
-            data += _payload.c_str()[i];
+    std::string encoded = boost::join(tokens, _DELIMETER);
+    if (getSize() > 0) {
+        encoded.push_back(_DELIMETER_C);
+        encoded += getPayload();
     }
-    data += _TERMINATION_CHAR & 0xFF;
-    return data; 
+    encoded.push_back(_DELIMETER_C);
+    encoded.push_back(_TERMINATION_CHAR);
+
+    return encoded;
 }
 
-RmMultiWii::~RmMultiWii() {
-}
+RmMultiWii::~RmMultiWii() {}

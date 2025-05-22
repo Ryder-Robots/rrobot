@@ -34,6 +34,17 @@ class External {
      */
     virtual ssize_t recv_rr(void* buffer, size_t bufsz) = 0;
     virtual std::string recv_rr(size_t bufsz) {return nullptr;}
+    
+    
+    /**
+     * @brief on supported interfaces (sub as libserial), get method is preferred as it will send a uint8_t (aka char), if
+     * unsupported then null char is sent.
+     * 
+     * @param termination character
+     * @param max string size
+     * @return raw string (uint8_t characters)
+     */
+    virtual std::string get(const uint8_t tc, const ssize_t sz) {return "\0";}
 
     /**
      * @fn accept_rr
