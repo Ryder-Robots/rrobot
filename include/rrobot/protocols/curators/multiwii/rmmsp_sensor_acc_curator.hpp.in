@@ -8,7 +8,49 @@ namespace rrobot {
  * @class RmMspSensorMagCurator
  * @brief contains vector for accelometer.
  */
-class RmMspSensorMagCurator : public AbstractSensorCurator<msp_sensor_acc> {};
+
+class RmMspSensorAccCurator : public AbstractSensorCurator<msp_sensor_acc> {
+    public:
+    RmMspSensorAccCurator() = default;
+    ~RmMspSensorAccCurator() = default;
+
+    /**
+     * @brief Serializes the payload of the given event.
+     *
+     * This method overrides the base class implementation to serialize the payload
+     * of the provided Event object. The serialization format and logic are defined
+     * in the AbstractSensorCurator base class.
+     *
+     * @param in Pointer to the Event object to be serialized.
+     * @return A std::string containing the serialized payload.
+     */
+    std::string serializePayload(Event* in) override { return AbstractSensorCurator::serializePayload(in); }
+
+        /**
+     * @fn deserializePayload
+     * @brief Deserializes the payload from the given RmMultiWii object into an Event object.
+     * @param in Reference to the RmMultiWii object containing the payload.
+     * @return Pointer to the deserialized Event.
+     */
+    Event* deserializePayload(RmMultiWii& in) override { return AbstractSensorCurator::deserializePayload(in); }
+
+    /**
+     * @fn deserializem
+     * @brief Deserializes magnetometer sensor data from the given RmMultiWii object.
+     * @param in Reference to the RmMultiWii object containing the sensor data.
+     * @return Deserialized msp_sensor_mag structure.
+     */
+    msp_sensor_acc deserializem(RmMultiWii& in) { return AbstractSensorCurator::deserializem(in); }
+
+
+    /**
+     * @fn serializem
+     * @brief Serializes the given msp_sensor_mag structure into a string.
+     * @param in The msp_sensor_acc structure to serialize.
+     * @return Serialized data as a std::string.
+     */
+    std::string serializem(const msp_sensor_acc in) { return AbstractSensorCurator::serializem(in); }
+};
 }  // namespace rrobot
 
 #endif

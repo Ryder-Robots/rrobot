@@ -5,7 +5,11 @@
 #include <rrobot/ai/aibasefunctions.hpp>
 #include <rrobot/com/external.hpp>
 #include <rrobot/protocols/curators/multiwii/rmmsp_sonic_curator.hpp>
+#include <rrobot/protocols/curators/multiwii/rmmsp_sensor_acc_curator.hpp>
+#include <rrobot/protocols/curators/multiwii/rmmsp_sensor_mag_curator.hpp>
+#include <rrobot/protocols/curators/multiwii/rmmsp_sensor_gyro_curator.hpp>
 #include <rrobot/protocols/curators/multiwii/rmultiwii.hpp>
+#include <rrobot/state/state_manager.hpp>
 
 namespace rrobot {
 
@@ -21,7 +25,7 @@ namespace rrobot {
  */
 class ble33iface : public aibase {
    public:
-    ble33iface(External& ext) : _ext(ext) {}
+    ble33iface(External& ext, StateManager& sm) : _ext(ext), _sm(sm) {}
     ~ble33iface() = default;
 
     /**
@@ -84,8 +88,15 @@ class ble33iface : public aibase {
    private:
     Crc32 _crc;
     External& _ext;  // USB connection (or otherwise) to BLE33
+    StateManager& _sm;
 
     RmMspSonicCurator curator_sonic;
+    RmMspSensorAccCurator curator_acc;
+    RmMspSensorMagCurator curator_mag;
+    RmMspSensorGyroCurator curator_gyro;
+
+    // internal methods
+    RmMultiWii get_m(MSPCOMMANDS c);
 
 };
 }  // namespace rrobot

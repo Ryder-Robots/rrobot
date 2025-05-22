@@ -30,6 +30,7 @@ class TestBle33Iface : public ::testing::Test {
     MockExternal _ext;
     RmMspSonicCurator _curator_sonic;
     Crc32 _crc;
+    StateManager _sm;
 };
 
 TEST_F(TestBle33Iface, TestSonar) {
@@ -44,7 +45,7 @@ TEST_F(TestBle33Iface, TestSonar) {
         .WillOnce(::testing::Return(result.size()));
     EXPECT_CALL(_ext, get(RmMultiWii::_TERMINATION_CHAR, LLONG_MAX)).WillOnce(::testing::Return(m));
 
-    ble33iface _iface(_ext);
+    ble33iface _iface(_ext, _sm);
     msp_sonar_altitude sonar = _iface.sen_sonar();
 
     EXPECT_EQ(20, sonar.get_distance());
