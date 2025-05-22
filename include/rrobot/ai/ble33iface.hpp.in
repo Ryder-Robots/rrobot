@@ -98,6 +98,9 @@ class ble33iface : public aibase {
     // internal methods
     RmMultiWii get_m(MSPCOMMANDS c);
 
+    // for safety use mutex.
+    std::mutex _lock;
+
 };
 }  // namespace rrobot
 

@@ -20,6 +20,7 @@ void ble33iface::stop() {}
  * internal get that retrieves sensors.
  */
 RmMultiWii ble33iface::get_m(MSPCOMMANDS c) {
+    const std::lock_guard<std::mutex> lock(_lock);
     if (_ext.available() && _ext.send_rr(RmMultiWii::createInstance("", c).encode(_crc)) > 0) {
         std::string data = _ext.get(RmMultiWii::_TERMINATION_CHAR, LONG_MAX);
         RmMultiWii m = RmMultiWii::createInstance(data, _crc);
