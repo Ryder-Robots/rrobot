@@ -45,7 +45,10 @@ TEST_F(TestBle33Iface, TestSonar) {
     EXPECT_CALL(_ext, get(RmMultiWii::_TERMINATION_CHAR, LLONG_MAX)).WillOnce(::testing::Return(m));
 
     ble33iface _iface(_ext);
-    _iface.sen_sonar();
+    msp_sonar_altitude sonar = _iface.sen_sonar();
+
+    EXPECT_EQ(20, sonar.get_distance());
+    EXPECT_EQ(24, sonar.get_temperature());
 }
 
 int main(int argc, char** argv) {

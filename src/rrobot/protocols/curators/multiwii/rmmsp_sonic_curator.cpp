@@ -29,6 +29,10 @@ msp_sonar_altitude RmMspSonicCurator::deserializem(RmMultiWii& in) {
     msp_sonar_altitude payload;
     vector<std::string> tokens = decodeTokens(in.getPayload());
 
+    if (in.getCommand() != MSPCOMMANDS::MSP_SONAR_ALTITUDE) {
+        throw InvalidFormat("incorrect command, MUST BE MSP_SONAR_ALTITUDE");
+    }
+
     if (in.getSize() > 0) {
         if (tokens.size() != 2) {
             throw InvalidFormat("sonic had incorrect number of returned parameters");
