@@ -1,0 +1,46 @@
+#ifndef RMMSP_CMD_ROTATE_CURATOR_HPP
+#define RMMSP_CMD_ROTATE_CURATOR_HPP
+
+#include <rrobot/protocols/curators/multiwii/abstract_sensor_curator.hpp>
+
+namespace rrobot {
+class RmMspCmdRotateCurator : public AbstractSensorCurator<msp_rotate> {
+   public:
+    RmMspCmdRotateCurator() = default;
+    ~RmMspCmdRotateCurator() = default;
+
+    /**
+     * @fn serializePayload
+     * @brief Serializes the given Event object into a string payload for transmission.
+     * @param in Pointer to the Event to serialize.
+     * @return Serialized payload as a std::string.
+     */
+    std::string serializePayload(Event* in) override { return AbstractSensorCurator::serializePayload(in); }
+
+    /**
+     * @fn deserializePayload
+     * @brief Deserializes the payload from the given RmMultiWii object into an Event object.
+     * @param in Reference to the RmMultiWii object containing the payload.
+     * @return Pointer to the deserialized Event.
+     */
+    Event* deserializePayload(RmMultiWii& in) override { return AbstractSensorCurator::deserializePayload(in); }
+
+    /**
+     * @fn deserializem
+     * @brief Deserializes rotate command data from the given RmMultiWii object.
+     * @param in Reference to the RmMultiWii object containing the sensor data.
+     * @return Deserialized msp_rotate structure.
+     */
+    msp_rotate deserializem(RmMultiWii& in) { return AbstractSensorCurator::deserializem(in); }
+
+    /**
+     * @fn serializem
+     * @brief Serializes the given msp_rotate structure into a string.
+     * @param in The msp_rotate structure to serialize.
+     * @return Serialized data as a std::string.
+     */
+    std::string serializem(const msp_rotate in) { return AbstractSensorCurator::serializem(in); }
+};
+}  // namespace rrobot
+
+#endif

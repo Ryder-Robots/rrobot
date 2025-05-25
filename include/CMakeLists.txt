@@ -83,6 +83,7 @@ set(rrobot_INCLUDE
     rrobot/protocols/curators/multiwii/rmmsp_sensor_mag_curator.hpp
     rrobot/protocols/curators/multiwii/rmmsp_sensor_acc_curator.hpp
     rrobot/protocols/curators/multiwii/rmmsp_sensor_gyro_curator.hpp
+    rrobot/protocols/curators/multiwii/rmmsp_cmd_rotate_curator.hpp
     rrobot/protocols/curators/encoder.hpp
     rrobot/com/external.hpp
     rrobot/com/server.hpp
@@ -100,6 +101,8 @@ set(rrobot_INCLUDE
     rrobot/ai/aiiface.hpp
     rrobot/ai/aibasefunctions.hpp
     rrobot/ai/ble33iface.hpp
+    rrobot/ai/saxel.hpp
+    rrobot/ai/saxprocessor.hpp
 )   
 
 foreach(item ${rrobot_INCLUDE})
@@ -158,6 +161,7 @@ set(MSPCOMMANDS
   "MSP_SENSOR_ACC 216 EXTERNAL_OUT 0 0 1 uint32_t available dlib::vector<float,3> data"
   "MSP_SENSOR_GYRO 217 EXTERNAL_OUT 0 0 1 uint32_t available dlib::vector<float,3> data"
   "MSP_SENSOR_MAG 218 EXTERNAL_OUT 0 0 1 uint32_t available dlib::vector<float,3> data"
+  "MSP_ROTATE 223 EXTERNAL_OUT 0 0 1 uint32_t available dlib::vector<float,3> data"
   "MSP_STOP 220 EXTERNAL_OUT 1 1 1"
   "MSP_MOVE 221 EXTERNAL_OUT 1 1 1"
   "MSP_VECTOR 222 EXTERNAL_IN 1 1 1 float x float y float z")

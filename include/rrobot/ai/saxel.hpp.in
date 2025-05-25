@@ -1,0 +1,60 @@
+#ifndef SAXEL_HPP
+#define SAXEL_HPP
+
+#include <rrobot/ai/ai.hpp>
+#include <rrobot/ai/aifeatures.hpp>
+
+namespace rrobot {
+
+/**
+ * @class saxel
+ * @brief provides state of robot at specific time of movement.  This can be used as a black box or to train
+ * algorithms.
+ */
+class saxel {
+   public:
+    saxel(const long tid, 
+           const AiFeatures& features, 
+           const dlib::vector<float, VECTOR_DIM>& vector,
+           const dlib::vector<float, VECTOR_DIM>& point, 
+           const dlib::vector<float, VECTOR_DIM>& dp)
+        : _tid(tid), _features(features), _vector(vector), _point(point), _dp(dp) {}
+
+    ~saxel() = default;
+
+    /**
+     * @brief unique identifier for this entry
+     */
+    long tid() { return _tid; }
+
+    /**
+     * @brief features (sensors) at this point in time.
+     */
+    AiFeatures features() { return _features; }
+
+    /**
+     * @brief current heading vector
+     */
+    dlib::vector<float, VECTOR_DIM> n() { return _vector; }
+
+    /**
+     * @brief current point
+     */
+    dlib::vector<float, VECTOR_DIM> cp() { return _point; }
+
+    /**
+     * @brief destination point
+     */
+    dlib::vector<float, VECTOR_DIM> dp() { return _dp; }
+
+   private:
+    const long _tid;
+    // current features
+    const AiFeatures& _features;
+    const dlib::vector<float, VECTOR_DIM>& _vector;
+    const dlib::vector<float, VECTOR_DIM>& _point;
+    const dlib::vector<float, VECTOR_DIM>& _dp;
+};
+}  // namespace rrobot
+
+#endif

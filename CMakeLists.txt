@@ -54,6 +54,7 @@ set(rrobot_SOURCES
         src/rrobot/protocols/curators/rrp/msp_sensor_acc_curator.cpp
         src/rrobot/protocols/curators/rrp/msp_sensor_mag_curator.cpp
         src/rrobot/protocols/curators/rrp/msp_sensor_gyro_curator.cpp
+        src/rrobot/protocols/curators/rrp/msp_rotate_curator.cpp
         src/rrobot/protocols/curators/multiwii/rmultiwii.cpp
         src/rrobot/protocols/curators/multiwii/rmultiwii_curator.cpp
         src/rrobot/protocols/curators/multiwii/rmmsp_sonic_curator.cpp

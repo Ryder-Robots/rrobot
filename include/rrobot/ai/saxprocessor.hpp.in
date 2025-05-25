@@ -1,0 +1,30 @@
+#ifndef SAXPROCESSOR_HPP
+#define SAXPROCESSOR_HPP
+
+#include <dlib/serialize.h>
+
+#include <fstream>
+#include <rrobot/ai/saxel.hpp>
+
+namespace rrobot {
+
+// SAX handler context
+struct RrSAXContext {
+    saxel data;
+    std::string currentElement;
+};
+
+class saxprocessor {
+   public:
+    saxprocessor(std::string fname) { setup(fname); }
+    ~saxprocessor() { teardown(); }
+    void serialize(saxel el);
+    RrSAXContext deserialize();
+
+   private:
+    void setup(string fname);
+    void teardown();
+    std::ofstream _fout;
+};
+}  // namespace rrobot
+#endif

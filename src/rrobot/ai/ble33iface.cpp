@@ -4,17 +4,53 @@ using namespace rrobot;
 
 dlib::logger dlog_if("rr_miface");
 
-void ble33iface::rotate(dlib::vector<float, VECTOR_DIM>) {}
 
-bool ble33iface::detecto() { return false; }
+void ble33iface::rotate(dlib::vector<float, VECTOR_DIM> v) {
+    msp_rotate r;
+    r.set_available(1);
+    r.set_data(v);
+    RmMultiWii m = RmMultiWii::createInstance(curator_rotate.serializem(r), MSPCOMMANDS::MSP_ROTATE);
+    if (_ext.available()) {
+        _ext.send_rr(m.encode(_crc));
+    }
+}
 
-void ble33iface::move_v(dlib::vector<float, VECTOR_DIM> v) {}
+bool ble33iface::detecto() { 
+    // call critical sensor first.
+    msp_sonar_altitude s = sen_sonar();
+    if (s.get_distance() >= _MAX_DISTANCE) {
+        return true;
+    }
+
+    // set other sensors to update state manager
+    sen_acc();
+    sen_gyro();
+    sen_mag();
+
+    return false;
+}
+
+void ble33iface::move_v(dlib::vector<float, VECTOR_DIM> v) {
+    RmMultiWii m = RmMultiWii::createInstance("", MSPCOMMANDS::MSP_MOVE);
+    if (_ext.available()) {
+        _ext.send_rr(m.encode(_crc));
+    }    
+}
 
 void ble33iface::serialize(const long tid, dlib::vector<float, VECTOR_DIM> v) {}
 
-long ble33iface::gen_tid() { return 0; }
+long ble33iface::gen_tid() {
+    long tid = _tid;
+    _tid++;
+    return tid; 
+}
 
-void ble33iface::stop() {}
+void ble33iface::stop() {
+        RmMultiWii m = RmMultiWii::createInstance("", MSPCOMMANDS::MSP_STOP);
+    if (_ext.available()) {
+        _ext.send_rr(m.encode(_crc));
+    }  
+}
 
 /*
  * internal get that retrieves sensors.

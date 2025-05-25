@@ -4,14 +4,18 @@
 #include <climits>
 #include <rrobot/ai/aibasefunctions.hpp>
 #include <rrobot/com/external.hpp>
-#include <rrobot/protocols/curators/multiwii/rmmsp_sonic_curator.hpp>
 #include <rrobot/protocols/curators/multiwii/rmmsp_sensor_acc_curator.hpp>
-#include <rrobot/protocols/curators/multiwii/rmmsp_sensor_mag_curator.hpp>
 #include <rrobot/protocols/curators/multiwii/rmmsp_sensor_gyro_curator.hpp>
+#include <rrobot/protocols/curators/multiwii/rmmsp_sensor_mag_curator.hpp>
+#include <rrobot/protocols/curators/multiwii/rmmsp_sonic_curator.hpp>
+#include <rrobot/protocols/curators/multiwii/rmmsp_cmd_rotate_curator.hpp>
 #include <rrobot/protocols/curators/multiwii/rmultiwii.hpp>
 #include <rrobot/state/state_manager.hpp>
 
 namespace rrobot {
+
+// set distance to 15cm for now.    
+#define _MAX_DISTANCE 15
 
 /**
  * @class ble33iface
@@ -94,6 +98,7 @@ class ble33iface : public aibase {
     RmMspSensorAccCurator curator_acc;
     RmMspSensorMagCurator curator_mag;
     RmMspSensorGyroCurator curator_gyro;
+    RmMspCmdRotateCurator curator_rotate;
 
     // internal methods
     RmMultiWii get_m(MSPCOMMANDS c);
@@ -101,6 +106,7 @@ class ble33iface : public aibase {
     // for safety use mutex.
     std::mutex _lock;
 
+    long _tid = 0;
 };
 }  // namespace rrobot
 
