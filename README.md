@@ -2,6 +2,17 @@
 
 **rrobot** is an MVP (Minimum Viable Product) software stack for an AI-driven robot, designed for rapid prototyping and experimentation. The repository provides a modular framework for robotic navigation, with a focus on using ultrasonic sensors as the primary means of environmental perception.
 
+## CAVEATS
+* This code is compiled for use on Raspberry Pi 5 and Raspberry Pi 4B platforms.
+* It interfaces with an Arduino BLE33 micro-controller.
+* The micro-processor can be swapped out for other processors, provided that the
+* RRMULTIWII protocol, as defined in this source base, is strictly adhered to.
+* CODE is currently in a non-working state
+
+# CONTRIBUTIONS
+
+For contributions to the source base please contact azzmosphere@gmail.com  using the subject line R-Robot.
+
 ## Key Features
 
 - **Ultrasonic-Based Navigation:** The robot uses ultrasonic sensors to detect obstacles and navigate its environment.
