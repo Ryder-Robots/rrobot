@@ -101,7 +101,6 @@ set(rrobot_INCLUDE
     rrobot/ai/aiiface.hpp
     rrobot/ai/aibasefunctions.hpp
     rrobot/ai/ble33iface.hpp
-    rrobot/ai/saxel.hpp
     rrobot/ai/saxprocessor.hpp
 )   
 

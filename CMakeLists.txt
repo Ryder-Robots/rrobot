@@ -71,6 +71,7 @@ set(rrobot_SOURCES
         src/rrobot/handlers/currentstatehandler.cpp
         src/rrobot/ai/greedyai.cpp
         src/rrobot/ai/ble33iface.cpp
+        src/rrobot/ai/saxprocessor.cpp
 )
 
 add_library(rrobot SHARED  ${rrobot_SOURCES})

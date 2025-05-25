@@ -4,27 +4,31 @@
 #include <dlib/serialize.h>
 
 #include <fstream>
-#include <rrobot/ai/saxel.hpp>
+#include <rrobot/ai/ai.hpp>
+#include <rrobot/state/state_manager.hpp>
 
 namespace rrobot {
-
 // SAX handler context
-struct RrSAXContext {
-    saxel data;
-    std::string currentElement;
+struct sax_el {
+    long tid;
+
+    dlib::vector<float, VECTOR_DIM> v;
+    dlib::vector<float, VECTOR_DIM> cp;
+    dlib::vector<float, VECTOR_DIM> dp;
 };
 
 class saxprocessor {
    public:
-    saxprocessor(std::string fname) { setup(fname); }
+    saxprocessor(std::string fname, StateManager& sm): _sm(sm)  { setup(fname); }
     ~saxprocessor() { teardown(); }
-    void serialize(saxel el);
-    RrSAXContext deserialize();
+    void serialize(const sax_el el);
+    sax_el deserialize();
 
    private:
     void setup(string fname);
     void teardown();
     std::ofstream _fout;
+    StateManager& _sm;
 };
 }  // namespace rrobot
 #endif
