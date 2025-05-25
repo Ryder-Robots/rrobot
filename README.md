@@ -1,21 +1,19 @@
-## Overview
+# rrobot Overview
 
-This Minimum Viable Product (MVP) aims to create a basic framework for connecting robots to machine learning techniques that affect their physical functioning, specifically designed for Raspberry Pi architecture and implemented in C++.
+**rrobot** is an MVP (Minimum Viable Product) software stack for an AI-driven robot, designed for rapid prototyping and experimentation. The repository provides a modular framework for robotic navigation, with a focus on using ultrasonic sensors as the primary means of environmental perception.
 
-##  Features
+## Key Features
 
-- Implementation of an algorithm that allow various controllers to work on indivisual threads.
-- Ability to collect data and write to SD card, for use of training.
-- ML Model Interface: That is created by implementing interface AiPredictor 
-- Data Collection: Implement basic data logging for sensor readings and robot actions. This is performed using the EaiTrainingData interface, and AiGenerateData
-- Remote control functionality based on JSON Ryder Robot Protocol (RRP), and using TCP/IP
-- State, and environment control provided through manifest.json file, and using interfaces StateIface, and StateManagerIface
-- Event queuing and event handling provided through implementation of EventHandler
+- **Ultrasonic-Based Navigation:** The robot uses ultrasonic sensors to detect obstacles and navigate its environment.
+- **Greedy Algorithm (Vanilla Mode):** By default, rrobot employs a simple greedy algorithm to emulate basic navigation and obstacle avoidance.
+- **Extensible AI Control:** The navigation logic can be replaced with more advanced algorithms, such as Reinforcement Learning (RL) or other AI methods compatible with [dlib](http://dlib.net/).
+- **Modular Design:** The codebase is structured to allow easy swapping of navigation strategies, making it suitable for research and development.
 
-## Implementation 
+## Use Cases
 
-for implementation of this software refer to [LD001](https://github.com/Ryder-Robots/ld001)
-
+- Rapid prototyping of AI navigation algorithms.
+- Educational projects involving robotics and AI.
+- Benchmarking different navigation strategies in a controlled environment.
 
 
 # BUILD SERVICE
@@ -59,14 +57,4 @@ dpkg -i rrobot_*.deb
 ```
 systemctl start fatcnt
 journalctl -u fatcnt -f
-```
-
-
-# DESIGN
-
-```
-
-RRP_COMMAND, STATE, MODE, ENV ->  EaiHandler -> AiPredictor->addFeature()
-FC <-  EaiHandler <- AiPredictor.predict()
-
 ```
