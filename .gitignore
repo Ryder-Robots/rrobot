@@ -33,3 +33,4 @@
 
 build/**
 Testing/**
+./test/resources/fr.dat
