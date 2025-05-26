@@ -106,6 +106,16 @@ dlib::vector<float, VECTOR_DIM> StateManager::getCp() {
     return _state.getCp();
 }
 
+void StateManager::setDp(dlib::vector<float, VECTOR_DIM> dp) {
+    const std::lock_guard<std::mutex> lock(_lock);
+    _state.setDp(dp);
+}
+
+dlib::vector<float, VECTOR_DIM> StateManager::getDp() {
+    const std::lock_guard<std::mutex> lock(_lock);
+    return _state.getDp();
+}
+
 void StateManager::setUp() {
     dlib::vector<float, VECTOR_DIM> cp(0,0,0);
     setCp(cp);

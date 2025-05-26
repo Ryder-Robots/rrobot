@@ -11,6 +11,7 @@
 #include <rrobot/protocols/curators/multiwii/rmmsp_cmd_rotate_curator.hpp>
 #include <rrobot/protocols/curators/multiwii/rmultiwii.hpp>
 #include <rrobot/state/state_manager.hpp>
+#include <rrobot/ai/saxprocessor.hpp>
 
 namespace rrobot {
 
@@ -29,7 +30,7 @@ namespace rrobot {
  */
 class ble33iface : public aibase {
    public:
-    ble33iface(External& ext, StateManager& sm) : _ext(ext), _sm(sm) {}
+    ble33iface(External& ext, StateManager& sm, saxprocessor& sxp) : _ext(ext), _sm(sm), _sxp(sxp) {}
     ~ble33iface() = default;
 
     /**
@@ -107,6 +108,7 @@ class ble33iface : public aibase {
     std::mutex _lock;
 
     long _tid = 0;
+    saxprocessor& _sxp;
 };
 }  // namespace rrobot
 

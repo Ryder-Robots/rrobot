@@ -37,7 +37,17 @@ void ble33iface::move_v(dlib::vector<float, VECTOR_DIM> v) {
     }    
 }
 
-void ble33iface::serialize(const long tid, dlib::vector<float, VECTOR_DIM> v) {}
+void ble33iface::serialize(const long tid, dlib::vector<float, VECTOR_DIM> v) {
+    sax_el el;
+    el.tid = tid;
+    el.v = v;
+    el.cp = _sm.getCp();
+    el.dp = _sm.getDp();
+    el.acc = _sm.getFeatures().get_sensor_acc().get_data();
+    el.mag = _sm.getFeatures().get_sensor_mag().get_data();
+    el.gyro = _sm.getFeatures().get_sensor_gyro().get_data();
+    _sxp.serialize(el);
+}
 
 long ble33iface::gen_tid() {
     long tid = _tid;

@@ -156,6 +156,18 @@ class StateManager {
      */
     dlib::vector<float, VECTOR_DIM> getCp();
 
+        /**
+     * @fn setDp
+     * @brief set current point (vector point)
+     */
+    void setDp(dlib::vector<float, VECTOR_DIM>);
+
+    /**
+     * @fn getDp
+     * @brief returns current point.
+     */
+    dlib::vector<float, VECTOR_DIM> getDp();
+
 
    private:
     void setUp();

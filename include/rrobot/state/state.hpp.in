@@ -107,6 +107,9 @@ class State {
 
     dlib::vector<float, VECTOR_DIM> getCp() { return _cp; }
 
+    void setDp(dlib::vector<float, VECTOR_DIM> dp) {_dp = dp;}
+    dlib::vector<float, VECTOR_DIM> getDp() { return _dp; }
+
    private:
     bool _is_running = true;
     uint16_t _error_count = 0;
@@ -115,6 +118,7 @@ class State {
     uint32_t _flags = CMODE_NOT_SET;
     AiFeatures _features;
     dlib::vector<float, VECTOR_DIM> _cp;  // current point
+    dlib::vector<float, VECTOR_DIM> _dp;  // destination point
 };
 }  // namespace rrobot
 

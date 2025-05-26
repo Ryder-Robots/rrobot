@@ -34,6 +34,7 @@ class TestBle33Iface : public ::testing::Test {
     RmMspSensorMagCurator _curator_mag;
     Crc32 _crc;
     StateManager _sm;
+    saxprocessor _sxp = saxprocessor("fr.dat", false);
 };
 
 TEST_F(TestBle33Iface, TestSonar) {
@@ -48,7 +49,7 @@ TEST_F(TestBle33Iface, TestSonar) {
         .WillOnce(::testing::Return(result.size()));
     EXPECT_CALL(_ext, get(RmMultiWii::_TERMINATION_CHAR, LLONG_MAX)).WillOnce(::testing::Return(m));
 
-    ble33iface _iface(_ext, _sm);
+    ble33iface _iface(_ext, _sm, _sxp);
     msp_sonar_altitude sonar = _iface.sen_sonar();
 
     EXPECT_EQ(20, sonar.get_distance());
@@ -71,7 +72,7 @@ TEST_F(TestBle33Iface, TestGyro) {
         .WillOnce(::testing::Return(result.size()));
     EXPECT_CALL(_ext, get(RmMultiWii::_TERMINATION_CHAR, LLONG_MAX)).WillOnce(::testing::Return(m));
 
-    ble33iface _iface(_ext, _sm);
+    ble33iface _iface(_ext, _sm, _sxp);
     msp_sensor_gyro sensor = _iface.sen_gyro();
 
     EXPECT_EQ(10, sensor.get_data().x());
@@ -96,7 +97,7 @@ TEST_F(TestBle33Iface, TestAcc) {
         .WillOnce(::testing::Return(result.size()));
     EXPECT_CALL(_ext, get(RmMultiWii::_TERMINATION_CHAR, LLONG_MAX)).WillOnce(::testing::Return(m));
 
-    ble33iface _iface(_ext, _sm);
+    ble33iface _iface(_ext, _sm, _sxp);
     msp_sensor_acc sensor = _iface.sen_acc();
 
     EXPECT_EQ(12, sensor.get_data().x());
@@ -122,7 +123,7 @@ TEST_F(TestBle33Iface, TestMag) {
         .WillOnce(::testing::Return(result.size()));
     EXPECT_CALL(_ext, get(RmMultiWii::_TERMINATION_CHAR, LLONG_MAX)).WillOnce(::testing::Return(m));
 
-    ble33iface _iface(_ext, _sm);
+    ble33iface _iface(_ext, _sm, _sxp);
     msp_sensor_mag sensor = _iface.sen_mag();
 
     EXPECT_EQ(12, sensor.get_data().x());
