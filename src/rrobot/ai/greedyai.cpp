@@ -15,6 +15,10 @@ using namespace rrobot;
  * n = vector of travel, including heading.
  */
 PSTATE GreedyAi::transverse(const dlib::vector<float, VECTOR_DIM> dp) {
+
+    // call decto first, this will set the sensors.
+    detecto();
+
     const dlib::vector<float, VECTOR_DIM> sp = _sm.getCp();
     dlib::vector<float, VECTOR_DIM> c = dp - sp;
     // previously transversed points
@@ -22,6 +26,9 @@ PSTATE GreedyAi::transverse(const dlib::vector<float, VECTOR_DIM> dp) {
     // local exclusions,  these include all paths that have been transversed. 
     std::vector<dlib::vector<float, VECTOR_DIM>> excl = _excl;
 
+    // resolutions need to phased out in future versions, this can be calculated by using SIN and 
+    // vector maths for more accurate turning. It assumes that everything is 45 degrees, which is obviously
+    // not correct.
     while (c.length() > 0) {
         bool f = false;
         dlib::vector<float, VECTOR_DIM> n(0,0,0);  // next transversal
