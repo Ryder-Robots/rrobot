@@ -8,7 +8,27 @@
 #include <rrobot/state/state_manager.hpp>
 
 namespace rrobot {
-// SAX handler context
+
+/**
+ * @struct sax_el
+ * @brief Represents a SAX element containing sensor data and associated vectors.
+ *
+ * The sax_el structure encapsulates a set of vectors and an identifier, typically used
+ * for storing and processing sensor data in the rrobot system. This object can link with
+ * sensors, allowing it to represent real-time or recorded sensor readings.
+ *
+ * Members:
+ *   - tid: Unique identifier for the SAX element, often used as a timestamp or tracking ID.
+ *   - v: Main feature vector of dimension VECTOR_DIM.
+ *   - cp: Control point vector of dimension VECTOR_DIM.
+ *   - dp: Derivative point vector of dimension VECTOR_DIM.
+ *   - acc: Accelerometer data vector of dimension VECTOR_DIM, representing acceleration readings.
+ *   - mag: Magnometer data vector of dimension VECTOR_DIM, representing magnetic field readings.
+ *   - gyro: Gyroscope data vector of dimension VECTOR_DIM, representing angular velocity readings.
+ *
+ * Note: The sensor data fields (acc, mag, gyro) are designed to interface with hardware sensors,
+ * enabling the structure to store and process physical measurements from the robot's environment.
+ */
 struct sax_el {
     long tid;
 
@@ -18,20 +38,64 @@ struct sax_el {
 
     dlib::vector<float, VECTOR_DIM> acc;
     dlib::vector<float, VECTOR_DIM> mag;
-    dlib::vector<float, VECTOR_DIM> gyro;   
+    dlib::vector<float, VECTOR_DIM> gyro;
 };
+
+/**
+ * @class saxprocessor
+ * @brief Handles serialization and deserialization of SAX elements to and from files.
+ *
+ * The saxprocessor class provides functionality to serialize vectors (SAX elements) to a file
+ * and deserialize them back. It manages file streams for input and output operations and
+ * maintains the state of the processor (input or output mode). The class ensures proper
+ * setup and teardown of resources and provides methods to control its operation mode.
+ *
+ * Usage:
+ *   - Construct with a file name and mode (input/output).
+ *   - Use serialize() to write SAX elements to a file.
+ *   - Use deserialize() to read SAX elements from a file.
+ *   - Change mode using set_isinput().
+ *
+ * Note: Sensor data is derived from the status manager, not from the element itself during serialization.
+ */
 
 class saxprocessor {
    public:
-    saxprocessor(std::string fname, bool isinput)  { setup(fname, isinput); }
+    saxprocessor(std::string fname, bool isinput) { setup(fname, isinput); }
     ~saxprocessor() { teardown(); }
 
     /**
-     * @brief serialize vectors to file, note that sensors will derived from _status manager, and not element.
+     * @brief Serializes the given SAX element to the output stream.
+     *
+     * This method takes a sax_el object and writes its serialized representation
+     * to the currently configured output stream. The behavior depends on the
+     * internal state of the processor and the file or buffer being used.
+     *
+     * @param el The SAX element to serialize.
      */
     void serialize(const sax_el el);
+
+    /**
+     * @brief Deserializes a SAX element from the input stream.
+     *
+     * This method reads from the currently configured input stream and constructs
+     * a sax_el object based on the serialized data found. The behavior depends on
+     * the internal state of the processor and the file or buffer being used.
+     *
+     * @return The deserialized SAX element.
+     */
     sax_el deserialize();
 
+    /**
+     * @brief Sets the processor mode to input or output.
+     *
+     * This method updates the internal state of the saxprocessor to indicate
+     * whether it should operate in input (deserialization) or output (serialization) mode.
+     * Changing this flag may affect how subsequent operations interact with the underlying
+     * file streams or buffers.
+     *
+     * @param isinput If true, sets the processor to input mode; otherwise, sets to output mode.
+     */
     void set_isinput(bool isinput);
 
    private:
