@@ -175,3 +175,8 @@ add_executable(test_ble33iface test/test_ble33iface.cpp)
 set_target_properties(test_ble33iface PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
 target_link_libraries(test_ble33iface GTest::gtest_main rrobot dlib gmock)
 gtest_discover_tests(test_ble33iface  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")
+
+add_executable(test_saxprocessor test/test_saxprocessor.cpp)
+set_target_properties(test_saxprocessor PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/test)
+target_link_libraries(test_saxprocessor GTest::gtest_main rrobot dlib gmock)
+gtest_discover_tests(test_saxprocessor  WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/test/resources")

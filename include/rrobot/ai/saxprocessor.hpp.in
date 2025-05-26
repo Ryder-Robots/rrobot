@@ -15,20 +15,35 @@ struct sax_el {
     dlib::vector<float, VECTOR_DIM> v;
     dlib::vector<float, VECTOR_DIM> cp;
     dlib::vector<float, VECTOR_DIM> dp;
+
+    dlib::vector<float, VECTOR_DIM> acc;
+    dlib::vector<float, VECTOR_DIM> mag;
+    dlib::vector<float, VECTOR_DIM> gyro;   
 };
 
 class saxprocessor {
    public:
-    saxprocessor(std::string fname, StateManager& sm): _sm(sm)  { setup(fname); }
+    saxprocessor(std::string fname, bool isinput)  { setup(fname, isinput); }
     ~saxprocessor() { teardown(); }
+
+    /**
+     * @brief serialize vectors to file, note that sensors will derived from _status manager, and not element.
+     */
     void serialize(const sax_el el);
     sax_el deserialize();
 
+    void set_isinput(bool isinput);
+
    private:
-    void setup(string fname);
+    void setup(string fname, bool isinput);
     void teardown();
     std::ofstream _fout;
-    StateManager& _sm;
+    std::ifstream _fin;
+    bool _isinput = false;
+    std::string _fname;
+    std::stringstream _buffer;
+    std::istringstream _sin;
 };
+
 }  // namespace rrobot
 #endif
