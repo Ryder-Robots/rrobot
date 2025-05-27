@@ -33,4 +33,4 @@
 
 build/**
 Testing/**
-./test/resources/fr.dat
+test/resources/fr.dat
