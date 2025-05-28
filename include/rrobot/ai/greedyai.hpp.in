@@ -6,6 +6,7 @@
 
 namespace rrobot {
 
+
 /**
  * @class GreedyAi
  * @brief Implements a greedy algorithm-based AI for robot pathfinding and movement.
@@ -72,6 +73,7 @@ class GreedyAi : public aiiface {
 
    private:
     std::vector<dlib::vector<float, VECTOR_DIM>> _excl;  // points that have been excluded
+    static float R(float x);
 
     // Paths that can be transversed
     const std::vector<dlib::vector<float, VECTOR_DIM>> res = {
