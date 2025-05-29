@@ -155,7 +155,7 @@ set(MSPCOMMANDS
   "MSP_ERROR 2 EXTERNAL_OUT 1 1 1 string message"
   "MSP_AUTHKEY 7 EXTERNAL_IN 1 1 0 string key"
   "MSP_IDENT 100 EXTERNAL_OUT 0 0 0 std::string version MULTITYPE_T multitype MSP_VERSION msp_version uint32_t capability"
-  "MSP_STATUS 101 EXTERNAL_OUT 1 1 1 uint16_t cycletime uint16_t i2c_errors_count uint16_t sensor uint32_t flag uint8_t current_set"
+  "MSP_STATUS 101 EXTERNAL_OUT 0 0 0 uint16_t cycletime uint16_t i2c_errors_count uint16_t sensor uint32_t flag uint8_t current_set std::vector<dlib::vector<float,3>> sensors std::vector<std::string> vnames"
   "MSP_SONAR_ALTITUDE 58 EXTERNAL_OUT 1 1 1 uint32_t distance uint32_t temperature" 
   "MSP_SENSOR_ACC 216 EXTERNAL_OUT 0 0 1 uint32_t available dlib::vector<float,3> data"
   "MSP_SENSOR_GYRO 217 EXTERNAL_OUT 0 0 1 uint32_t available dlib::vector<float,3> data"

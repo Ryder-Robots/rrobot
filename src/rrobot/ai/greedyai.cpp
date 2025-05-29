@@ -6,7 +6,6 @@ using namespace rrobot;
  * TODO:
  * - some logging is desperately needed.
  * - c should indicate vector.
- * - cp needs to be added to simply equations,  this is just cp = cp + n after movement, then round to get actual point.
  * - need to round off very small numbers by using a wrapper for cos, and sin
  */
 
