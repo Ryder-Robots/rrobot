@@ -74,6 +74,7 @@ class GreedyAi : public aiiface {
    private:
     std::vector<dlib::vector<float, VECTOR_DIM>> _excl;  // points that have been excluded
     static float R(float x);
+    static dlib::vector<float, VECTOR_DIM> RR(dlib::vector<float, VECTOR_DIM>);
 
     // Paths that can be transversed
     const std::vector<dlib::vector<float, VECTOR_DIM>> res = {

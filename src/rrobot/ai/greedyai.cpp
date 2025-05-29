@@ -21,7 +21,7 @@ PSTATE GreedyAi::transverse(const dlib::vector<float, VECTOR_DIM> dp) {
     detecto();
 
     const dlib::vector<float, VECTOR_DIM> sp = _sm.getCp();
-    dlib::vector<float, VECTOR_DIM> c = dp - _sm.getFeatures().get_sensor_mag().get_data();
+    dlib::vector<float, VECTOR_DIM> c = dp - _sm.getFeatures().get_sensor_mag().get_data(), cp = sp;
     // previously transversed points
     std::stack<dlib::vector<float, VECTOR_DIM>> _trans;
     // local exclusions,  these include all paths that have been transversed.
@@ -30,17 +30,14 @@ PSTATE GreedyAi::transverse(const dlib::vector<float, VECTOR_DIM> dp) {
     while (c.length() > 0) {
         bool f = false;
         float r = R(atan2(c.y(), c.x())), l = c.length();
-
-        // next transversal TODO: set a formula that will round really low precisions, less that 0.00
         dlib::vector<float, VECTOR_DIM> n(R(cos(r)), R(sin(r)), 0);
 
-        // TODO: should simplify this calculation.
-        if (!is_valid(sp + c + n, excl)) {
+        if (!is_valid(cp + n, excl)) {
             // attempt to get best path first,
             for (auto v : res) {
                 // n is a point at this stage
-                dlib::vector<float, VECTOR_DIM> nd = c - v;
-                if (is_valid((dp + nd) + sp, excl)) {
+                dlib::vector<float, VECTOR_DIM> nd = cp + v;
+                if (is_valid(nd, excl)) {
                     if (!f || nd.length() < l) {
                         l = nd.length();
                         n = v;
@@ -53,16 +50,16 @@ PSTATE GreedyAi::transverse(const dlib::vector<float, VECTOR_DIM> dp) {
         }
 
         if (f) {
-            excl.push_back((dp - c) + sp);
+            excl.push_back(cp);
             rotate(n);
-
             if (!detecto()) {
                 move(n);
-                c = c - n;
-                _sm.setCp(excl.back());
-                _trans.push(excl.back());
+                c = RR(c - n);
+                cp = RR(cp + n);
+                _sm.setCp(cp);
+                _trans.push(cp);
             } else {
-                _excl.push_back(excl.back());
+                _excl.push_back(cp + n);
             }
         } else {
             if (_trans.empty()) {
@@ -72,6 +69,7 @@ PSTATE GreedyAi::transverse(const dlib::vector<float, VECTOR_DIM> dp) {
             dlib::vector<float, VECTOR_DIM> lp = _trans.top(), n = _trans.top() - c;
             _trans.pop();
             rotate(n);
+            cp = RR(cp + n);
             move(n);
             c = lp;
         }
@@ -80,9 +78,12 @@ PSTATE GreedyAi::transverse(const dlib::vector<float, VECTOR_DIM> dp) {
     return PSTATE::P_AVAILABLE;
 }
 
- // round to 4 decimal place, by converting to an integer then dividing the number by 10000
-float GreedyAi::R(float x) {
-    return std::round(x * 10000.f) / 10000.0f;
+// round to 4 decimal place, by converting to an integer then dividing the number by 10000
+float GreedyAi::R(float x) { return std::round(x * 10000.f) / 10000.0f; }
+
+dlib::vector<float, VECTOR_DIM> GreedyAi::RR(dlib::vector<float, VECTOR_DIM> vi) {
+    dlib::vector<float, VECTOR_DIM> vo(std::round(vi.x()), std::round(vi.y()), std::round(vi.z()));
+    return vo;
 }
 
 /*
